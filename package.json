@@ -1,0 +1,9 @@
+{
+  "name": "parure-la-plee",
+  "version": "1.0.0",
+  "description": "Parure La Plee — AI Personal Stylist landing page",
+  "type": "module",
+  "dependencies": {
+    "resend": "^4.0.0"
+  }
+}

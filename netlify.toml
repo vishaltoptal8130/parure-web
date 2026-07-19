@@ -1,0 +1,20 @@
+# ─────────────────────────────────────────────
+# Netlify Configuration — Parure La Plee
+# ─────────────────────────────────────────────
+
+[build]
+  # Netlify Functions directory
+  functions = "netlify/functions"
+
+  # No build command needed — static HTML site
+  # Netlify will still run `npm install` to install dependencies for functions
+  command = "npm install"
+
+  # Publish the root directory as the static site
+  publish = "."
+
+# ─────────────────────────────────────────────
+# Environment / Runtime
+# ─────────────────────────────────────────────
+[functions]
+  node_bundler = "esbuild"

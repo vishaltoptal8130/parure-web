@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Environment variables (contains API keys — NEVER commit)
+.env
+
+# Netlify local cache
+.netlify/

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Parure La Plee</title>
+<meta name="description" content="Privacy Policy for Parure La Plee — how we collect, use, and protect your personal information.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --charcoal: #1A1A18; --tan: #C8B89A; --tan-light: #E8DDD0;
+    --tan-dark: #8C7A62; --cream: #FAF8F5; --cream-deep: #F2EDE6;
+    --white: #FFFFFF; --text: #2C2B28; --muted: #7A7468; --green: #4A7C59;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250,248,245,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 0.5px solid rgba(200,184,154,0.4); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .nav-logo { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; line-height: 1; }
+  .nav-logo-sub { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 300; font-size: 11px; letter-spacing: 0.12em; color: var(--tan-dark); text-transform: none; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta { background: var(--charcoal); color: var(--white) !important; padding: 9px 20px; border-radius: 6px; font-size: 13px !important; font-weight: 500; letter-spacing: 0.04em !important; }
+  .nav-cta:hover { opacity: 0.88 !important; }
+  .page-header { background: var(--charcoal); padding: 120px 40px 72px; text-align: center; }
+  .page-header-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,184,154,0.55); font-weight: 500; margin-bottom: 20px; }
+  .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 5vw, 64px); font-weight: 300; color: var(--white); line-height: 1.1; margin-bottom: 16px; }
+  .page-header h1 em { font-style: italic; color: var(--tan); }
+  .page-header-meta { font-size: 13px; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; }
+  .content-wrap { max-width: 760px; margin: 0 auto; padding: 72px 40px 100px; }
+  .toc { background: var(--cream-deep); border: 0.5px solid rgba(200,184,154,0.5); border-radius: 10px; padding: 28px 32px; margin-bottom: 56px; }
+  .toc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--tan-dark); font-weight: 500; margin-bottom: 14px; }
+  .toc ol { list-style: none; display: flex; flex-direction: column; gap: 8px; counter-reset: toc-counter; }
+  .toc ol li { counter-increment: toc-counter; display: flex; align-items: baseline; gap: 10px; }
+  .toc ol li::before { content: counter(toc-counter, decimal-leading-zero); font-size: 10px; color: var(--tan); font-weight: 500; flex-shrink: 0; }
+  .toc ol li a { font-size: 14px; color: var(--text); text-decoration: none; border-bottom: 0.5px solid rgba(200,184,154,0.4); transition: color 0.2s; }
+  .toc ol li a:hover { color: var(--tan-dark); }
+  .policy-section { margin-bottom: 56px; scroll-margin-top: 88px; }
+  .section-num { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--tan); font-weight: 500; margin-bottom: 8px; }
+  .policy-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--charcoal); margin-bottom: 20px; line-height: 1.2; padding-bottom: 14px; border-bottom: 0.5px solid rgba(200,184,154,0.4); }
+  .policy-section p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+  .policy-section p:last-child { margin-bottom: 0; }
+  .policy-section ul { margin: 12px 0 16px; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .policy-section ul li { font-size: 15px; color: var(--muted); line-height: 1.7; padding-left: 20px; position: relative; }
+  .policy-section ul li::before { content: '—'; position: absolute; left: 0; color: var(--tan); font-size: 13px; }
+  .policy-section strong { color: var(--text); font-weight: 500; }
+  .highlight-box { background: rgba(200,184,154,0.12); border-left: 3px solid var(--tan); border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0; font-size: 14px; color: var(--muted); line-height: 1.75; }
+  .contact-card { background: var(--charcoal); border-radius: 12px; padding: 32px 36px; margin-top: 24px; }
+  .contact-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--white); margin-bottom: 14px; }
+  .contact-card p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 10px; }
+  .contact-card a { color: var(--tan); text-decoration: none; border-bottom: 0.5px solid rgba(200,184,154,0.4); transition: border-color 0.2s; }
+  footer { background: var(--charcoal); border-top: 0.5px solid rgba(200,184,154,0.15); padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-logo { font-size: 15px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--tan); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+  @media (max-width: 700px) {
+    nav { padding: 0 20px; } .nav-links { display: none; }
+    .page-header { padding: 100px 20px 56px; }
+    .content-wrap { padding: 48px 20px 80px; }
+    .toc { padding: 20px; } .contact-card { padding: 24px 20px; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+    .footer-links { justify-content: center; flex-wrap: wrap; }
+  }
+
+  .skip-link {
+    position: absolute; top: -100px; left: 16px; z-index: 9999;
+    background: var(--charcoal); color: var(--white);
+    padding: 10px 20px; border-radius: 6px; font-size: 14px;
+    text-decoration: none; font-weight: 500; transition: top 0.2s;
+  }
+  .skip-link:focus { top: 16px; }
+
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav role="navigation" aria-label="Main navigation">
+  <a href="/" class="nav-logo">PARURE<span class="nav-logo-sub">La Plee</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/terms">Terms</a>
+    <a href="/#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-eyebrow">Legal · S9 Enterprises LLC</div>
+  <h1>Privacy <em>Policy</em></h1>
+  <div class="page-header-meta">Effective date: June 17, 2026 &nbsp;·&nbsp; Last updated: June 17, 2026</div>
+</div>
+
+<div class="content-wrap" id="main-content" role="main">
+
+  <div class="highlight-box">
+    Your privacy matters to us. Parure La Plee is operated by S9 Enterprises LLC ("we," "us," or "our"). This policy explains what information we collect, how we use it, and the choices you have. We will never sell your personal data to third parties.
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#s1">Information we collect</a></li>
+      <li><a href="#s2">How we use your information</a></li>
+      <li><a href="#s3">How we share your information</a></li>
+      <li><a href="#s4">Photo and image data</a></li>
+      <li><a href="#s5">Cookies and tracking</a></li>
+      <li><a href="#s6">Data retention</a></li>
+      <li><a href="#s7">Your rights and choices</a></li>
+      <li><a href="#s8">Children's privacy</a></li>
+      <li><a href="#s9">Data security</a></li>
+      <li><a href="#s10">Changes to this policy</a></li>
+      <li><a href="#s11">Contact us</a></li>
+    </ol>
+  </div>
+
+  <div class="policy-section" id="s1">
+    <div class="section-num">01</div>
+    <h2>Information we collect</h2>
+    <p>We collect information you provide directly to us, information collected automatically when you use our services, and information from third parties.</p>
+    <p><strong>Information you provide:</strong></p>
+    <ul>
+      <li>Account information — name, email address, and password when you register</li>
+      <li>Profile information — style preferences, body measurements, and sizing details you choose to enter</li>
+      <li>Photos and images — selfies used for color analysis and photos of wardrobe items you upload</li>
+      <li>Payment information — processed securely by Stripe; we do not store full card numbers</li>
+      <li>Communications — messages you send to our support team</li>
+      <li>Waitlist information — email address submitted via parure.app before launch
+      <li>Usage patterns — outfits worn, occasions selected, cost-per-wear data, and calendar events you choose to sync, used to personalize your AI recommendations over time</li></li>
+    </ul>
+    <p><strong>Information collected automatically:</strong></p>
+    <ul>
+      <li>Usage data — features you access, outfits you generate, and actions taken in the app</li>
+      <li>Device information — device type, operating system, and app version</li>
+      <li>Location data — approximate location used for weather-based outfit recommendations (only when you grant permission)</li>
+      <li>Log data — IP address, access times, and pages or screens viewed</li>
+    </ul>
+  </div>
+
+  <div class="policy-section" id="s2">
+    <div class="section-num">02</div>
+    <h2>How we use your information</h2>
+    <p>We use the information we collect to provide, improve, and personalize the Parure La Plee experience.</p>
+    <ul>
+      <li>Generate your personal color season analysis and Comprehensive Personal Color Profile (CPCP) using AI</li>
+      <li>Build and style AI outfit recommendations from your digital wardrobe across 42 occasions</li>
+      <li>Process subscription payments and manage your account</li>
+      <li>Send you transactional emails — receipts, security alerts, and product updates</li>
+      <li>Send marketing communications, with your consent (you may opt out at any time)</li>
+      <li>Improve our AI models and recommendation quality using anonymized, aggregated data</li>
+      <li>Detect fraud and ensure platform security</li>
+      <li>Comply with legal obligations</li>
+    </ul>
+    <p>We do not use your photos or personal data to train AI models that are shared externally, sold to advertisers, or used for any purpose beyond providing you with the Parure La Plee service.</p>
+  </div>
+
+  <div class="policy-section" id="s3">
+    <div class="section-num">03</div>
+    <h2>How we share your information</h2>
+    <p>We do not sell your personal information. We share information only in these limited circumstances:</p>
+    <ul>
+      <li><strong>Service providers</strong> — third-party vendors who help us operate the app, including Supabase (database), Stripe (payments), RevenueCat (subscriptions), Cloudinary (image storage), Mixpanel (analytics), and Anthropic (AI processing). Each provider is contractually bound to protect your data.</li>
+      <li><strong>Affiliate networks</strong> — when you tap a shopping recommendation, Skimlinks or our affiliate partners may record the referral. No personal identifying information beyond a click identifier is shared.</li>
+      <li><strong>Marketplace transactions</strong> — if you sell items in the Parure La Plee marketplace, your listing details are visible to other members. Your full name and contact details are never shared without your consent.</li>
+      <li><strong>Legal requirements</strong> — if required by law, subpoena, or to protect our rights or the safety of our users.</li>
+      <li><strong>Business transfers</strong> — in the event of a merger or acquisition, your information may be transferred. We will notify you via email before this occurs.</li>
+    </ul>
+  </div>
+
+  <div class="policy-section" id="s4">
+    <div class="section-num">04</div>
+    <h2>Photo and image data</h2>
+    <p>Your photos are central to the Parure La Plee experience. We take their handling seriously.</p>
+    <ul>
+      <li>Selfies you upload for color analysis are processed by our AI and stored securely in your account. They are never shared with other users or third parties except our image storage provider (Cloudinary).</li>
+      <li>Wardrobe item photos are stored in your personal digital wardrobe and are visible only to you, unless you choose to list an item in the marketplace.</li>
+      <li>You may delete any photo from your account at any time. Deletion from our storage typically occurs within 30 days.</li>
+      <li>We do not use your photos for facial recognition beyond the color analysis feature, and we do not share biometric data with any third party.</li>
+    </ul>
+  </div>
+
+  <div class="policy-section" id="s5">
+    <div class="section-num">05</div>
+    <h2>Cookies and tracking</h2>
+    <p>Our website (parure.app) uses cookies and similar technologies to remember your preferences and understand how visitors use our site.</p>
+    <ul>
+      <li><strong>Essential cookies</strong> — required for the site to function. Cannot be disabled.</li>
+      <li><strong>Analytics cookies</strong> — help us understand traffic and improve the site. You may opt out via your browser settings.</li>
+      <li><strong>Marketing cookies</strong> — used only if you consent. You can withdraw consent at any time.</li>
+    </ul>
+    <p>The Parure La Plee mobile app does not use browser cookies. Analytics in the app are handled by Mixpanel using a pseudonymous user identifier.</p>
+    <p><strong>Affiliate link tracking.</strong> Our app and website contain affiliate links to third-party retailers including Amazon.com, merchants on CJ Affiliate, and merchants on Awin. When you click an affiliate link, the retailer may use cookies or tracking technology to record that your visit originated from Parure La Plee. This tracking is used solely for commission attribution purposes. We do not share your personal information with affiliate partners beyond what is necessary for this tracking. As an Amazon Associate we earn from qualifying purchases.</p>
+  </div>
+
+  <div class="policy-section" id="s6">
+    <div class="section-num">06</div>
+    <h2>Data retention</h2>
+    <p>We retain your personal information for as long as your account is active or as needed to provide our services.</p>
+    <ul>
+      <li>Account data is retained until you delete your account</li>
+      <li>Wardrobe and outfit data is retained until you delete individual items or your account</li>
+      <li>Payment records are retained for seven years to comply with tax and financial regulations</li>
+      <li>Waitlist email addresses are retained until you unsubscribe or the waitlist closes</li>
+      <li>Anonymized, aggregated analytics data may be retained indefinitely</li>
+    </ul>
+    <p>When you delete your account, we will delete or anonymize your personal information within 30 days, except where we are required by law to retain it.</p>
+  </div>
+
+  <div class="policy-section" id="s7">
+    <div class="section-num">07</div>
+    <h2>Your rights and choices</h2>
+    <p>You have meaningful control over your personal information:</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+      <li><strong>Correction</strong> — update or correct inaccurate information via your account settings</li>
+      <li><strong>Deletion</strong> — delete your account and associated data at any time</li>
+      <li><strong>Portability</strong> — request an export of your data in a machine-readable format</li>
+      <li><strong>Marketing opt-out</strong> — unsubscribe from marketing emails at any time using the link in any email we send</li>
+      <li><strong>Location</strong> — disable location access at any time in your device settings</li>
+    </ul>
+    <p>If you are located in California, the European Economic Area, or the United Kingdom, you may have additional rights under applicable law (including CCPA and GDPR). To exercise any of these rights, contact us at <a href="mailto:parureapp@gmail.com" style="color:var(--tan-dark)">parureapp@gmail.com</a>.</p>
+  </div>
+
+  <div class="policy-section" id="s8">
+    <div class="section-num">08</div>
+    <h2>Children's privacy</h2>
+    <p>Parure La Plee is not directed to children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected information from a child under 13, please contact us immediately at <a href="mailto:parureapp@gmail.com" style="color:var(--tan-dark)">parureapp@gmail.com</a> and we will delete it promptly.</p>
+  </div>
+
+  <div class="policy-section" id="s9">
+    <div class="section-num">09</div>
+    <h2>Data security</h2>
+    <p>We implement industry-standard technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+    <ul>
+      <li>All data is transmitted using TLS encryption</li>
+      <li>Passwords are hashed and never stored in plain text</li>
+      <li>Payment data is handled exclusively by Stripe, which is PCI-DSS compliant</li>
+      <li>Images are stored in encrypted cloud storage</li>
+      <li>Access to your data within our team is limited to those who need it to operate the service</li>
+    </ul>
+    <p>No method of transmission over the internet is 100% secure. If you believe your account has been compromised, please contact us immediately.</p>
+  </div>
+
+  <div class="policy-section" id="s10">
+    <div class="section-num">10</div>
+    <h2>Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top of this page. For material changes, we will notify you by email or with a prominent notice in the app at least 14 days before the change takes effect. Your continued use of Parure La Plee after changes become effective constitutes your acceptance of the revised policy.</p>
+  </div>
+
+  <div class="policy-section" id="s11">
+    <div class="section-num">11</div>
+    <h2>Contact us</h2>
+    <p>If you have questions, concerns, or requests regarding this Privacy Policy or your personal data, please reach out:</p>
+    <div class="contact-card">
+      <h3>Parure La Plee Privacy Team</h3>
+      <p><strong style="color:rgba(255,255,255,0.7)">S9 Enterprises LLC</strong><br>Orlando, Florida, United States</p>
+      <p>Email: <a href="mailto:parureapp@gmail.com">parureapp@gmail.com</a><br>
+      General: <a href="mailto:parureapp@gmail.com">parureapp@gmail.com</a><br>
+      Website: <a href="https://parure.app">parure.app</a></p>
+      <p>We aim to respond to all privacy requests within 10 business days.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer role="contentinfo">
+  <div class="footer-logo" style="display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:2px">PARURE<span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:300;font-size:12px;letter-spacing:.1em;color:var(--tan);text-transform:none;line-height:1">La Plee</span></div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/policy">Privacy policy</a>
+    <a href="/terms">Terms of service</a>
+    <a href="/accessibility">Accessibility</a>
+    <a href="mailto:parureapp@gmail.com">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Parure La Plee. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
