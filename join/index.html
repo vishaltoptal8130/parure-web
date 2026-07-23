@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Parure La Plee — AI Wardrobe & Styling</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1e1d1b;
+      color: #faf8f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(200, 149, 42, 0.3);
+      border-radius: 24px;
+      padding: 40px 24px;
+      max-width: 380px;
+      width: 88%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    .crown {
+      font-size: 42px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-family: "Georgia", serif;
+      font-size: 24px;
+      font-weight: 500;
+      margin: 0 0 12px 0;
+      color: #ffffff;
+    }
+    p {
+      color: #c8b89a;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 28px 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #c8952a;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 30px;
+      width: 80%;
+      transition: opacity 0.2s;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="crown">👑</div>
+    <h1>Parure La Plee</h1>
+    <p>You’ve been invited to join Parure La Plee — Luxury AI Wardrobe & Styling Marketplace.</p>
+
+    <a id="app-btn" class="btn" href="parurelaplee://join">Open Parure La Plee App</a>
+  </div>
+  <div class="footer">&copy; 2026 S9 Enterprises LLC. All rights reserved.</div>
+
+  <script>
+    // Extract query parameters
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    const appBtn = document.getElementById('app-btn');
+
+    if (ref) {
+      // Direct deep link with referral code
+      const deepLink = 'parurelaplee://join?ref=' + encodeURIComponent(ref);
+      appBtn.setAttribute('href', deepLink);
+
+      // Auto-trigger app launch attempt
+      window.location.href = deepLink;
+    }
+  </script>
+</body>
+</html>

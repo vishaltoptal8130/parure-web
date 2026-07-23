@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "B7VR9WHC94.com.parurelaplee.app",
+        "paths": [
+          "/join*",
+          "*"
+        ]
+      }
+    ]
+  }
+}
