@@ -1431,7 +1431,7 @@
           already own. Technology that understands your wardrobe, rooted in sustainability.
         </p>
         <form class="waitlist-form" id="hero-form" name="waitlist" method="POST" data-netlify="true"
-          data-netlify-honeypot="bot-field" onsubmit="handleWaitlist(event,'hero')">
+          data-netlify-honeypot="bot-field" onsubmit="return handleWaitlist(event,'hero')">
           <input type="hidden" name="form-name" value="waitlist" />
           <input type="hidden" name="source" value="hero" />
           <p style="display:none"><input name="bot-field" aria-hidden="true" tabindex="-1" autocomplete="off" /></p>
@@ -1882,7 +1882,7 @@
     <p class="section-body">Become a Founding Member and get <strong>20% off your first 12 months</strong> — on monthly
       or yearly, your choice. Claim it within 30 days of launch.</p>
     <form class="cta-form" id="cta-form" name="waitlist-cta" method="POST" data-netlify="true"
-      data-netlify-honeypot="bot-field" onsubmit="handleWaitlist(event,'cta')">
+      data-netlify-honeypot="bot-field" onsubmit="return handleWaitlist(event,'cta')">
       <input type="hidden" name="form-name" value="waitlist-cta" />
       <input type="hidden" name="source" value="cta-section" />
       <p style="display:none"><input name="bot-field" aria-hidden="true" tabindex="-1" autocomplete="off" /></p>
@@ -2297,18 +2297,24 @@
 
   <script>
     function handleWaitlist(e, source) {
-      e.preventDefault();
-      const form = e.target;
+      if (e && e.preventDefault) e.preventDefault();
+      const form = e ? e.target : document.getElementById(source === 'hero' ? 'hero-form' : 'cta-form');
+      if (!form) return false;
+
       const emailEl = document.getElementById(source === 'hero' ? 'hero-email' : 'cta-email');
       const successEl = document.getElementById(source === 'hero' ? 'hero-success' : 'cta-success');
       const btn = form.querySelector('button[type="submit"]');
-      if (!emailEl.value) return;
+      if (!emailEl || !emailEl.value) return false;
+
+      const email = emailEl.value.trim();
 
       // Disable button while submitting
-      btn.disabled = true;
-      btn.textContent = 'Joining...';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Joining...';
+      }
 
-      // Encode form data for Netlify
+      // Step 1: Submit to Netlify Forms via AJAX
       const formData = new FormData(form);
       fetch('/', {
         method: 'POST',
@@ -2316,14 +2322,27 @@
         body: new URLSearchParams(formData).toString()
       })
         .then(() => {
+          // Step 2: Show inline success message
           form.style.display = 'none';
-          successEl.style.display = 'block';
+          if (successEl) successEl.style.display = 'block';
+
+          // Step 3: Add to Resend Audience & send welcome email via Netlify Function
+          fetch('/.netlify/functions/waitlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+          }).catch(function(err) {
+            console.warn('Resend email function error:', err);
+          });
         })
-        .catch(() => {
-          // Fallback - show success anyway (email still captured by Netlify)
+        .catch((err) => {
+          console.error('Netlify form submission error:', err);
+          // Fallback: show success message anyway
           form.style.display = 'none';
-          successEl.style.display = 'block';
+          if (successEl) successEl.style.display = 'block';
         });
+
+      return false;
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(a => {
