@@ -2296,37 +2296,29 @@
   </footer>
 
   <script>
-    function handleWaitlist(e, source) {
-      if (e && e.preventDefault) e.preventDefault();
-      const form = e ? e.target : document.getElementById(source === 'hero' ? 'hero-form' : 'cta-form');
-      if (!form) return false;
-
+    function submitWaitlistForm(form, source) {
       const emailEl = document.getElementById(source === 'hero' ? 'hero-email' : 'cta-email');
       const successEl = document.getElementById(source === 'hero' ? 'hero-success' : 'cta-success');
       const btn = form.querySelector('button[type="submit"]');
-      if (!emailEl || !emailEl.value) return false;
 
+      if (!emailEl || !emailEl.value) return false;
       const email = emailEl.value.trim();
 
-      // Disable button while submitting
       if (btn) {
         btn.disabled = true;
         btn.textContent = 'Joining...';
       }
 
-      // Step 1: Submit to Netlify Forms via AJAX
       const formData = new FormData(form);
       fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData).toString()
       })
-        .then(() => {
-          // Step 2: Show inline success message
+        .then(function() {
           form.style.display = 'none';
           if (successEl) successEl.style.display = 'block';
 
-          // Step 3: Add to Resend Audience & send welcome email via Netlify Function
           fetch('/.netlify/functions/waitlist', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -2335,14 +2327,44 @@
             console.warn('Resend email function error:', err);
           });
         })
-        .catch((err) => {
+        .catch(function(err) {
           console.error('Netlify form submission error:', err);
-          // Fallback: show success message anyway
           form.style.display = 'none';
           if (successEl) successEl.style.display = 'block';
         });
 
       return false;
+    }
+
+    function handleWaitlist(e, source) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (e && e.stopPropagation) e.stopPropagation();
+      const form = (e && e.target) ? e.target : document.getElementById(source === 'hero' ? 'hero-form' : 'cta-form');
+      if (form) {
+        submitWaitlistForm(form, source || (form.id === 'hero-form' ? 'hero' : 'cta'));
+      }
+      return false;
+    }
+
+    function initWaitlistListeners() {
+      ['hero-form', 'cta-form'].forEach(function(formId) {
+        const form = document.getElementById(formId);
+        if (form) {
+          form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const source = formId === 'hero-form' ? 'hero' : 'cta';
+            submitWaitlistForm(form, source);
+            return false;
+          });
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initWaitlistListeners);
+    } else {
+      initWaitlistListeners();
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(a => {
