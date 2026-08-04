@@ -184,23 +184,21 @@ export default async (req, context) => {
         <div style="font-size:24px;letter-spacing:4px;color:#1A1A18;margin-bottom:20px;font-weight:600;">
           PARURE<br><span style="font-family:Georgia,serif;font-style:italic;font-weight:300;font-size:16px;letter-spacing:2px;color:#B08D57;">La Plee</span>
         </div>
-        <h2 style="font-size:20px;color:#3A3733;font-weight:500;">New Waitlist Signup 🎉</h2>
-        <p style="font-size:16px;color:#5A554C;margin:20px 0;">A new user has just joined the waitlist:</p>
-        <div style="background-color:#E9E4DA;padding:15px;border-radius:4px;display:inline-block;margin:10px 0;">
+        <h2 style="font-size:20px;color:#3A3733;font-weight:500;">New Waitlist Signup</h2>
+        <p style="font-size:16px;color:#5A554C;margin:20px 0;">A new user has just joined the Parure La Plee waitlist:</p>
+        <div style="background-color:#E9E4DA;padding:15px 25px;border-radius:4px;display:inline-block;margin:10px 0;">
           <strong style="font-size:18px;color:#1A1A18;">${email}</strong>
         </div>
-        <p style="font-size:14px;color:#7A7468;margin-top:30px;">This is an automated notification from your app.</p>
+        <p style="font-size:14px;color:#7A7468;margin-top:30px;">This is an automated notification for Parure La Plee.</p>
       </div>
     `;
     try {
-      const adminEmailRaw = process.env.RESEND_FROM_EMAIL || 'anne@parureapp.com';
-      const toAdminMatch = adminEmailRaw.match(/<([^>]+)>/);
-      const toAdmin = toAdminMatch ? toAdminMatch[1] : adminEmailRaw;
+      const toAdmin = process.env.ADMIN_EMAIL || 'parureapp@gmail.com';
 
       await resend.emails.send({
         from: fromEmail,
         to: toAdmin,
-        subject: 'New Waitlist Signup: ' + email,
+        subject: '[Parure] New Waitlist Signup: ' + email,
         html: adminEmailHtml,
       });
       console.log(`[waitlist] ✓ Admin notification sent to: ${toAdmin}`);

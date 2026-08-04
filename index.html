@@ -1430,8 +1430,7 @@
           Parure La Plee analyzes your coloring, organizes your wardrobe, and styles every occasion from what you
           already own. Technology that understands your wardrobe, rooted in sustainability.
         </p>
-        <form class="waitlist-form" id="hero-form" name="waitlist" method="POST" data-netlify="true"
-          data-netlify-honeypot="bot-field" onsubmit="return handleWaitlist(event,'hero')">
+        <form class="waitlist-form" id="hero-form" name="waitlist" method="POST" onsubmit="return handleWaitlist(event,'hero')">
           <input type="hidden" name="form-name" value="waitlist" />
           <input type="hidden" name="source" value="hero" />
           <p style="display:none"><input name="bot-field" aria-hidden="true" tabindex="-1" autocomplete="off" /></p>
@@ -1881,8 +1880,7 @@
     </h2>
     <p class="section-body">Become a Founding Member and get <strong>20% off your first 12 months</strong> — on monthly
       or yearly, your choice. Claim it within 30 days of launch.</p>
-    <form class="cta-form" id="cta-form" name="waitlist-cta" method="POST" data-netlify="true"
-      data-netlify-honeypot="bot-field" onsubmit="return handleWaitlist(event,'cta')">
+    <form class="cta-form" id="cta-form" name="waitlist-cta" method="POST" onsubmit="return handleWaitlist(event,'cta')">
       <input type="hidden" name="form-name" value="waitlist-cta" />
       <input type="hidden" name="source" value="cta-section" />
       <p style="display:none"><input name="bot-field" aria-hidden="true" tabindex="-1" autocomplete="off" /></p>
@@ -2309,26 +2307,17 @@
         btn.textContent = 'Joining...';
       }
 
-      const formData = new FormData(form);
-      fetch('/', {
+      fetch('/.netlify/functions/waitlist', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
       })
         .then(function() {
           form.style.display = 'none';
           if (successEl) successEl.style.display = 'block';
-
-          fetch('/.netlify/functions/waitlist', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-          }).catch(function(err) {
-            console.warn('Resend email function error:', err);
-          });
         })
         .catch(function(err) {
-          console.error('Netlify form submission error:', err);
+          console.error('Waitlist submission error:', err);
           form.style.display = 'none';
           if (successEl) successEl.style.display = 'block';
         });
