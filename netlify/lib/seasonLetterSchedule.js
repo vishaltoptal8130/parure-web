@@ -37,7 +37,7 @@ export const SEASON_LETTER_ISSUES = /** @type {SeasonLetterIssue[]} */ ([
   {
     id: 'nl5',
     sendDate: '2026-09-08',
-    subject: 'Your Community Closet Just Opened',
+    subject: 'Inside the Community Closet',
     file: 'broadcast_5_sept8.html',
   },
   {
