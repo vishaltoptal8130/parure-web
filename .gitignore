@@ -6,3 +6,7 @@ node_modules/
 
 # Netlify local cache
 .netlify/
+
+# OS files
+.DS_Store
+

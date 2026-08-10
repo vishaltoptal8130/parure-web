@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Season Letter — Automated Welcome</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Season Letter — Welcome, Founding Member</title>
+<!-- Subject: Welcome, Founding Member | Preview: You just joined something we've been building for a long time. Here's why it exists. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  
+
   *{box-sizing:border-box;margin:0;padding:0;}
   body{
     background:#E9E4DA;
@@ -24,31 +26,11 @@
   .wordmark{ font-family:'Poppins',sans-serif; font-size:12px; letter-spacing:5px; color:#C8B89A; font-weight:600; }
   .title{ font-family:'Lora',serif; font-size:34px; color:#1E1D1B; margin-top:10px; letter-spacing:0.5px; }
   .goldline{ width:64px; height:2px; background:#B08D57; margin:18px auto 0; }
-  .issueband{
-    background:#B08D57; color:#1E1D1B; text-align:center;
-    display:flex; justify-content:center; align-items:center; padding:10px 28px;
-    font-size:12px; letter-spacing:2px; font-weight:600;
-  }
-  .hero{
-    height:340px;
-    position:relative;
-    overflow:hidden;
-    display:flex; align-items:flex-end; padding:24px 40px;
-  }
-  .hero img{
-    position:absolute; top:0; left:0;
-    width:100%; height:100%;
-    object-fit:cover; object-position:center 20%;
-  }
-  .hero::after{
-    content:"";
-    position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(30,29,27,0) 40%, rgba(30,29,27,0.75) 100%);
-  }
-  .hero-caption{ position:relative; z-index:1; color:#FAF8F5; font-family:'Lora',serif; font-style:italic; font-size:15px; }
   .section{ padding:34px 40px 6px; }
   .eyebrow{ font-size:11px; letter-spacing:3px; color:#B08D57; font-weight:600; text-transform:uppercase; margin-bottom:10px; }
   .from-anne p, .body-copy p{ font-size:15px; line-height:1.75; color:#3A3733; margin-bottom:14px; }
+  .body-copy ul{ margin:0 0 14px 18px; padding:0; }
+  .body-copy li{ font-size:15px; line-height:1.7; color:#3A3733; margin-bottom:10px; }
   .signoff{ font-family:'Lora',serif; font-style:italic; font-size:15px; color:#1E1D1B; margin-top:6px; }
   .divider{ border:none; border-top:1px solid #C8B89A; margin:0 40px; }
   .feature-title{ font-family:'Lora',serif; font-size:20px; color:#1E1D1B; margin-bottom:8px; }
@@ -58,114 +40,98 @@
     text-decoration:none; font-size:13px; letter-spacing:1.5px; padding:15px 34px; font-weight:500;
   }
   .cta-sub{ font-size:13px; color:#7d776c; margin-top:14px; }
-  .playlist-card{ display:flex; align-items:center; gap:16px; background:#F1ECE2; padding:16px; border-left:3px solid #B08D57; }
-  .playlist-art{ width:56px;height:56px;flex:0 0 56px; background:linear-gradient(135deg,#C8B89A,#B08D57); }
-  .playlist-text{ font-size:13.5px; line-height:1.6; color:#3A3733; }
-  .playlist-text a{ color:#1E1D1B; font-weight:600; }
   .closet-card{ background:#F1ECE2; padding:18px 20px; border-left:3px solid #1E1D1B; }
   .closet-card .step-num{ font-family:'Lora',serif; font-style:italic; font-size:13px; color:#B08D57; display:block; margin-bottom:4px; }
-  .closet-card p{ font-size:14.5px; line-height:1.7; color:#3A3733; }
+  .closet-card p{ font-size:14.5px; line-height:1.7; color:#3A3733; margin-bottom:10px; }
+  .closet-card p:last-child{ margin-bottom:0; }
   .footer{ background:#1E1D1B; color:#c9c3b8; text-align:center; padding:32px 40px; font-size:12px; line-height:1.9; }
   .footer .brand{ color:#C8B89A; letter-spacing:3px; font-size:11px; font-weight:600; margin-bottom:10px; }
   .footer a{ color:#c9c3b8; }
   .footer .countdown-foot{ color:#C8B89A; font-weight:600; margin-top:8px; display:block; }
+
 </style>
 </head>
 <body>
   <div class="email">
-
     <div class="masthead">
       <div class="wordmark">PARURE LA PLEE</div>
       <div class="title">The Season Letter</div>
       <div class="goldline"></div>
     </div>
-
-
-
     <div class="issueband" style="background:#1E1D1B; color:#FAF8F5; font-size:11px; letter-spacing:3px; padding:10px; text-align:center; font-weight:600; text-transform:uppercase;">
-      <span>BROADCAST 1 · AUGUST 11 · 49 DAYS TO LAUNCH</span>
+      <span>NEWSLETTER 1 · AUGUST 11 · 49 DAYS TO LAUNCH</span>
     </div>
-    
-    <!-- HERO SECTION -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; margin:0 auto; border-collapse:collapse;">
       <tr>
-        <td align="center" style="padding: 0; line-height: 0;">
-          <img src="https://parure.app/images/broadcast1-hero.png" alt="real, styled photo of a keep / worth-listing / unsure sorting moment" width="600" style="display: block; width: 100%; max-width: 600px; height: auto; border: 0; margin: 0;">
+        <td align="center" style="padding:0; line-height:0;">
+          <img src="https://parure.app/images/newsletter_1.jpg" alt="Fabric swatches in warm earth tones — a preview of colour season" width="600" style="display:block; width:100%; max-width:600px; height:auto; border:0; margin:0;">
         </td>
       </tr>
       <tr>
-        <td bgcolor="#1E1D1B"
- style="padding:20px 40px; color:#FAF8F5; text-align:center; font-family:'Lora',serif; font-style:italic; font-size:15px; line-height:1.5;">
-          “I have nothing to wear” — while standing in front of a full closet. Sound familiar?
-        
-</td>
+        <td bgcolor="#1E1D1B" style="padding:20px 40px; color:#FAF8F5; text-align:center; font-family:'Lora',serif; font-style:italic; font-size:15px; line-height:1.5;">
+          You just joined something we've been building for a long time. Here's why it exists.
+        </td>
       </tr>
     </table>
-
     <div class="section from-anne">
       <div class="eyebrow">From Anne</div>
-      <p>Before Parure La Plee was an app, it was a question I couldn’t stop asking myself: why did I feel like I had nothing to wear when my closet was completely full? The answer, it turns out, wasn’t that I owned the wrong things. It was that I’d never actually seen my wardrobe as a whole — just as a pile of individual pieces I’d forgotten how to combine. That’s the gap we’re building to close.</p>
-      
-<div class="signoff">— Anne</div>
+      <p>I built Parure La Plee because I got tired of opening my closet every morning and feeling like I owned nothing, when really I owned plenty — I just didn't know how to put it together. That's the whole idea here: not another app telling you to buy more, but one that finally helps you see what you already have. You just became a Founding Member, which means you're going to be one of the first people in the world to try this. Over the next few weeks, I'm going to write to you every week — a little of the why, a little of what's coming, and a little something to do in the meantime. Glad you're here.</p>
+      <div class="signoff">— Anne</div>
     </div>
-
     <hr class="divider">
 
     <div class="section">
       <div class="eyebrow">Feature Sneak Peek</div>
-      <div class="feature-title">Your whole closet, finally visible.</div>
+      <div class="feature-title">One selfie, one color season.</div>
       <div class="body-copy">
-        <p>The digital wardrobe turns your closet into something you can see and search — organised by category, colour, and season instead of buried on a hanger. A guided flow walks you through eight categories one at a time, celebrating your progress, building toward a 65-piece foundation. You can always add more.</p>
-      </div>
+        <p>At the center of everything is our patent-pending color analysis technology, which reads your eyes, hair, skin tone, and depth from a single selfie and places you in one of twelve color seasons — the same framework professional color analysts use, in under a minute. Every recommendation the app ever makes starts here.</p>
+</div>
     </div>
-
     <hr class="divider">
 
     <div class="section">
       <div class="eyebrow">Style Notes — Seasonal Trend</div>
       <div class="body-copy">
-      <p>Early August is when a lot of closets are quietly holding pieces that never get worn simply because they’ve never been seen next to the right partner piece. Before you touch anything, just notice: is there something in there you haven’t worn all summer, and can you say why?</p>
-      
-</div>
+        <p>August asks a lot of the pieces that already work hardest for you — the linen shirt worn open over a tank in the heat, the one dress you reach for when nothing else feels right, sandals that go from errands to dinner without a second thought. Start noticing which of your own pieces are already pulling double duty this month — that's a preview of what the app will point you toward.</p>
+      </div>
     </div>
-
     <hr class="divider">
 
     <div class="section">
       <div class="eyebrow">The Playlist</div>
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F1ECE2; border-left:3px solid #B08D57; width:100%; border-collapse: collapse; margin-top: 10px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F1ECE2; border-left:3px solid #B08D57; width:100%; border-collapse:collapse; margin-top:10px;">
         <tr>
-          <td style="padding: 16px; width: 56px; vertical-align: middle; line-height: 0;">
-            <div style="width:56px; height:56px; background:#C8B89A; border-radius: 4px;"></div>
+          <td style="padding:16px; width:56px; vertical-align:middle; line-height:0;">
+                        <div style="width:56px; height:56px; background:linear-gradient(135deg,#C8B89A,#B08D57); border-radius:4px;"></div>
           </td>
-          <td style="padding: 16px 16px 16px 0; vertical-align: middle; font-family:'Poppins', sans-serif; font-size:13.5px; line-height:1.6; color:#3A3733;">
-            <strong style="color:#1E1D1B;">Slow Sunday Getting Dressed</strong> — easy, unbothered, made for the kind of morning where you actually take your time.<br>
+          <td style="padding:16px 16px 16px 0; vertical-align:middle; font-family:'Poppins',sans-serif; font-size:13.5px; line-height:1.6; color:#3A3733;">
+            <strong style="color:#1E1D1B;">Sunlit Waiting</strong> — warm, unhurried, made for a season that's just getting started.<br>
             <a href="https://open.spotify.com/playlist/5Wc0mk6Kl7wgPEZVbQ7hkC?si=RxqKktqFSLWrRAbd-zEddw" target="_blank" rel="noopener" style="color:#1E1D1B; font-weight:600; text-decoration:none;">Listen on Spotify →</a>
           </td>
         </tr>
       </table>
     </div>
-
     <hr class="divider">
 
     <div class="section">
       <div class="eyebrow">Get Closet-Ready</div>
       <div class="closet-card">
-        <span class="step-num">Step 2 of 6</span>
-        <p>Time to sort. Pull everything from that same shelf or drawer and make three quick piles: keep, worth listing, and unsure. That middle pile isn’t a donation box — pieces that no longer fit your life might be exactly what someone else’s colour season is looking for on the marketplace we’re building. Your keep pile is what you’ll photograph for your wardrobe upload on day one.</p>
+        <span class="step-num">Step 1 of 7</span>
+        <p>No sorting yet — just looking. Open one shelf, drawer, or section of your closet and really look at what's there for a minute. Don't move anything. You're just getting reacquainted before we start organizing in the next issue.</p>
       </div>
     </div>
-
     <div class="cta-wrap">
-      <div class="cta-sub" style="margin-top:0; margin-bottom:14px; font-size:14px; line-height:1.6;">Reply and tell me one piece that ended up in your “worth listing” pile — I read every reply.</div>
-      
+      <div class="cta-sub" style="margin-top:0; margin-bottom:14px; font-size:14px; line-height:1.6;">Know someone who'd want early access too? Forward this email or share <strong>parure.app</strong> — we'll let early sharers know first.</div>
+      <a class="cta-btn" href="https://parure.app" target="_blank" rel="noopener">SHARE PARURE.APP</a>
     </div>
-
     <div class="footer">
       <div class="brand">PARURE LA PLEE</div>
       Personal. Purposeful. Intentional.<br>
-      <a href="https://instagram.com/parurelaplee" target="_blank" rel="noopener">@parurelaplee</a> &nbsp;·&nbsp; <a href="https://parure.app" target="_blank" rel="noopener">parure.app</a> &nbsp;·&nbsp; <a href="{{ unsubscribe_url }}" target="_blank" rel="noopener">Unsubscribe</a>
-      <span class="countdown-foot">49 days to launch — more soon.</span>
+      <a href="https://instagram.com/parurelaplee" target="_blank" rel="noopener">@parurelaplee</a> &nbsp;·&nbsp;
+      <a href="https://www.tiktok.com/@parurelaplee" target="_blank" rel="noopener">TikTok</a> &nbsp;·&nbsp;
+      <a href="https://parure.app" target="_blank" rel="noopener">parure.app</a> &nbsp;·&nbsp;
+      <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" target="_blank" rel="noopener">Unsubscribe</a>
+      <span class="countdown-foot">49 days to launch — more next week.</span>
     </div>
 
   </div>

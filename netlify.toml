@@ -19,6 +19,10 @@
 [functions]
   node_bundler = "esbuild"
 
+# Include Season Letter HTML templates so waitlist can send welcome + catch-up
+[functions.waitlist]
+  included_files = ["emails/**"]
+
 # ─────────────────────────────────────────────
 # Redirects & Universal Links
 # ─────────────────────────────────────────────

@@ -7,7 +7,8 @@
 //   1. Receives a POST with { email } from the frontend
 //   2. Creates (or gracefully handles existing) contact in Resend Audience
 //   3. Sends the Season Letter welcome email to new subscribers
-//   4. Returns a clean JSON response
+//   4. Catch-up: sends any Season Letter issues already broadcast (late joiners)
+//   5. Returns a clean JSON response
 //
 // Environment variables required (set in Netlify Dashboard):
 //   - RESEND_API_KEY      — Your Resend API key
@@ -15,47 +16,38 @@
 //   - RESEND_FROM_EMAIL   — Verified sender (e.g. "The Season Letter <anne@parureapp.com>")
 //
 // The Resend Audience is the single source of truth for the waitlist.
-// No Supabase. No duplicate emails. No exposed API keys.
+// Weekly issues still go out as Resend Broadcasts; this function only
+// backfills issues whose send date is already in the past.
 // ─────────────────────────────────────────────────────────────────────
 
 import { Resend } from 'resend';
 import { readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { resolve } from 'path';
+import { sendCatchUpEmails } from '../lib/seasonLetterSchedule.js';
 
 // ── Initialize Resend client (runs once per cold start) ──────────────
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ── Load the welcome email HTML template at cold start ───────────────
-// The template lives at emails/season_letter_welcome_template.html
-// We read it once and cache it in memory for all subsequent requests.
 let welcomeEmailHtml = '';
 try {
-  // Resolve the path relative to the project root.
-  // In Netlify Functions, process.cwd() points to the project root.
   const templatePath = resolve(process.cwd(), 'emails', 'season_letter_welcome_template.html');
   welcomeEmailHtml = readFileSync(templatePath, 'utf-8');
   console.log('[waitlist] ✓ Welcome email template loaded successfully');
 } catch (err) {
   console.error('[waitlist] ✗ Failed to load welcome email template:', err.message);
-  // Function will still work — contact will be added to audience,
-  // but the welcome email will contain a fallback message.
 }
 
-// ── Simple email validation ──────────────────────────────────────────
 function isValidEmail(email) {
-  // RFC-5322 simplified — good enough for a waitlist form
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// ── CORS headers (allows frontend to call this function) ─────────────
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-// ── Helper: build a JSON Response ────────────────────────────────────
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -66,22 +58,15 @@ function jsonResponse(body, status = 200) {
   });
 }
 
-// ─────────────────────────────────────────────────────────────────────
-// Main handler — Netlify Functions v2 (ESM default export)
-// ─────────────────────────────────────────────────────────────────────
 export default async (req, context) => {
-
-  // ── Handle CORS preflight ────────────────────────────────────────
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: corsHeaders });
   }
 
-  // ── Only accept POST ─────────────────────────────────────────────
   if (req.method !== 'POST') {
     return jsonResponse({ success: false, error: 'Method not allowed' }, 405);
   }
 
-  // ── Parse the request body ───────────────────────────────────────
   let email;
   try {
     const body = await req.json();
@@ -91,7 +76,6 @@ export default async (req, context) => {
     return jsonResponse({ success: false, error: 'Invalid request body' }, 400);
   }
 
-  // ── Validate the email ───────────────────────────────────────────
   if (!email || !isValidEmail(email)) {
     console.warn('[waitlist] ✗ Invalid email received:', email);
     return jsonResponse({ success: false, error: 'A valid email is required' }, 400);
@@ -99,10 +83,9 @@ export default async (req, context) => {
 
   console.log(`[waitlist] → Processing signup for: ${email}`);
 
-  // ── Configuration ────────────────────────────────────────────────
   const audienceId = process.env.RESEND_AUDIENCE_ID;
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'Parure Pla Plee <anne@parureapp.com>';
-  const emailSubject = 'Welcome to the Waitlist';
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'Parure La Plee <anne@parureapp.com>';
+  const emailSubject = 'Welcome to The Season Letter';
 
   if (!audienceId) {
     console.error('[waitlist] ✗ RESEND_AUDIENCE_ID is not set');
@@ -122,16 +105,11 @@ export default async (req, context) => {
     });
 
     if (error) {
-      // ── Handle duplicate gracefully ────────────────────────────
-      // Resend returns a validation_error when the contact already exists.
-      // This is expected behavior — treat it as success, skip welcome email.
       if (error.name === 'validation_error' || error.message?.includes('already exists')) {
-        console.log(`[waitlist] ℹ Contact already exists: ${email} — skipping welcome email`);
+        console.log(`[waitlist] ℹ Contact already exists: ${email} — skipping welcome + catch-up`);
         isNewContact = false;
       } else {
-        // Unexpected error — log it but still return success to the user
         console.error('[waitlist] ✗ Resend contacts.create error:', JSON.stringify(error));
-        // Return success anyway — the email was already captured by Netlify Forms
         return jsonResponse({ success: true, message: 'Signed up successfully' });
       }
     } else {
@@ -139,20 +117,18 @@ export default async (req, context) => {
     }
   } catch (err) {
     console.error('[waitlist] ✗ Resend contacts.create exception:', err.message);
-    // Return success — Netlify Forms has the email as a fallback
     return jsonResponse({ success: true, message: 'Signed up successfully' });
   }
 
   // ─────────────────────────────────────────────────────────────────
-  // Step 2: Send welcome email (only for NEW subscribers)
+  // Step 2: Welcome + catch-up (NEW subscribers only)
   // ─────────────────────────────────────────────────────────────────
   if (isNewContact) {
-    // Use the loaded HTML template, or a minimal fallback if template failed to load
     const htmlContent = welcomeEmailHtml || `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:40px 20px;text-align:center;">
         <h1 style="font-size:28px;color:#1A1A18;">Welcome to The Season Letter ✦</h1>
         <p style="font-size:16px;color:#3A3733;line-height:1.6;">
-          Thank you for joining the Parure La Plee waitlist. We'll be in touch soon with updates, 
+          Thank you for joining the Parure La Plee waitlist. We'll be in touch soon with updates,
           early access, and everything you need to know before launch.
         </p>
         <p style="font-size:14px;color:#7A7468;margin-top:30px;">— The Parure La Plee Team</p>
@@ -168,17 +144,25 @@ export default async (req, context) => {
       });
 
       if (error) {
-        // Log but don't fail — the contact is already in the audience
         console.error('[waitlist] ✗ Welcome email send error:', JSON.stringify(error));
       } else {
         console.log(`[waitlist] ✓ Welcome email sent to: ${email} (id: ${data?.id})`);
       }
     } catch (err) {
       console.error('[waitlist] ✗ Welcome email send exception:', err.message);
-      // Don't fail — contact is in the audience, email can be retried later
     }
 
-    // ── Send Admin Notification Email ────────────────────────────────
+    // Late joiners: backfill any Season Letter issues already sent
+    try {
+      const catchUp = await sendCatchUpEmails(resend, { email, fromEmail });
+      console.log(
+        `[waitlist] ✓ Catch-up done for ${email}: sent=[${catchUp.sent.join(',')}] skipped=[${catchUp.skipped.join(',')}]`
+      );
+    } catch (err) {
+      console.error('[waitlist] ✗ Catch-up exception:', err.message);
+    }
+
+    // Admin notification
     const adminEmailHtml = `
       <div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;max-width:600px;margin:0 auto;padding:40px 20px;text-align:center;background-color:#FAF8F5;border:1px solid #E9E4DA;border-radius:8px;">
         <div style="font-size:24px;letter-spacing:4px;color:#1A1A18;margin-bottom:20px;font-weight:600;">
@@ -194,7 +178,6 @@ export default async (req, context) => {
     `;
     try {
       const toAdmin = process.env.ADMIN_EMAIL || 'parureapp@gmail.com';
-
       await resend.emails.send({
         from: fromEmail,
         to: toAdmin,
@@ -207,12 +190,9 @@ export default async (req, context) => {
     }
   }
 
-  // ─────────────────────────────────────────────────────────────────
-  // Step 3: Return success
-  // ─────────────────────────────────────────────────────────────────
   console.log(`[waitlist] ✓ Signup complete for: ${email} (new: ${isNewContact})`);
   return jsonResponse({
     success: true,
-    message: isNewContact ? 'Welcome! Check your inbox.' : 'You\'re already on the list!',
+    message: isNewContact ? 'Welcome! Check your inbox.' : "You're already on the list!",
   });
 };
