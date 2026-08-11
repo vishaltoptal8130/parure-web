@@ -7,6 +7,24 @@
 <title>Parure La Plee — Your AI Personal Stylist</title>
 <meta name="description" content="Parure La Plee (pa·rure /paˈryr/) — your AI personal stylist. Patent-pending colour analysis, AI-generated outfits from your own closet, and sustainable shopping. Join to become a Founding Member for 20% off your first 12 months.">
 
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1027413000094780');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
 <!-- Social share preview -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Parure La Plee">
@@ -1164,10 +1182,18 @@
         btn.textContent = 'Joining...';
       }
 
+      // Unique event ID for Meta deduplication (Pixel + CAPI)
+      const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+
+      // Track Meta Pixel Lead Event
+      if (typeof fbq === 'function') {
+        fbq('track', 'Lead', { content_name: 'Waitlist Signup', source: source }, { eventID: eventId });
+      }
+
       fetch('/.netlify/functions/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ email: email, eventId: eventId })
       })
         .then(function() {
           form.style.display = 'none';

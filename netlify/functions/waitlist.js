@@ -23,6 +23,7 @@
 import { Resend } from 'resend';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { createHash } from 'node:crypto';
 import { sendCatchUpEmails } from '../lib/seasonLetterSchedule.js';
 
 // ── Initialize Resend client (runs once per cold start) ──────────────
@@ -40,6 +41,69 @@ try {
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// ── Meta Conversions API (CAPI) Helper ──────────────────────────────
+async function sendMetaCapiEvent({ email, eventId, req, context }) {
+  const pixelId = process.env.META_PIXEL_ID || '1027413000094780';
+  const accessToken = process.env.META_CAPI_TOKEN || 'EAAWNmZCOIgKoBSM84ZAlBan7AuUPlwVYFAQ6DtlHygvYyLxC6wWUXTGZAEPB4sxplOtTVTWlcpb6CZAbwsrzZAzqIroIA9weGx6savyuLdMXJcAJfm5MEiVPI8YI3g1CdZBxni7pNVDwmOhDwgi7y5UrMvVzJzH8KfwWRlvriBZCX4C8PoYjlE0O3tb45AjUi2UxgZDZD';
+  const testCode = process.env.META_TEST_EVENT_CODE || 'TEST79595';
+
+  if (!pixelId || !accessToken) {
+    console.warn('[waitlist] Meta CAPI: Missing pixelId or accessToken');
+    return;
+  }
+
+  try {
+    const hashedEmail = createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
+
+    // Extract headers for IP and User-Agent
+    let clientIp = req.headers?.get('x-forwarded-for') || req.headers?.get('x-nf-client-connection-ip') || context?.ip || '';
+    if (clientIp.includes(',')) {
+      clientIp = clientIp.split(',')[0].trim();
+    }
+    const userAgent = req.headers?.get('user-agent') || '';
+    const referer = req.headers?.get('referer') || 'https://parure.app/';
+
+    const payload = {
+      data: [
+        {
+          event_name: 'Lead',
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: eventId || `lead_server_${Date.now()}`,
+          event_source_url: referer,
+          action_source: 'website',
+          user_data: {
+            em: [hashedEmail],
+            ...(clientIp ? { client_ip_address: clientIp } : {}),
+            ...(userAgent ? { client_user_agent: userAgent } : {})
+          },
+          custom_data: {
+            content_name: 'Waitlist Signup'
+          }
+        }
+      ]
+    };
+
+    if (testCode) {
+      payload.test_event_code = testCode;
+    }
+
+    const res = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      console.log('[waitlist] ✓ Meta CAPI Lead event sent successfully:', data);
+    } else {
+      console.error('[waitlist] ✗ Meta CAPI error response:', data);
+    }
+  } catch (err) {
+    console.error('[waitlist] ✗ Failed to send Meta CAPI event:', err.message);
+  }
 }
 
 const corsHeaders = {
@@ -67,10 +131,11 @@ export default async (req, context) => {
     return jsonResponse({ success: false, error: 'Method not allowed' }, 405);
   }
 
-  let email;
+  let email, eventId;
   try {
     const body = await req.json();
     email = body.email?.trim().toLowerCase();
+    eventId = body.eventId;
   } catch (err) {
     console.error('[waitlist] ✗ Invalid JSON body:', err.message);
     return jsonResponse({ success: false, error: 'Invalid request body' }, 400);
@@ -82,6 +147,11 @@ export default async (req, context) => {
   }
 
   console.log(`[waitlist] → Processing signup for: ${email}`);
+
+  // Send server-side Meta CAPI Lead Event (non-blocking)
+  sendMetaCapiEvent({ email, eventId, req, context }).catch(err => {
+    console.error('[waitlist] ✗ Meta CAPI background error:', err);
+  });
 
   const audienceId = process.env.RESEND_AUDIENCE_ID;
   const fromEmail = process.env.RESEND_FROM_EMAIL || 'Parure La Plee <anne@parureapp.com>';
