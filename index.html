@@ -97,6 +97,37 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   }
   .nav-cta:hover { opacity: 0.88 !important; }
 
+  .nav-toggle {
+    display: none;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    z-index: 102;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--charcoal);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+  body.nav-open { overflow: hidden; }
+
   /* ── HERO ── */
   .hero {
     min-height: 100vh;
@@ -554,7 +585,34 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     nav { padding: 0 20px; }
-    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--cream);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 12px 24px 40px;
+      overflow-y: auto;
+      z-index: 101;
+    }
+    nav.nav-open .nav-links { display: flex; }
+    .nav-links a {
+      font-size: 17px;
+      color: var(--charcoal);
+      padding: 16px 0;
+      border-bottom: 0.5px solid rgba(200,184,154,0.35);
+    }
+    .nav-links a.nav-cta {
+      margin-top: 20px;
+      text-align: center;
+      border-bottom: none;
+    }
     .hero { padding: 100px 20px 60px; }
     .hero-inner { grid-template-columns: minmax(0,1fr); gap: 48px; }
     .hero-visual { display: none; }
@@ -683,12 +741,16 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 <nav role="navigation" aria-label="Main navigation">
   <a href="#" class="nav-logo" style="display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:1px">PARURE<span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:300;font-size:11px;letter-spacing:.12em;color:var(--tan-dark);text-transform:none;line-height:1">La Plee</span></a>
   <div style="display:none" id="def-tooltip"></div>
-  <div class="nav-links">
+  <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="#how-it-works">How it works</a>
     <a href="#features">Features</a>
     <a href="#community">Community</a>
     <a href="#shop">Shop</a>
     <a href="#pricing">Pricing</a>
+    <a href="#creator">Creators</a>
     <a href="#waitlist" class="nav-cta">Become a Founding Member</a>
   </div>
 </nav>
@@ -718,7 +780,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
         <li><strong>Discover your colour season</strong> in under a minute</li>
         <li><strong>Unlock premium features</strong> as a Founding Member</li>
       </ul>
-      <form class="waitlist-form" id="hero-form" name="waitlist" method="POST" onsubmit="return handleWaitlist(event,'hero')">
+      <form class="waitlist-form" id="hero-form" name="waitlist" method="POST">
         <input type="hidden" name="form-name" value="waitlist" />
         <input type="hidden" name="source" value="hero" />
         <input type="email" name="email" autocomplete="email" placeholder="Your email address" required id="hero-email" />
@@ -830,7 +892,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     <div class="how-cta">
       <h3 class="how-cta-title">Unlock your style like you've never seen before.</h3>
       <p class="how-cta-body">Become a Founding Member today — be first to experience Parure La Plee and lock in 20% off your first year.</p>
-      <form class="cta-form" id="how-form" name="waitlist-how" method="POST" onsubmit="return handleWaitlist(event,'how')">
+      <form class="cta-form" id="how-form" name="waitlist-how" method="POST">
         <input type="hidden" name="form-name" value="waitlist-how" />
         <input type="hidden" name="source" value="how-it-works" />
         <input type="email" name="email" autocomplete="email" placeholder="Your email address" required id="how-email" />
@@ -1092,7 +1154,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   <div class="section-eyebrow">Waitlist offer</div>
   <h2 class="section-title" style="max-width:560px">Be first — and save 20%<br>when <em>Parure La Plee</em> launches</h2>
   <p class="section-body">Join to become a Founding Member and get <strong>20% off your first 12 months</strong> — on monthly or yearly, your choice. Claim it within 30 days of launch.</p>
-  <form class="cta-form" id="cta-form" name="waitlist-cta" method="POST" onsubmit="return handleWaitlist(event,'cta')">
+  <form class="cta-form" id="cta-form" name="waitlist-cta" method="POST">
     <input type="hidden" name="form-name" value="waitlist-cta" />
     <input type="hidden" name="source" value="cta-section" />
     <input type="email" name="email" autocomplete="email" placeholder="Your email address" required id="cta-email" />
@@ -1363,6 +1425,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
       how: { formId: 'how-form', emailId: 'how-email', successId: 'how-success' },
       cta: { formId: 'cta-form', emailId: 'cta-email', successId: 'cta-success' }
     };
+    var waitlistInFlight = {};
 
     function resolveWaitlistSource(form) {
       if (!form) return 'cta';
@@ -1378,7 +1441,9 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
       var btn = form.querySelector('button[type="submit"]');
 
       if (!emailEl || !emailEl.value) return false;
-      var email = emailEl.value.trim();
+      var email = emailEl.value.trim().toLowerCase();
+      if (waitlistInFlight[email]) return false;
+      waitlistInFlight[email] = true;
 
       if (btn) {
         btn.disabled = true;
@@ -1440,6 +1505,33 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     } else {
       initWaitlistListeners();
     }
+
+    (function initMobileNav() {
+      var nav = document.querySelector('nav[aria-label="Main navigation"]');
+      var toggle = document.querySelector('.nav-toggle');
+      var links = document.getElementById('nav-links');
+      if (!nav || !toggle || !links) return;
+
+      function setOpen(open) {
+        nav.classList.toggle('nav-open', open);
+        document.body.classList.toggle('nav-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+
+      toggle.addEventListener('click', function() {
+        setOpen(!nav.classList.contains('nav-open'));
+      });
+      links.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() { setOpen(false); });
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') setOpen(false);
+      });
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 900) setOpen(false);
+      });
+    })();
 
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {

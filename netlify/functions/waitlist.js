@@ -206,12 +206,15 @@ export default async (req, context) => {
     `;
 
     try {
-      const { data, error } = await resend.emails.send({
-        from: fromEmail,
-        to: [email],
-        subject: emailSubject,
-        html: htmlContent,
-      });
+      const { data, error } = await resend.emails.send(
+        {
+          from: fromEmail,
+          to: [email],
+          subject: emailSubject,
+          html: htmlContent,
+        },
+        { idempotencyKey: `season-letter-welcome:${email}` }
+      );
 
       if (error) {
         console.error('[waitlist] ✗ Welcome email send error:', JSON.stringify(error));

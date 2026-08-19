@@ -132,12 +132,15 @@ export async function sendCatchUpEmails(resend, { email, fromEmail, now = new Da
     }
 
     try {
-      const { data, error } = await resend.emails.send({
-        from: fromEmail,
-        to: [email],
-        subject: issue.subject,
-        html,
-      });
+      const { data, error } = await resend.emails.send(
+        {
+          from: fromEmail,
+          to: [email],
+          subject: issue.subject,
+          html,
+        },
+        { idempotencyKey: `season-letter-${issue.id}:${email}` }
+      );
 
       if (error) {
         console.error(`[season-letter] ✗ Catch-up ${issue.id} failed:`, JSON.stringify(error));

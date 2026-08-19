@@ -43,6 +43,16 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   .nav-links a:hover { color: var(--charcoal); }
   .nav-cta { background: var(--charcoal); color: var(--white) !important; padding: 9px 20px; border-radius: 6px; font-size: 13px !important; font-weight: 500; letter-spacing: 0.04em !important; }
   .nav-cta:hover { opacity: 0.88 !important; }
+  .nav-toggle {
+    display: none; margin-left: auto; width: 44px; height: 44px; border: none;
+    background: transparent; cursor: pointer; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px; padding: 0; z-index: 102;
+  }
+  .nav-toggle span { display: block; width: 20px; height: 1.5px; background: var(--charcoal); transition: transform 0.2s ease, opacity 0.2s ease; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  body.nav-open { overflow: hidden; }
   .page-header { background: var(--charcoal); padding: 120px 40px 72px; text-align: center; }
   .page-header-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,184,154,0.55); font-weight: 500; margin-bottom: 20px; }
   .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 5vw, 64px); font-weight: 300; color: var(--white); line-height: 1.1; margin-bottom: 16px; }
@@ -79,7 +89,19 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   .footer-links a:hover { color: var(--tan); }
   .footer-copy { font-size: 13px; color: rgba(255,255,255,0.25); }
   @media (max-width: 700px) {
-    nav { padding: 0 20px; } .nav-links { display: none; }
+    nav { padding: 0 20px; }
+    .nav-toggle { display: flex; }
+    .nav-links {
+      display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+      background: var(--cream); flex-direction: column; align-items: stretch;
+      gap: 0; padding: 12px 24px 40px; overflow-y: auto; z-index: 101;
+    }
+    nav.nav-open .nav-links { display: flex; }
+    .nav-links a {
+      font-size: 17px; color: var(--charcoal); padding: 16px 0;
+      border-bottom: 0.5px solid rgba(200,184,154,0.35);
+    }
+    .nav-links a.nav-cta { margin-top: 20px; text-align: center; border-bottom: none; }
     .page-header { padding: 100px 20px 56px; }
     .content-wrap { padding: 48px 20px 80px; }
     .status-grid { grid-template-columns: 1fr; }
@@ -95,10 +117,14 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 
 <nav role="navigation" aria-label="Main navigation">
   <a href="/" class="nav-logo">PARURE<span class="nav-logo-sub">La Plee</span></a>
-  <div class="nav-links">
+  <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="/">Home</a>
     <a href="/policy">Privacy</a>
     <a href="/terms">Terms</a>
+    <a href="/accessibility">Accessibility</a>
     <a href="/#waitlist" class="nav-cta">Join Waitlist</a>
   </div>
 </nav>
@@ -239,5 +265,23 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   <div class="footer-copy">© 2026 Parure La Plee. All rights reserved.</div>
 </footer>
 
+<script>
+(function() {
+  var nav = document.querySelector('nav');
+  var toggle = document.querySelector('.nav-toggle');
+  var links = document.getElementById('nav-links');
+  if (!nav || !toggle || !links) return;
+  function setOpen(open) {
+    nav.classList.toggle('nav-open', open);
+    document.body.classList.toggle('nav-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  toggle.addEventListener('click', function() { setOpen(!nav.classList.contains('nav-open')); });
+  links.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { setOpen(false); }); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') setOpen(false); });
+  window.addEventListener('resize', function() { if (window.innerWidth > 700) setOpen(false); });
+})();
+</script>
 </body>
 </html>
