@@ -7,6 +7,7 @@
 <title>Parure La Plee — Your AI Personal Stylist</title>
 <meta name="description" content="Parure La Plee (pa·rure /paˈryr/) — your AI personal stylist. Patent-pending colour analysis, AI-generated outfits from your own closet, and sustainable shopping. Join to become a Founding Member for 20% off your first 12 months.">
 
+<script src="/js/meta-click-id.js"></script>
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -1470,15 +1471,35 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
       // Unique event ID for Meta deduplication (Pixel + CAPI)
       var eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
 
-      // Track Meta Pixel Lead Event
+      function readCookie(name) {
+        var match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : '';
+      }
+      var fbclid = '';
+      try {
+        fbclid = new URLSearchParams(window.location.search).get('fbclid') || '';
+      } catch (err) {
+        fbclid = '';
+      }
+      var fbp = readCookie('_fbp');
+      var fbc = readCookie('_fbc');
+
+      // Track Meta Pixel Lead Event (email enables advanced matching)
       if (typeof fbq === 'function') {
+        fbq('init', '1027413000094780', { em: email });
         fbq('track', 'Lead', { content_name: 'Waitlist Signup', source: source }, { eventID: eventId });
       }
 
       fetch('/.netlify/functions/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, eventId: eventId })
+        body: JSON.stringify({
+          email: email,
+          eventId: eventId,
+          fbp: fbp,
+          fbc: fbc,
+          fbclid: fbclid
+        })
       })
         .then(function() {
           form.style.display = 'none';

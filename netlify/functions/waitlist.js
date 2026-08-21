@@ -44,10 +44,9 @@ function isValidEmail(email) {
 }
 
 // ── Meta Conversions API (CAPI) Helper ──────────────────────────────
-async function sendMetaCapiEvent({ email, eventId, req, context }) {
+async function sendMetaCapiEvent({ email, eventId, fbp, fbc, fbclid, req, context }) {
   const pixelId = process.env.META_PIXEL_ID || '1027413000094780';
   const accessToken = process.env.META_CAPI_TOKEN || 'EAAWNmZCOIgKoBSM84ZAlBan7AuUPlwVYFAQ6DtlHygvYyLxC6wWUXTGZAEPB4sxplOtTVTWlcpb6CZAbwsrzZAzqIroIA9weGx6savyuLdMXJcAJfm5MEiVPI8YI3g1CdZBxni7pNVDwmOhDwgi7y5UrMvVzJzH8KfwWRlvriBZCX4C8PoYjlE0O3tb45AjUi2UxgZDZD';
-  const testCode = process.env.META_TEST_EVENT_CODE || 'TEST79595';
 
   if (!pixelId || !accessToken) {
     console.warn('[waitlist] Meta CAPI: Missing pixelId or accessToken');
@@ -65,6 +64,12 @@ async function sendMetaCapiEvent({ email, eventId, req, context }) {
     const userAgent = req.headers?.get('user-agent') || '';
     const referer = req.headers?.get('referer') || 'https://parure.app/';
 
+    let clickId = (fbc || '').trim();
+    const rawFbclid = (fbclid || '').trim();
+    if (!clickId && rawFbclid) {
+      clickId = `fb.1.${Math.floor(Date.now() / 1000)}.${rawFbclid}`;
+    }
+
     const payload = {
       data: [
         {
@@ -76,7 +81,9 @@ async function sendMetaCapiEvent({ email, eventId, req, context }) {
           user_data: {
             em: [hashedEmail],
             ...(clientIp ? { client_ip_address: clientIp } : {}),
-            ...(userAgent ? { client_user_agent: userAgent } : {})
+            ...(userAgent ? { client_user_agent: userAgent } : {}),
+            ...((fbp || '').trim() ? { fbp: fbp.trim() } : {}),
+            ...(clickId ? { fbc: clickId } : {}),
           },
           custom_data: {
             content_name: 'Waitlist Signup'
@@ -84,10 +91,6 @@ async function sendMetaCapiEvent({ email, eventId, req, context }) {
         }
       ]
     };
-
-    if (testCode) {
-      payload.test_event_code = testCode;
-    }
 
     const res = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`, {
       method: 'POST',
@@ -131,11 +134,14 @@ export default async (req, context) => {
     return jsonResponse({ success: false, error: 'Method not allowed' }, 405);
   }
 
-  let email, eventId;
+  let email, eventId, fbp, fbc, fbclid;
   try {
     const body = await req.json();
     email = body.email?.trim().toLowerCase();
     eventId = body.eventId;
+    fbp = body.fbp;
+    fbc = body.fbc;
+    fbclid = body.fbclid;
   } catch (err) {
     console.error('[waitlist] ✗ Invalid JSON body:', err.message);
     return jsonResponse({ success: false, error: 'Invalid request body' }, 400);
@@ -149,7 +155,7 @@ export default async (req, context) => {
   console.log(`[waitlist] → Processing signup for: ${email}`);
 
   // Send server-side Meta CAPI Lead Event (non-blocking)
-  sendMetaCapiEvent({ email, eventId, req, context }).catch(err => {
+  sendMetaCapiEvent({ email, eventId, fbp, fbc, fbclid, req, context }).catch(err => {
     console.error('[waitlist] ✗ Meta CAPI background error:', err);
   });
 
