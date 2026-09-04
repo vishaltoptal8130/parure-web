@@ -93,7 +93,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   .nav-links {
     display: flex; align-items: center; gap: 32px;
     position: absolute; top: 0; right: 40px; height: 64px;
-    z-index: 301;
+    z-index: 400;
   }
   .nav-links a {
     font-size: 13px; color: var(--muted); text-decoration: none;
@@ -121,6 +121,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     justify-content: center;
     gap: 5px;
     padding: 0;
+    z-index: 304;
     -webkit-tap-highlight-color: transparent;
     appearance: none;
   }
@@ -563,7 +564,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     flex-wrap: wrap; gap: 16px;
   }
   .footer-logo { font-size: 15px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); }
-  .footer-links { display: flex; gap: 28px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
   .footer-links a { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--tan); }
   .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
@@ -597,38 +598,14 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   }
 
   /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 12px; }
+    .nav-cta { padding: 8px 14px; }
+  }
+
   @media (max-width: 900px) {
     .nav-bar { padding: 0 16px; }
-    .nav-toggle { display: flex; }
-    .nav-links {
-      display: none;
-      position: fixed;
-      top: 64px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: auto;
-      background: #FAF8F5;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-      gap: 0;
-      padding: 12px 24px 40px;
-      overflow-y: auto;
-      z-index: 301;
-    }
-    body.nav-open .nav-links { display: flex; }
-    .nav-links a {
-      font-size: 17px;
-      color: var(--charcoal);
-      padding: 16px 0;
-      border-bottom: 0.5px solid rgba(200,184,154,0.35);
-    }
-    .nav-links a.nav-cta {
-      margin-top: 20px;
-      text-align: center;
-      border-bottom: none;
-    }
     .hero { padding: 100px 20px 60px; }
     .hero-inner { grid-template-columns: minmax(0,1fr); gap: 48px; }
     .hero-visual { display: none; }
@@ -646,6 +623,40 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     footer { flex-direction: column; gap: 20px; text-align: center; }
     .footer-links { justify-content: center; flex-wrap: wrap; row-gap: 12px; }
     .hero-accent { width: 0; }
+  }
+
+  @media (max-width: 960px) {
+    .nav-toggle { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: auto;
+      margin-left: 0;
+      background: #FAF8F5;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 12px 24px 40px;
+      overflow-y: auto;
+      z-index: 400;
+    }
+    body.nav-open .nav-links { display: flex; }
+    .nav-links a {
+      font-size: 17px;
+      color: var(--charcoal);
+      padding: 16px 0;
+      border-bottom: 0.5px solid rgba(200,184,154,0.35);
+    }
+    .nav-links a.nav-cta {
+      margin-top: 20px;
+      text-align: center;
+      border-bottom: none;
+    }
   }
 
   /* ── PHONE ── */
@@ -756,7 +767,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 <!-- NAV -->
 <nav role="navigation" aria-label="Main navigation">
   <div class="nav-bar">
-    <a href="#" class="nav-logo" style="display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:1px">PARURE<span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:300;font-size:11px;letter-spacing:.12em;color:var(--tan-dark);text-transform:none;line-height:1">La Plee</span></a>
+    <a href="/" class="nav-logo" style="display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:1px">PARURE<span style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:300;font-size:11px;letter-spacing:.12em;color:var(--tan-dark);text-transform:none;line-height:1">La Plee</span></a>
     <div style="display:none" id="def-tooltip"></div>
     <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
       <span></span><span></span><span></span>
@@ -769,12 +780,13 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     <a href="#shop">Shop</a>
     <a href="#pricing">Pricing</a>
     <a href="#creator">Creators</a>
+    <a href="/support">Support</a>
     <a href="#waitlist" class="nav-cta">Become a Founding Member</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<section id="main-content" class="hero" id="home">
+<section id="main-content" class="hero">
   <div class="hero-bg"></div>
   <div class="hero-accent"></div>
   <div class="hero-inner">
@@ -1429,6 +1441,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   <div class="footer-links">
     <a href="/policy">Privacy policy</a>
     <a href="/terms">Terms of service</a>
+    <a href="/support">Support</a>
     <a href="/accessibility">Accessibility</a>
     <a href="mailto:hello@parureapp.com">Contact</a>
     <a href="https://www.instagram.com/parurelaplee" aria-label="Parure La Plee on Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
@@ -1565,13 +1578,16 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
         setOpen(!isOpen());
       });
       links.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() { setOpen(false); });
+        link.addEventListener('click', function() {
+          var href = link.getAttribute('href') || '';
+          if (href.charAt(0) === '#') setOpen(false);
+        });
       });
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') setOpen(false);
       });
       window.addEventListener('resize', function() {
-        if (window.innerWidth > 900) setOpen(false);
+        if (window.innerWidth > 960) setOpen(false);
       });
     })();
 

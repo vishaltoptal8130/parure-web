@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parure La Plee Account Deletion</title>
 <script src="/js/meta-click-id.js"></script>
 <!-- Meta Pixel Code -->
 <script>
@@ -38,26 +39,26 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   .nav-bar { position: relative; z-index: 302; height: 64px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(250,248,245,0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 0.5px solid rgba(200,184,154,0.4); }
   .nav-logo { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; line-height: 1; }
   .nav-logo-sub { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 300; font-size: 11px; letter-spacing: 0.12em; color: var(--tan-dark); text-transform: none; }
-  .nav-links { display: flex; align-items: center; gap: 32px; position: absolute; top: 0; right: 40px; height: 64px; z-index: 301; }
+  .nav-links { display: flex; align-items: center; gap: 32px; position: absolute; top: 0; right: 40px; height: 64px; z-index: 400; }
   .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
   .nav-links a:hover { color: var(--charcoal); }
   .nav-toggle {
     display: none; margin-left: auto; width: 44px; height: 44px; border: none;
     background: transparent; cursor: pointer; flex-direction: column;
-    align-items: center; justify-content: center; gap: 5px; padding: 0; z-index: 102;
+    align-items: center; justify-content: center; gap: 5px; padding: 0; z-index: 304;
   }
   .nav-toggle span { display: block; width: 20px; height: 1.5px; background: var(--charcoal); transition: transform 0.2s ease, opacity 0.2s ease; }
   .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
   .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
   body.nav-open { overflow: hidden; }
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     .nav-bar { padding: 0 16px; }
     .nav-toggle { display: flex; }
     .nav-links {
       display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
-      height: auto; background: #FAF8F5; flex-direction: column; align-items: stretch;
-      gap: 0; padding: 12px 24px 40px; overflow-y: auto; z-index: 301;
+      height: auto; margin-left: 0; background: #FAF8F5; flex-direction: column; align-items: stretch;
+      gap: 0; padding: 12px 24px 40px; overflow-y: auto; z-index: 400;
     }
     body.nav-open .nav-links { display: flex; }
     .nav-links a {
@@ -84,11 +85,11 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   .contact-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: var(--white); margin-bottom: 14px; }
   .contact-card p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.75; margin-bottom: 16px; }
   .contact-card a.email-link { color: var(--tan); font-weight: 500; font-size: 16px; text-decoration: none; border-bottom: 1px dashed var(--tan); }
-  .btn-mail { display: inline-block; background: var(--tan); color: var(--charcoal); text-decoration: none; padding: 12px 26px; border-radius: 6px; font-size: 13px; font-weight: 500; letter-spacing: 0.05em; margin-top: 14px; transition: opacity 0.2s; }
+  .btn-mail { display: inline-block; background: var(--cream); color: var(--charcoal) !important; text-decoration: none; padding: 12px 26px; border-radius: 6px; font-size: 13px; font-weight: 500; letter-spacing: 0.05em; margin-top: 14px; transition: opacity 0.2s; border: none; }
   .btn-mail:hover { opacity: 0.9; }
   footer { background: var(--charcoal); border-top: 0.5px solid rgba(200,184,154,0.15); padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .footer-logo { font-size: 15px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); }
-  .footer-links { display: flex; gap: 28px; }
+  .footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
   .footer-links a { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--tan); }
   .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
@@ -98,7 +99,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 
 <nav>
   <div class="nav-bar">
-    <a href="https://parure.app" class="nav-logo">
+    <a href="/" class="nav-logo">
       PARURE LA PLEE
       <span class="nav-logo-sub">Personal. Purposeful. Intentional.</span>
     </a>
@@ -107,9 +108,11 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     </button>
   </div>
   <div class="nav-links" id="nav-links">
-    <a href="https://parure.app">Home</a>
-    <a href="https://parure.app/policy/">Privacy Policy</a>
-    <a href="https://parure.app/terms/">Terms of Service</a>
+    <a href="/">Home</a>
+    <a href="/policy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="/support">Support</a>
+    <a href="/accessibility">Accessibility</a>
   </div>
 </nav>
 
@@ -171,9 +174,11 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 <footer>
   <div class="footer-logo">PARURE LA PLEE</div>
   <div class="footer-links">
-    <a href="https://parure.app">Home</a>
-    <a href="https://parure.app/policy/">Privacy Policy</a>
-    <a href="https://parure.app/terms/">Terms of Service</a>
+    <a href="/">Home</a>
+    <a href="/policy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="/support">Support</a>
+    <a href="/accessibility">Accessibility</a>
   </div>
   <div class="footer-copy">&copy; 2026 Parure La Plee. All rights reserved.</div>
 </footer>
@@ -191,9 +196,14 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   }
   toggle.addEventListener('click', function() { setOpen(!nav.classList.contains('nav-open')); });
-  links.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { setOpen(false); }); });
+  links.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var href = a.getAttribute('href') || '';
+      if (href.charAt(0) === '#') setOpen(false);
+    });
+  });
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') setOpen(false); });
-  window.addEventListener('resize', function() { if (window.innerWidth > 700) setOpen(false); });
+  window.addEventListener('resize', function() { if (window.innerWidth > 768) setOpen(false); });
 })();
 </script>
 </body>

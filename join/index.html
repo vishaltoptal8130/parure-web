@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Parure La Plee</title>
   <script src="/js/meta-click-id.js"></script>
   <!-- Meta Pixel Code -->
   <script>
@@ -51,7 +52,25 @@
       border-radius: 36px;
       margin-bottom: 20px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      background: #c8b89a;
+      color: #1e1d1b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: 500;
+      margin-left: auto;
+      margin-right: auto;
     }
+    .home-link {
+      display: block;
+      margin-top: 16px;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .home-link:hover { color: #c8b89a; }
     h1 {
       font-family: "Georgia", serif;
       font-size: 24px;
@@ -91,11 +110,12 @@
 </head>
 <body>
   <div class="card">
-    <img class="logo" src="./icon.png" alt="Parure La Plee Logo" />
+    <div class="logo" aria-hidden="true">P</div>
     <h1>Parure La Plee</h1>
     <p>You’ve been invited to join Parure La Plee — Luxury AI Wardrobe & Styling Marketplace.</p>
 
     <a id="app-btn" class="btn" href="parurelaplee://join">Open Parure La Plee App</a>
+    <a class="home-link" href="/">Visit parure.app</a>
   </div>
   <div class="footer">&copy; 2026 S9 Enterprises LLC. All rights reserved.</div>
 
