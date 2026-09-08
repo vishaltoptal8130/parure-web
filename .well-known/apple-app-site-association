@@ -6,7 +6,18 @@
         "appID": "B7VR9WHC94.com.parurelaplee.app",
         "paths": [
           "/join*",
-          "*"
+          "/post/*",
+          "/story/*",
+          "/profile/*"
+        ]
+      },
+      {
+        "appIDs": ["B7VR9WHC94.com.parurelaplee.app"],
+        "components": [
+          { "/": "/join*" },
+          { "/": "/post/*" },
+          { "/": "/story/*" },
+          { "/": "/profile/*" }
         ]
       }
     ]
