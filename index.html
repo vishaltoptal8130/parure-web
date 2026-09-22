@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parure La Plee — Your AI Personal Stylist</title>
-<meta name="description" content="Parure La Plee (pa·rure /paˈryr/) — your AI personal stylist. Patent-pending colour analysis, AI-generated outfits from your own closet, and sustainable shopping. Join to become a Founding Member for 20% off your first 12 months.">
+<meta name="description" content="Parure La Plee (pa·rure /paˈryr/) — your AI personal stylist. Patent-pending colour analysis, AI-generated outfits from your own closet, and sustainable shopping. Join as a Founding Member for 20% off monthly or yearly — offer ends September 28, 2029 at 11:59pm.">
 
 <script src="/js/meta-click-id.js"></script>
 <!-- Meta Pixel Code -->
@@ -30,11 +30,11 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Parure La Plee">
 <meta property="og:title" content="Parure La Plee — Your AI Personal Stylist">
-<meta property="og:description" content="Discover your colour season with our patent-pending colour analysis. Style what you already own. Join to become a Founding Member and get 20% off your first 12 months.">
+<meta property="og:description" content="Discover your colour season with our patent-pending colour analysis. Style what you already own. Join as a Founding Member for 20% off monthly or yearly — offer ends September 28, 2029 at 11:59pm.">
 <meta property="og:url" content="https://parure.app/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Parure La Plee — Your AI Personal Stylist">
-<meta name="twitter:description" content="Discover your colour season with our patent-pending colour analysis. Style what you already own. Join to become a Founding Member and get 20% off your first 12 months.">
+<meta name="twitter:description" content="Discover your colour season with our patent-pending colour analysis. Style what you already own. Join as a Founding Member for 20% off monthly or yearly — offer ends September 28, 2029 at 11:59pm.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -718,11 +718,13 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
     .how-cta-body { margin-bottom: 24px; }
 
     .creator-section { padding: 56px 0; }
+    .creator-intro { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
     .creator-title { font-size: 32px; }
     .creator-stats { gap: 20px; row-gap: 24px; flex-wrap: wrap; }
     .creator-stat-n { font-size: 32px; }
-    .creator-stat-l { max-width: 92px; font-size: 10px; }
-    .creator-criteria { gap: 10px; }
+    .creator-stat-l { max-width: 140px; font-size: 11px; }
+    .creator-criteria { grid-template-columns: 1fr; gap: 12px; }
+    .creator-who-title { font-size: 24px; }
   }
 
   .skip-link {
@@ -740,23 +742,29 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 
   /* ── CREATOR PROGRAM SECTION ── */
   .creator-section { background: #1E1D1B; padding: 80px 0; }
-  .creator-inner { max-width: 820px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-  .creator-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #8C7A62; margin-bottom: 16px; }
-  .creator-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 500; color: #FAF8F5; line-height: 1.2; margin-bottom: 16px; }
+  .creator-inner { max-width: 960px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: stretch; text-align: left; }
+  .creator-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8B89A; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .creator-eyebrow::before { content: ''; width: 28px; height: 1px; background: #C8B89A; flex-shrink: 0; }
+  .creator-intro { display: grid; grid-template-columns: 1fr 1.15fr; gap: 48px; align-items: start; margin-bottom: 56px; }
+  .creator-title { font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 500; color: #FAF8F5; line-height: 1.15; margin-bottom: 12px; }
   .creator-title em { color: #C8B89A; font-style: italic; }
-  .creator-body { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: rgba(250,248,245,0.65); line-height: 1.7; max-width: 580px; margin-bottom: 40px; }
-  .creator-stats { display: flex; gap: 48px; justify-content: center; margin-bottom: 40px; }
-  .creator-stat { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .creator-tagline { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: rgba(250,248,245,0.75); line-height: 1.4; }
+  .creator-body { font-size: 15px; font-style: normal; font-family: Inter, sans-serif; color: rgba(250,248,245,0.72); line-height: 1.7; margin-bottom: 16px; max-width: none; }
+  .creator-body:last-child { margin-bottom: 0; }
+  .creator-stats { display: flex; gap: 48px; justify-content: flex-start; margin-bottom: 56px; }
+  .creator-stat { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
   .creator-stat-n { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 500; color: #C8B89A; line-height: 1; }
-  .creator-stat-l { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8C7A62; line-height: 1.5; text-align: center; max-width: 100px; }
+  .creator-stat-l { font-size: 12px; letter-spacing: 0.02em; text-transform: none; color: rgba(250,248,245,0.55); line-height: 1.45; text-align: left; max-width: 160px; }
   .creator-stat-divider { width: 0.5px; background: rgba(200,184,154,0.2); align-self: stretch; }
-  .creator-criteria { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-  .creator-criterion { background: rgba(200,184,154,0.08); border: 0.5px solid rgba(200,184,154,0.2); border-radius: 20px; padding: 8px 18px; font-size: 13px; color: rgba(250,248,245,0.7); display: flex; align-items: center; gap: 7px; }
-  .creator-criterion::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #C8B89A; flex-shrink: 0; }
-  .creator-cta { background: #C8B89A; color: #1E1D1B; border: none; border-radius: 28px; padding: 16px 40px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; text-decoration: none; display: inline-block; margin-bottom: 14px; transition: opacity 0.2s; }
+  .creator-who { margin-bottom: 40px; }
+  .creator-who-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; color: #FAF8F5; margin-bottom: 24px; }
+  .creator-criteria { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 40px; margin-bottom: 0; justify-content: stretch; }
+  .creator-criterion { background: none; border: none; border-radius: 0; padding: 0; font-size: 14px; color: rgba(250,248,245,0.72); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; text-align: left; }
+  .creator-criterion::before { content: '✓'; width: auto; height: auto; border-radius: 0; background: none; color: #C8B89A; font-size: 14px; line-height: 1.5; flex-shrink: 0; }
+  .creator-cta { background: #C8B89A; color: #1E1D1B; border: none; border-radius: 4px; padding: 16px 28px; font-family: Inter, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; cursor: pointer; text-decoration: none; display: inline-block; margin-bottom: 14px; transition: opacity 0.2s; align-self: flex-start; }
   .creator-cta:hover { opacity: 0.88; }
   .creator-note { font-size: 12px; color: rgba(200,184,154,0.4); letter-spacing: 0.06em; }
-  .creator-divider { width: 40px; height: 0.5px; background: rgba(200,184,154,0.3); margin: 0 auto 16px; }
+  .creator-divider { display: none; }
 
 </style>
 <script type="text/javascript">(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A7420694-a580-4fcc-a567-9fb248e412991.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');</script>
@@ -776,10 +784,10 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   <div class="nav-links" id="nav-links">
     <a href="#how-it-works">How it works</a>
     <a href="#features">Features</a>
-    <a href="#community">Community</a>
+    <a href="#style-circle">Style Circle</a>
     <a href="#shop">Shop</a>
     <a href="#pricing">Pricing</a>
-    <a href="#creator">Creators</a>
+    <a href="#trusted-partner">Trusted Partners</a>
     <a href="/support">Support</a>
     <a href="#waitlist" class="nav-cta">Become a Founding Member</a>
   </div>
@@ -816,8 +824,8 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
         <input type="email" name="email" autocomplete="email" placeholder="Your email address" required id="hero-email" />
         <button type="submit">Become a Founding Member</button>
       </form>
-      <div class="hero-note" id="hero-note"><span class="hero-note-lead">No credit card required</span><span class="hero-note-sep"> · </span><strong>Founding Members get 20% off their first 12 months</strong></div>
-      <div class="success-msg" id="hero-success">You're on the list! Your 20% off is reserved — we'll email you at launch.</div>
+      <div class="hero-note" id="hero-note"><strong>Founding Members get 20% off monthly or yearly</strong><span class="hero-note-sep"> · </span>Offer ends September 28, 2029 at 11:59pm</div>
+      <div class="success-msg" id="hero-success">You're on the list! Your Founding Member 20% off is reserved — we'll email you at launch.</div>
 
       <div class="app-preview" aria-hidden="true">
         <div class="app-preview-card">
@@ -921,7 +929,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 
     <div class="how-cta">
       <h3 class="how-cta-title">Unlock your style like you've never seen before.</h3>
-      <p class="how-cta-body">Become a Founding Member today — be first to experience Parure La Plee and lock in 20% off your first year.</p>
+      <p class="how-cta-body">Become a Founding Member today — be first to experience Parure La Plee and lock in 20% off monthly or yearly. Offer ends September 28, 2029 at 11:59pm.</p>
       <form class="cta-form" id="how-form" name="waitlist-how" method="POST">
         <input type="hidden" name="form-name" value="waitlist-how" />
         <input type="hidden" name="source" value="how-it-works" />
@@ -999,8 +1007,8 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
         <div class="feature-icon">
           <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
         </div>
-        <div class="feature-title">Follow &amp; community</div>
-        <div class="feature-desc">Follow friends and your style community. See their shared looks, shop their consignment listings, and get inspired — all within a community matched to your colour season.</div>
+        <div class="feature-title">Follow &amp; Style Circle</div>
+        <div class="feature-desc">Follow friends and your Style Circle. See their shared looks, shop their consignment listings, and get inspired — all within a Style Circle matched to your colour season.</div>
         <span class="feature-badge badge-premium">Premium</span>
       </div>
       <div class="feature-card">
@@ -1051,12 +1059,12 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- COMMUNITY -->
-<section class="section community-section" id="community">
+<!-- STYLE CIRCLE -->
+<section class="section community-section" id="style-circle">
   <div class="section-inner">
-    <div class="section-eyebrow">The Parure La Plee community</div>
+    <div class="section-eyebrow">The Parure La Plee Style Circle</div>
     <h2 class="section-title">Style is more fun<br><em>when it's shared</em></h2>
-    <p class="section-body">Follow people whose style you love. Share your best looks. Shop pre-loved pieces. And if you're a style creator with 5,000+ followers, apply to the Parure La Plee Creator Program. Earn 15-25% commissions on every Premium subscriber you refer, growing as your referrals grow.</p>
+    <p class="section-body">Follow people whose style you love. Share your best looks. Shop pre-loved pieces. And if you're a verified style professional, apply to become a Parure La Plee Trusted Partner. Earn 15-25% commissions on every Premium subscriber you refer, growing as your referrals grow.</p>
     <div class="community-grid">
       <div class="community-card">
         <div class="community-img">
@@ -1074,14 +1082,14 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
       <div class="community-card">
         <div class="community-img" style="background:#1A1A18">
           <svg viewBox="0 0 48 48" style="stroke:rgba(200,184,154,0.6)"><path d="M24 6l4.5 10.5L40 18l-8 7.5 2 11.5L24 32l-10 5 2-11.5L8 18l11.5-1.5z"/></svg>
-          <div class="community-tag" style="background:rgba(200,149,42,0.9)">✦ Parure La Plee Creator</div>
+          <div class="community-tag" style="background:rgba(200,149,42,0.9)">✦ Trusted Partner</div>
         </div>
         <div class="community-body">
           <div class="community-user">
             <div class="community-avatar" style="background:#F5EDD8;color:#8B6914">SV</div>
-            <div class="community-name">StyleVault <span style="font-size:10px;color:#C8952A;font-weight:400">· Founder Creator</span></div>
+            <div class="community-name">StyleVault <span style="font-size:10px;color:#C8952A;font-weight:400">· Trusted Partner</span></div>
           </div>
-          <div class="community-caption">Curated style creators with 5,000+ followers earn 15-25% commission on every Premium subscriber they refer, tiered by referral performance, paid for life of memberships.<br><br><a href="https://forms.gle/19qo4yJXnL7obs2b7" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:4px;background:#1E1D1B;color:#C8B89A;font-size:11px;padding:6px 14px;border-radius:12px;text-decoration:none;font-weight:500;">Apply to the Creator Program →</a></div>
+          <div class="community-caption">Verified style professionals earn 15-25% commission on every Premium subscriber they refer, tiered by referral performance, paid for life of memberships.<br><br><a href="https://forms.gle/19qo4yJXnL7obs2b7" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:4px;background:#1E1D1B;color:#C8B89A;font-size:11px;padding:6px 14px;border-radius:12px;text-decoration:none;font-weight:500;">Apply to become a Trusted Partner →</a></div>
         </div>
       </div>
       <div class="community-card">
@@ -1111,7 +1119,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
       <div class="pricing-card">
         <div class="pricing-tier">Free</div>
         <div class="pricing-price">$0</div>
-        <div class="pricing-period">forever — no credit card needed</div>
+        <div class="pricing-period">forever</div>
         <div class="pricing-divider"></div>
         <ul class="pricing-features">
           <li>Unlimited digital closet &amp; clothing inventory</li>
@@ -1123,8 +1131,8 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
           <li>Wishlists &amp; moodboards</li>
           <li>Lookbooks — save &amp; categorize your favorite outfits</li>
           <li>Outfit history log — record what you wore &amp; when</li>
-          <li>Follow friends &amp; browse community feed</li>
-          <li>Community forums by colour season</li>
+          <li>Follow friends &amp; browse Style Circle feed</li>
+          <li>Style Circle forums by colour season</li>
           <li>Share outfits with followers</li>
           <li>Marketplace buying — shop pre-loved from members</li>
           <li>Your colour season name — a teaser of what awaits</li>
@@ -1136,7 +1144,7 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
         <div style="display:inline-block;background:var(--tan);color:var(--charcoal);font-size:11px;font-weight:600;letter-spacing:.06em;padding:4px 12px;border-radius:20px;margin-bottom:12px">14 DAYS FREE</div>
         <div class="pricing-price">$12.99</div>
         <div class="pricing-period">per month · or $119.00/year</div>
-        <div style="font-size:12px;color:rgba(200,184,154,.6);margin-top:6px;margin-bottom:4px">Try free for 14 days — no credit card required</div>
+        <div style="font-size:12px;color:rgba(200,184,154,.6);margin-top:6px;margin-bottom:4px">Try free for 14 days</div>
         <div class="pricing-divider"></div>
         <ul class="pricing-features">
           <li>Everything in Free</li>
@@ -1152,13 +1160,13 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
           <li>AI learns your individual preferences over time</li>
           <li>Unlimited saved looks</li>
           <li>Marketplace selling — list pre-loved items</li>
-          <li>Parure La Plee Creator Program access</li>
+          <li>Parure La Plee Trusted Partner access</li>
           <li>Priority support</li>
         </ul>
         <a href="#waitlist" class="pricing-btn">Be a Founding Member, Save 20%</a>
       </div>
     </div>
-    <div class="beta-note"><strong>Founding Members:</strong> 20% off monthly or yearly for your first 12 months — claim within 30 days of launch.</div>
+    <div class="beta-note"><strong>Founding Members:</strong> 20% off monthly or yearly — offer ends September 28, 2029 at 11:59pm.</div>
   </div>
 </section>
 
@@ -1183,24 +1191,31 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
 <section class="cta-section" id="waitlist">
   <div class="section-eyebrow">Waitlist offer</div>
   <h2 class="section-title" style="max-width:560px">Be first — and save 20%<br>when <em>Parure La Plee</em> launches</h2>
-  <p class="section-body">Join to become a Founding Member and get <strong>20% off your first 12 months</strong> — on monthly or yearly, your choice. Claim it within 30 days of launch.</p>
+  <p class="section-body">Join as a Founding Member and get <strong>20% off monthly or yearly</strong>, your choice. Offer ends September 28, 2029 at 11:59pm.</p>
   <form class="cta-form" id="cta-form" name="waitlist-cta" method="POST">
     <input type="hidden" name="form-name" value="waitlist-cta" />
     <input type="hidden" name="source" value="cta-section" />
     <input type="email" name="email" autocomplete="email" placeholder="Your email address" required id="cta-email" />
     <button type="submit">Become a Founding Member</button>
   </form>
-  <div class="cta-success" id="cta-success">You're on the list! Your 20% off is reserved — we'll email you at launch. Welcome to Parure La Plee.</div>
+  <div class="cta-success" id="cta-success">You're on the list! Your Founding Member 20% off is reserved — we'll email you at launch. Welcome to Parure La Plee.</div>
 </section>
 
 
-<!-- CREATOR PROGRAM SECTION -->
-<section class="creator-section" id="creator">
+<!-- TRUSTED PARTNER SECTION -->
+<section class="creator-section" id="trusted-partner">
   <div class="creator-inner">
-    <div class="creator-eyebrow">Parure La Plee Creator Program</div>
-    <div class="creator-divider"></div>
-    <h2 class="creator-title">Earn up to 25% on every subscriber<br>you bring to <em>Parure La Plee.</em></h2>
-    <p class="creator-body">A curated partnership program for style-forward creators who believe in the power of personal colour intelligence. Apply to become a Founding Creator. We review every application personally.</p>
+    <div class="creator-eyebrow">Parure La Plee Style Team</div>
+    <div class="creator-intro">
+      <div>
+        <h2 class="creator-title">Become a <em>Trusted Partner.</em></h2>
+        <p class="creator-tagline">Style with purpose. Earn as you grow.</p>
+      </div>
+      <div>
+        <p class="creator-body">A curated partnership for verified style professionals who help others look and feel their best. Parure La Plee Trusted Partners are professionals such as fashion stylists, personal shoppers, photographers, makeup artists, wardrobe consultants and other qualified style professionals whose work involves creating, coordinating or influencing complete looks for clients.</p>
+        <p class="creator-body">Approved Trusted Partners gain access to the Parure La Plee Style Team—giving them tools to collaborate with clients inside their wardrobes, create personalized edits, recommend pieces and build a business alongside the clients they already serve.</p>
+      </div>
+    </div>
     <div class="creator-stats">
       <div class="creator-stat">
         <span class="creator-stat-n">15–25%</span>
@@ -1208,22 +1223,27 @@ src="https://www.facebook.com/tr?id=1027413000094780&ev=PageView&noscript=1"
       </div>
       <div class="creator-stat-divider"></div>
       <div class="creator-stat">
-        <span class="creator-stat-n">&#8734;</span>
-        <span class="creator-stat-l">Lifetime earnings per referred subscriber</span>
+        <span class="creator-stat-n">&#8734; Lifetime</span>
+        <span class="creator-stat-l">Earnings per referred subscriber</span>
       </div>
       <div class="creator-stat-divider"></div>
       <div class="creator-stat">
-        <span class="creator-stat-n">20% off</span>
-        <span class="creator-stat-l">Premium access for approved Creators for 1 year</span>
+        <span class="creator-stat-n">20% Off</span>
+        <span class="creator-stat-l">Premium access for approved Trusted Partners for one year</span>
       </div>
     </div>
-    <div class="creator-criteria">
-      <div class="creator-criterion">5,000+ followers on any platform</div>
-      <div class="creator-criterion">Style, fashion, or lifestyle content</div>
-      <div class="creator-criterion">Genuine audience engagement</div>
-      <div class="creator-criterion">Belief in personal colour intelligence</div>
+    <div class="creator-who">
+      <h3 class="creator-who-title">Who can become a Trusted Partner?</h3>
+      <div class="creator-criteria">
+        <div class="creator-criterion">Works professionally in styling, fashion, beauty, photography or a related field that contributes to creating complete client looks</div>
+        <div class="creator-criterion">Provides evidence of professional work, portfolio, business or client experience</div>
+        <div class="creator-criterion">Style, fashion, beauty or lifestyle expertise</div>
+        <div class="creator-criterion">Genuine professional or audience engagement</div>
+        <div class="creator-criterion">Alignment with Parure La Plee's approach to personal colour intelligence and intentional style</div>
+        <div class="creator-criterion">5,000+ followers can be considered, but a following is not required</div>
+      </div>
     </div>
-    <a href="https://forms.gle/19qo4yJXnL7obs2b7" target="_blank" rel="noopener noreferrer" class="creator-cta">Apply to become a Founding Creator</a>
+    <a href="https://forms.gle/Wzi5UBzDvYvxGcjD6" target="_blank" rel="noopener noreferrer" class="creator-cta">Apply to Join the Parure La Plee Style Team</a>
     <div class="creator-note">Anne reviews every application personally &nbsp;·&nbsp; Response within 5–7 business days</div>
   </div>
 </section>
