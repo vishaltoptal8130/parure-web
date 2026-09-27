@@ -760,7 +760,7 @@ async function loadOverviewMetrics() {
     totalOrdersCount = txs.length;
     txs.forEach(t => {
       const amountCents = t.amount || 0;
-      const feeCents = t.application_fee_amount ?? t.platform_fee_amount ?? Math.round(amountCents * 0.10);
+      const feeCents = t.application_fee_amount ?? t.platform_fee_amount ?? Math.round(amountCents * 0.08);
       const netCents = t.seller_net_amount ?? (amountCents - feeCents);
 
       totalGmv += amountCents;
@@ -1141,7 +1141,7 @@ async function loadOrdersAndTransactions() {
 
   tbody.innerHTML = currentTransactionsData.map((tx) => {
     const amountCents = tx.amount || tx.total_amount || tx.price || 0;
-    const feeCents = tx.application_fee_amount ?? tx.platform_fee_amount ?? Math.round(amountCents * 0.10);
+    const feeCents = tx.application_fee_amount ?? tx.platform_fee_amount ?? Math.round(amountCents * 0.08);
     const netCents = tx.seller_net_amount ?? (amountCents - feeCents);
 
     const buyerLabel = tx.buyer?.email || (tx.buyer_user_id ? tx.buyer_user_id.slice(0, 8) + '...' : 'Buyer');
