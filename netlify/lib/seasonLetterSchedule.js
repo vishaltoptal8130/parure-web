@@ -58,6 +58,12 @@ export const SEASON_LETTER_ISSUES = /** @type {SeasonLetterIssue[]} */ ([
     subject: "It's Here",
     file: 'broadcast_8_launch_sept29.html',
   },
+  {
+    id: 'launch_delay',
+    sendDate: '2026-09-29',
+    subject: 'A little more time. A lot more to love.',
+    file: 'broadcast_launch_delay.html',
+  },
 ]);
 
 const TZ = 'America/New_York';
@@ -73,13 +79,12 @@ export function todayInEastern(now = new Date()) {
 }
 
 /**
- * Issues already sent (send date is strictly before today in Eastern).
- * Same-day joiners still get that day's scheduled Resend Broadcast —
- * catch-up only covers emails that already went out on a prior day.
+ * Issues already sent (send date is on or before today in Eastern).
+ * Catch-up covers all issues that have already been scheduled / broadcast.
  */
 export function getMissedIssues(now = new Date()) {
   const today = todayInEastern(now);
-  return SEASON_LETTER_ISSUES.filter((issue) => issue.sendDate < today);
+  return SEASON_LETTER_ISSUES.filter((issue) => issue.sendDate <= today);
 }
 
 const htmlCache = new Map();
@@ -156,7 +161,7 @@ export async function sendCatchUpEmails(resend, { email, fromEmail, now = new Da
 
     // Small gap between sends (keeps one request under function timeout)
     if (i < missed.length - 1) {
-      await sleep(400);
+      await sleep(300);
     }
   }
 
