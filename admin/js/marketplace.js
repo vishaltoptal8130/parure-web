@@ -21,14 +21,14 @@ export async function renderMarketplaceTable(supabase) {
 
   if (!tbody) return;
 
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="7" style="text-align: center; padding: 40px;">
-        <div class="spinner" style="margin: 0 auto 12px;"></div>
-        <p style="font-size: 13px; color: var(--text-muted);">Retrieving marketplace listings...</p>
-      </td>
+  const colWidths = ['65%', '45%', '55%', '40%', '60%', '35%', '50%'];
+  tbody.innerHTML = Array.from({ length: 6 }).map(() => `
+    <tr class="skeleton-row">
+      ${Array.from({ length: 7 }).map((_, i) => `
+        <td><div class="skeleton skeleton-cell" style="width: ${colWidths[i % colWidths.length]}; height: 14px;"></div></td>
+      `).join('')}
     </tr>
-  `;
+  `).join('');
 
   let query = supabase.from("marketplace_listings").select("*").order("created_at", { ascending: false }).limit(200);
   if (filter !== "all") {
@@ -82,7 +82,7 @@ export async function renderMarketplaceTable(supabase) {
   }
 
   tbody.innerHTML = filtered.map((item) => {
-    const imageUrl = item._resolvedImageUrl || (item.images && Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : item.image_url || "");
+    const imageUrl = item._resolvedImageUrl || item._resolved || (item.images && Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : item.image_url || "");
     const totalCents = item.price || 0;
     const priceUsd = fmt(totalCents);
     const titleText = item.name || item.title || (item.description ? item.description.slice(0, 45) + '...' : 'Garment Listing');

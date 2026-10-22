@@ -607,6 +607,18 @@ async function loadRecentActivityStream() {
 // MODULE 1: CREATOR APPLICATIONS
 // ─────────────────────────────────────────────────────────────────────
 
+export function renderTableSkeleton(tbody, cols = 6, rows = 5) {
+  if (!tbody) return;
+  const colWidths = ['65%', '45%', '55%', '40%', '60%', '35%', '50%', '40%'];
+  tbody.innerHTML = Array.from({ length: rows }).map(() => `
+    <tr class="skeleton-row">
+      ${Array.from({ length: cols }).map((_, i) => `
+        <td><div class="skeleton skeleton-cell" style="width: ${colWidths[i % colWidths.length]}; height: 14px;"></div></td>
+      `).join('')}
+    </tr>
+  `).join('');
+}
+
 async function loadCreatorApplications() {
   const tbody = document.getElementById("creator-table-body");
   const filter = document.getElementById("filter-creator-status")?.value || "pending";
@@ -614,14 +626,7 @@ async function loadCreatorApplications() {
 
   if (!tbody) return;
 
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="7" style="text-align: center; padding: 36px;">
-        <div class="spinner" style="margin: 0 auto 10px;"></div>
-        <p style="font-size: 13px; color: var(--text-muted);">Fetching creator applications...</p>
-      </td>
-    </tr>
-  `;
+  renderTableSkeleton(tbody, 7, 5);
 
   let query = supabase.from("creator_applications").select("*").order("created_at", { ascending: false });
   if (filter !== "all") {
@@ -849,6 +854,8 @@ async function loadOrdersAndTransactions() {
   const tbody = document.getElementById("orders-table-body");
   if (!tbody) return;
 
+  renderTableSkeleton(tbody, 8, 5);
+
   const { data: txs, error } = await supabase
     .from("marketplace_transactions")
     .select("*, listing:marketplace_listings(*), buyer:user_profiles!buyer_user_id(email, display_name), seller:user_profiles!seller_user_id(email, display_name)")
@@ -1073,6 +1080,8 @@ async function loadBetaTesters() {
 
   if (!tbody) return;
 
+  renderTableSkeleton(tbody, 4, 5);
+
   const { data: testers, error } = await supabase
     .from("beta_testers")
     .select("*")
@@ -1159,6 +1168,8 @@ window.deleteBetaTester = async function (id, email) {
 async function loadUserDirectory() {
   const tbody = document.getElementById("users-table-body");
   if (!tbody) return;
+
+  renderTableSkeleton(tbody, 7, 6);
 
   const { data: users, error } = await supabase
     .from("user_profiles")
@@ -1299,25 +1310,106 @@ window.openUserProfileView = async function (userId, forceRefresh = false) {
   const overviewPane = document.getElementById("ud-pane-overview");
   if (overviewPane) overviewPane.classList.remove("hidden");
 
-  // Loading skeleton state
+  // ── SKELETON PLACEHOLDER LOADING STATE ──
   const avatarImg = document.getElementById("ud-avatar");
   const initialAvatar = document.getElementById("ud-initial-avatar");
   if (avatarImg) avatarImg.style.display = "none";
   if (initialAvatar) {
     initialAvatar.style.display = "flex";
-    initialAvatar.innerText = "...";
+    initialAvatar.className = "skeleton skeleton-circle";
+    initialAvatar.style.width = "48px";
+    initialAvatar.style.height = "48px";
+    initialAvatar.innerText = "";
   }
 
-  document.getElementById("ud-display-name").innerText = "Loading Client Dossier...";
-  document.getElementById("ud-handle").innerText = "@loading";
-  document.getElementById("ud-email").innerText = "loading@parure.app";
+  // Header meta skeleton lines
+  document.getElementById("ud-display-name").innerHTML = `<span class="skeleton skeleton-text" style="width: 170px; height: 22px;"></span>`;
+  document.getElementById("ud-handle").innerHTML = `<span class="skeleton skeleton-text" style="width: 80px; height: 16px;"></span>`;
+  document.getElementById("ud-email").innerHTML = `<span class="skeleton skeleton-text" style="width: 150px; height: 14px;"></span>`;
   document.getElementById("ud-id").innerText = userId;
-  document.getElementById("ud-location-tag").innerText = "Loading Location...";
-  document.getElementById("ud-created-at").innerText = "Loading...";
+  document.getElementById("ud-location-tag").innerHTML = `<span class="skeleton skeleton-text" style="width: 110px; height: 13px;"></span>`;
+  document.getElementById("ud-created-at").innerHTML = `<span class="skeleton skeleton-text" style="width: 90px; height: 13px;"></span>`;
 
-  document.getElementById("ud-stat-wardrobe").innerText = "...";
-  document.getElementById("ud-stat-revenue").innerText = "$...";
-  document.getElementById("ud-stat-posts").innerText = "...";
+  // Badges skeleton
+  const roleBadge = document.getElementById("ud-role-badge");
+  if (roleBadge) {
+    roleBadge.className = "skeleton skeleton-badge";
+    roleBadge.innerText = "";
+  }
+  const subBadge = document.getElementById("ud-sub-badge");
+  if (subBadge) {
+    subBadge.className = "skeleton skeleton-badge";
+    subBadge.innerText = "";
+  }
+  const creatorBadge = document.getElementById("ud-creator-badge");
+  if (creatorBadge) creatorBadge.style.display = "none";
+
+  // Stat chips skeleton
+  document.getElementById("ud-stat-wardrobe").innerHTML = `<span class="skeleton skeleton-text" style="width: 32px; height: 18px;"></span>`;
+  document.getElementById("ud-stat-revenue").innerHTML = `<span class="skeleton skeleton-text" style="width: 52px; height: 18px;"></span>`;
+  document.getElementById("ud-stat-posts").innerHTML = `<span class="skeleton skeleton-text" style="width: 28px; height: 18px;"></span>`;
+
+  // Overview Passport Skeleton
+  const seasonEl = document.getElementById("ud-season");
+  if (seasonEl) seasonEl.innerHTML = `<span class="skeleton skeleton-text" style="width: 130px; height: 18px;"></span>`;
+  const confEl = document.getElementById("ud-season-confidence");
+  if (confEl) confEl.innerHTML = `<span class="skeleton skeleton-badge" style="width: 60px; height: 16px;"></span>`;
+  const selfieImg = document.getElementById("ud-selfie-img");
+  const noSelfie = document.getElementById("ud-no-selfie");
+  if (selfieImg) selfieImg.style.display = "none";
+  if (noSelfie) {
+    noSelfie.className = "skeleton";
+    noSelfie.style.display = "block";
+    noSelfie.style.width = "100%";
+    noSelfie.style.height = "260px";
+    noSelfie.innerText = "";
+  }
+
+  // Pre-populate grids with skeleton cards
+  const wardrobeGridPre = document.getElementById("ud-wardrobe-grid");
+  if (wardrobeGridPre) {
+    wardrobeGridPre.innerHTML = `
+      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+        ${Array.from({ length: 6 }).map(() => `
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-card-img"></div>
+            <div class="skeleton skeleton-card-title"></div>
+            <div class="skeleton skeleton-card-meta"></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  const lbContainerPre = document.getElementById("ud-lookbooks-container");
+  if (lbContainerPre) {
+    lbContainerPre.innerHTML = `
+      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+        ${Array.from({ length: 2 }).map(() => `
+          <div class="skeleton-card" style="min-height: 240px;">
+            <div class="skeleton skeleton-card-title" style="width: 60%;"></div>
+            <div class="skeleton skeleton-card-img" style="height: 100px;"></div>
+            <div class="skeleton skeleton-card-meta" style="width: 80%;"></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  const mpContainerPre = document.getElementById("ud-marketplace-container");
+  if (mpContainerPre) {
+    mpContainerPre.innerHTML = `
+      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px;">
+        ${Array.from({ length: 4 }).map(() => `
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-card-img"></div>
+            <div class="skeleton skeleton-card-title"></div>
+            <div class="skeleton skeleton-card-meta"></div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
 
   // Fetch full user record
   const { data: u, error } = await supabase
@@ -1437,19 +1529,16 @@ window.openUserProfileView = async function (userId, forceRefresh = false) {
   }
 
   // Badges
-  const roleBadge = document.getElementById("ud-role-badge");
   if (roleBadge) {
     roleBadge.innerText = (u.role || "USER").toUpperCase();
     roleBadge.className = `badge ${u.role === 'admin' ? 'badge-gold' : u.role === 'creator' ? 'badge-approved' : 'badge-pending'}`;
   }
 
-  const subBadge = document.getElementById("ud-sub-badge");
   if (subBadge) {
     subBadge.innerText = `${(u.subscription_tier || "FREE").toUpperCase()} TIER`;
     subBadge.className = `badge ${u.subscription_tier === 'premium' ? 'badge-approved' : 'badge-gold'}`;
   }
 
-  const creatorBadge = document.getElementById("ud-creator-badge");
   if (creatorBadge) {
     if (u.is_approved_creator) {
       creatorBadge.style.display = "inline-block";
@@ -1473,17 +1562,19 @@ window.openUserProfileView = async function (userId, forceRefresh = false) {
   document.getElementById("ud-stat-posts").innerText = postsList.length;
 
   // 1. PANE OVERVIEW: Style Passport
-  const selfieImg = document.getElementById("ud-selfie-img");
-  const noSelfie = document.getElementById("ud-no-selfie");
-
   if (resolvedSelfieUrl && selfieImg) {
-    if (noSelfie) noSelfie.style.display = "none";
+    if (noSelfie) {
+      noSelfie.style.display = "none";
+      noSelfie.className = "";
+    }
     selfieImg.src = resolvedSelfieUrl;
     selfieImg.style.display = "block";
   } else {
     if (selfieImg) selfieImg.style.display = "none";
     if (noSelfie) {
+      noSelfie.className = "";
       noSelfie.style.display = "block";
+      noSelfie.style.height = "auto";
       noSelfie.innerText = "No Analysis Photo";
     }
   }
@@ -1645,43 +1736,77 @@ function renderUserWardrobePane(items) {
 
   if (items.length > 0) {
     const categoryMap = new Map();
+    const categoryOrder = ['Tops', 'Bottoms', 'Dresses & Jumpsuits', 'Shoes', 'Outerwear', 'Bags', 'Accessories', 'Jewelry', 'Activewear', 'Seasonal', 'Other'];
+
     items.forEach(item => {
       const cat = item.category || item.subcategory || 'Other';
       if (!categoryMap.has(cat)) categoryMap.set(cat, []);
       categoryMap.get(cat).push(item);
     });
 
-    wardrobeGrid.innerHTML = [...categoryMap.entries()].map(([cat, catItems]) => `
-      <div class="card" style="margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);">
-          <div>
-            <h4 class="font-serif" style="font-size: 18px; margin: 0; color: var(--text-primary);">${cat}</h4>
-            <span style="font-size: 11px; color: var(--text-muted);">${catItems.length} piece${catItems.length > 1 ? 's' : ''}</span>
-          </div>
-          <span class="badge badge-gold">${catItems.length} PIECES</span>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px;">
-          ${catItems.map(item => `
-            <div style="background: var(--bg-surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden;">
-              <div style="width: 100%; height: 180px; background: var(--bg-surface-3); display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                ${item._resolvedImageUrl ? `
-                  <img src="${item._resolvedImageUrl}" alt="${item.name || 'Garment'}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onerror="this.style.display='none';">
-                ` : `
-                  <span style="font-size: 11px; color: var(--text-muted);">No Photo</span>
-                `}
-              </div>
-              <div style="padding: 12px;">
-                <h5 style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin: 0 0 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name || 'Unnamed Item'}</h5>
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                  <span style="font-size: 12px; font-weight: 600; color: var(--gold-primary);">${item.purchase_price ? fmt(item.purchase_price) : 'Not Set'}</span>
-                  <span style="font-size: 10px; color: var(--text-muted);">Worn ${item.wear_count || 0}x</span>
-                </div>
-              </div>
+    const sortedCats = [...categoryMap.keys()].sort((a, b) => {
+      const idxA = categoryOrder.findIndex(c => a.toLowerCase().includes(c.toLowerCase()));
+      const idxB = categoryOrder.findIndex(c => b.toLowerCase().includes(c.toLowerCase()));
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b);
+    });
+
+    wardrobeGrid.innerHTML = sortedCats.map(cat => {
+      const catItems = categoryMap.get(cat);
+      return `
+        <div class="card" style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);">
+            <div>
+              <h4 class="font-serif" style="font-size: 19px; margin: 0; color: var(--text-primary);">${cat}</h4>
+              <span style="font-size: 11px; color: var(--text-muted);">${catItems.length} piece${catItems.length > 1 ? 's' : ''}</span>
             </div>
-          `).join("")}
+            <span class="badge badge-gold">${catItems.length} PIECES</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px;">
+            ${catItems.map(item => {
+              const imgUrl = item._resolvedImageUrl || item.image_url || item._resolved;
+              const priceDisplay = item.purchase_price
+                ? fmt(item.purchase_price)
+                : '<span style="color: var(--text-muted); font-style: italic;">Not Set</span>';
+              const colorDot = item.dominant_color_hex
+                ? `<span style="width: 10px; height: 10px; border-radius: 50%; background: ${item.dominant_color_hex}; display: inline-block; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;"></span>`
+                : '';
+              const cpw = item.purchase_price && item.wear_count
+                ? (item.purchase_price / 100 / item.wear_count).toFixed(2)
+                : null;
+              return `
+                <div class="garment-card">
+                  <div class="garment-frame">
+                    ${imgUrl ? `
+                      <img src="${imgUrl}" alt="${item.name || 'Garment'}" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-muted); font-size:11px;\\'><span>👔</span><span>Photo Unavailable</span></div>';">
+                    ` : `
+                      <div style="display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-muted); font-size:11px;">
+                        <span>👔</span>
+                        <span>No Photo</span>
+                      </div>
+                    `}
+                  </div>
+                  <div style="padding: 14px;">
+                    <h5 style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin: 0 0 6px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.name || 'Unnamed Item'}">${item.name || 'Unnamed Item'}</h5>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                      ${colorDot}
+                      <span style="font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.color_name || item.brand || item.category || 'Garment'}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--gold-primary);">${priceDisplay}</span>
+                      <span style="font-size: 10px; color: var(--text-muted); background: var(--bg-surface-2); padding: 2px 8px; border-radius: var(--radius-full);">Worn ${item.wear_count || 0}x</span>
+                    </div>
+                    ${cpw ? `<div style="font-size: 10px; color: var(--accent-green); margin-top: 4px; font-weight: 500;">CPW: $${cpw}</div>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
         </div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
   } else {
     wardrobeGrid.innerHTML = `
       <div class="empty-state">
@@ -1804,19 +1929,45 @@ function renderUserMarketplacePane(listings, favorited) {
   const container = document.getElementById("ud-marketplace-container");
   const savedContainer = document.getElementById("ud-mp-saved-container");
 
-  const renderCard = (l) => `
-    <div class="card" style="padding: 12px;">
-      <div style="width: 100%; height: 160px; background: var(--bg-surface-3); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px;">
-        ${l._resolvedImageUrl ? `<img src="${l._resolvedImageUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;">` : '<span style="font-size: 10px; color: var(--text-muted);">No Photo</span>'}
+  const renderCard = (l) => {
+    const imgUrl = l._resolvedImageUrl || l._resolved || (Array.isArray(l.images) && l.images[0]) || l.image_url || l.image;
+    const isSold = (l.status === 'sold' || l.is_sold === true || l.status === 'completed' || !!l.buyer_user_id);
+    const statusBadge = isSold
+      ? `<span class="badge badge-declined" style="position: absolute; top: 10px; right: 10px; z-index: 2; font-size: 9px;">SOLD</span>`
+      : `<span class="badge badge-approved" style="position: absolute; top: 10px; right: 10px; z-index: 2; font-size: 9px;">ACTIVE</span>`;
+
+    return `
+      <div class="garment-card">
+        <div class="garment-frame" style="height: 190px; position: relative;">
+          ${statusBadge}
+          ${imgUrl ? `
+            <img src="${imgUrl}" alt="${l.title || l.name || 'Marketplace Garment'}" onerror="this.onerror=null; this.parentElement.innerHTML='${statusBadge}<div style=\\'display:flex; flex-direction:column; align-items:center; color:var(--text-muted); font-size:11px;\\'><span>🛍️</span><span>Photo Unavailable</span></div>';">
+          ` : `
+            <div style="display:flex; flex-direction:column; align-items:center; color:var(--text-muted); font-size:11px;">
+              <span>🛍️</span>
+              <span>No Photo</span>
+            </div>
+          `}
+        </div>
+        <div style="padding: 14px;">
+          <h5 style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin: 0 0 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${l.title || l.name || 'Garment'}">${l.title || l.name || 'Garment'}</h5>
+          <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
+            ${l.brand ? `<span style="color: var(--gold-primary); font-weight: 500;">${l.brand}</span>` : 'Designer Apparel'}
+            ${l.size || l.size_value ? ` • Size: <strong style="color: var(--text-primary);">${l.size || l.size_value}</strong>` : ''}
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">${isSold ? 'Sold Price' : 'Listing Price'}</span>
+            <span style="font-size: 13px; color: ${isSold ? 'var(--accent-red)' : 'var(--accent-green)'}; font-weight: 600;">${fmt(l.price || 0)}</span>
+          </div>
+        </div>
       </div>
-      <h5 style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin: 0 0 4px 0;">${l.name || l.title || 'Garment'}</h5>
-      <span style="font-size: 12px; color: var(--gold-primary); font-weight: 600;">${fmt(l.price || 0)}</span>
-    </div>
-  `;
+    `;
+  };
 
   if (container) {
     container.innerHTML = listings.length > 0 ? listings.map(renderCard).join("") : `
       <div class="empty-state" style="grid-column: 1 / -1;">
+        <div class="empty-icon">🛍️</div>
         <div class="empty-title">No Created Listings</div>
         <div class="empty-desc">This client has not published any garment listings for sale.</div>
       </div>
@@ -1826,6 +1977,7 @@ function renderUserMarketplacePane(listings, favorited) {
   if (savedContainer) {
     savedContainer.innerHTML = favorited.length > 0 ? favorited.map(renderCard).join("") : `
       <div class="empty-state" style="grid-column: 1 / -1;">
+        <div class="empty-icon">💖</div>
         <div class="empty-title">No Favorited Garments</div>
         <div class="empty-desc">No marketplace listings saved or favorited.</div>
       </div>
@@ -1855,44 +2007,136 @@ window.switchMarketplaceSubView = function (view) {
   }
 };
 
+// Helper parser for structured look name strings: "Title (Vibe)||Description||Accessories||Categories"
+function parseLookName(rawName, customNotes) {
+  if (!rawName) return { title: 'Untitled Look', vibe: null, description: customNotes || null, tags: [] };
+
+  const parts = rawName.split(/\|\|\||\|\|/);
+  let rawTitle = parts[0] ? parts[0].trim() : 'Untitled Look';
+  let vibe = null;
+  let description = parts[1] ? parts[1].trim() : (customNotes || null);
+  const tags = [];
+
+  if (parts[2]) {
+    tags.push(...parts[2].split(',').map(s => s.trim()).filter(Boolean));
+  }
+  if (parts[3]) {
+    tags.push(...parts[3].split(',').map(s => s.trim()).filter(Boolean));
+  }
+
+  const vibeMatch = rawTitle.match(/^(.+?)\s*\((.+?)\)$/);
+  if (vibeMatch) {
+    rawTitle = vibeMatch[1].trim();
+    vibe = vibeMatch[2].trim();
+  }
+
+  return { title: rawTitle, vibe, description, tags: [...new Set(tags)] };
+}
+
 function renderUserLookbooksPane(lookbooks, savedLooks, wardrobeItemsMap) {
   const container = document.getElementById("ud-lookbooks-container");
   if (!container) return;
 
-  if (savedLooks.length === 0 && lookbooks.length === 0) {
+  const allSavedLooks = [...savedLooks];
+  (lookbooks || []).forEach(lb => {
+    if (Array.isArray(lb.saved_looks)) {
+      lb.saved_looks.forEach(sl => {
+        if (!allSavedLooks.some(existing => existing.id === sl.id)) {
+          allSavedLooks.push(sl);
+        }
+      });
+    }
+  });
+
+  if (allSavedLooks.length === 0 && (!lookbooks || lookbooks.length === 0)) {
     container.innerHTML = `
       <div class="empty-state" style="grid-column: 1 / -1;">
         <div class="empty-icon">📖</div>
         <div class="empty-title">No Saved Outfits or Lookbooks</div>
-        <div class="empty-desc">This client has not saved any styled lookbooks yet.</div>
+        <div class="empty-desc">This client has not saved any styled lookbooks or custom outfits yet.</div>
       </div>
     `;
     return;
   }
 
-  container.innerHTML = savedLooks.map(look => {
+  let html = "";
+
+  if (lookbooks && lookbooks.length > 0) {
+    html += lookbooks.map(lb => {
+      const folderLooks = Array.isArray(lb.saved_looks) ? lb.saved_looks : [];
+      return `
+        <div style="grid-column: 1 / -1; background: var(--bg-surface-2); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-size: 10px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;">LOOKBOOK COLLECTION</div>
+            <h4 class="font-serif" style="font-size: 19px; margin: 2px 0 0; color: var(--text-primary);">${lb.name || 'Untitled Lookbook'}</h4>
+          </div>
+          <span class="badge badge-gold">${folderLooks.length} SAVED LOOKS</span>
+        </div>
+      `;
+    }).join("");
+  }
+
+  html += allSavedLooks.map((look) => {
     const itemIds = Array.isArray(look.item_ids) ? look.item_ids : [];
     const outfitItems = itemIds.map(id => wardrobeItemsMap.get(id)).filter(Boolean);
+    const parsed = parseLookName(look.name, look.custom_notes);
+    const tags = Array.isArray(look.occasion_tags) && look.occasion_tags.length > 0 ? look.occasion_tags : parsed.tags;
 
     return `
-      <div class="card" style="padding: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+      <div class="lookbook-card">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
           <div>
-            <h5 class="font-serif" style="font-size: 16px; margin: 0; color: var(--text-primary);">${look.name || 'Styled Outfit'}</h5>
-            <span style="font-size: 11px; color: var(--text-muted);">${fmtDate(look.created_at)}</span>
+            <h4 class="font-serif" style="font-size: 18px; color: var(--text-primary); margin: 0 0 4px 0; font-weight: 600;">${parsed.title}</h4>
+            <span style="font-size: 11px; color: var(--text-muted);">${fmtDate(look.created_at)}${look.lookbook_name ? ` • In ${look.lookbook_name}` : ''}</span>
           </div>
-          <span class="badge badge-gold">${outfitItems.length} Pieces</span>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+            <span class="badge badge-gold" style="font-size: 10px;">${outfitItems.length} PIECES</span>
+            ${parsed.vibe ? `<span class="badge" style="font-size: 9px; background: var(--bg-surface-2); color: var(--gold-primary); border: 1px solid var(--border-subtle);">${parsed.vibe}</span>` : ''}
+          </div>
         </div>
-        <div style="display: flex; gap: 8px; overflow-x: auto; padding: 8px 0;">
-          ${outfitItems.map(item => `
-            <div style="width: 60px; height: 60px; background: var(--bg-surface-3); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-              ${item._resolvedImageUrl ? `<img src="${item._resolvedImageUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;">` : '<span style="font-size: 9px; color: var(--text-muted);">Img</span>'}
+
+        <div>
+          <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-primary); font-weight: 600; margin-bottom: 8px;">Outfit Composition</div>
+          <div class="lookbook-composition-grid">
+            ${outfitItems.length > 0 ? outfitItems.map(item => {
+              const imgUrl = item._resolvedImageUrl || item.image_url || item._resolved;
+              return `
+                <div class="lookbook-piece-box" title="${item.name || 'Garment Piece'}">
+                  <div class="lookbook-piece-thumb">
+                    ${imgUrl ? `
+                      <img src="${imgUrl}" alt="${item.name || 'Item'}" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size:10px; color:var(--text-muted);\\'>👔</span>';">
+                    ` : `
+                      <span style="font-size: 10px; color: var(--text-muted);">👔</span>
+                    `}
+                  </div>
+                  <div style="font-size: 10px; color: var(--text-primary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name || 'Item'}</div>
+                  ${item.brand ? `<div style="font-size: 9px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.brand}</div>` : ''}
+                </div>
+              `;
+            }).join("") : `
+              <div style="grid-column: 1 / -1; font-size: 11px; color: var(--text-muted); text-align: center; padding: 12px;">No individual wardrobe pieces cataloged in this outfit</div>
+            `}
+          </div>
+        </div>
+
+        ${parsed.description ? `
+          <div style="background: var(--bg-surface-2); border-left: 2px solid var(--gold-primary); padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;">
+            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; font-style: italic;">
+              "${parsed.description}"
             </div>
-          `).join("")}
-        </div>
+          </div>
+        ` : ''}
+
+        ${tags.length > 0 ? `
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            ${tags.map(t => `<span class="badge" style="font-size: 10px; background: rgba(200, 184, 154, 0.08); color: var(--gold-light); border: 1px solid var(--border-subtle); padding: 2px 8px;">#${t}</span>`).join("")}
+          </div>
+        ` : ''}
       </div>
     `;
   }).join("");
+
+  container.innerHTML = html;
 }
 
 function renderUserMoodboardsPane(moodboards, moodboardItemsMap, wardrobeItemsMap) {
@@ -1924,8 +2168,8 @@ function renderUserFavoritesPane(favoritedListings, wardrobeItems) {
   if (!container) return;
 
   const allFavs = [
-    ...favoritedListings.map(l => ({ title: l.title || l.name, price: l.price, img: l._resolvedImageUrl })),
-    ...wardrobeItems.filter(w => w.is_favorite).map(w => ({ title: w.name, price: w.purchase_price, img: w._resolvedImageUrl }))
+    ...favoritedListings.map(l => ({ title: l.title || l.name, price: l.price, img: l._resolvedImageUrl || l._resolved || (Array.isArray(l.images) && l.images[0]) || l.image_url || l.image })),
+    ...wardrobeItems.filter(w => w.is_favorite).map(w => ({ title: w.name, price: w.purchase_price, img: w._resolvedImageUrl || w._resolved || w.image_url || w.photo_url }))
   ];
 
   if (allFavs.length === 0) {
@@ -2041,6 +2285,8 @@ async function loadCommunityPosts() {
   const tbody = document.getElementById("community-table-body");
   if (!tbody) return;
 
+  renderTableSkeleton(tbody, 6, 5);
+
   const { data: posts, error } = await supabase
     .from("community_posts")
     .select("*")
@@ -2100,14 +2346,7 @@ async function loadAffiliateProducts(page = 1) {
   const networkFilter = networkSelect ? networkSelect.value : "all";
 
   if (tbody) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="8" style="text-align: center; padding: 40px;">
-          <div class="spinner" style="margin: 0 auto 10px;"></div>
-          <p style="font-size: 13px; color: var(--text-muted);">Syncing affiliate products catalog...</p>
-        </td>
-      </tr>
-    `;
+    renderTableSkeleton(tbody, 8, 6);
   }
 
   const from = (page - 1) * AFFILIATE_PAGE_SIZE;
