@@ -1,1050 +1,1278 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parure La Plee — Admin Control Dashboard</title>
+  <title>Parure La Plee — Executive Admin Console</title>
+  
+  <base href="/admin/">
+  <script>
+    if (window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/index')) {
+      window.location.replace(window.location.pathname.replace(/\/index$/, '') + '/' + window.location.search + window.location.hash);
+    }
+  </script>
+  
+  <!-- Premium Luxury Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <!-- Supabase JS Client -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Design Tokens & Base Stylesheet -->
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+
+  <!-- Supabase Client JS (v2 CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <!-- ==================== AUTH CONTAINER ==================== -->
-  <div id="auth-container" class="auth-container">
+  <!-- ───────────────────────────────────────────────────────────────── -->
+  <!-- 1. LUXURY AUTHENTICATION GATEWAY -->
+  <!-- ───────────────────────────────────────────────────────────────── -->
+  <div id="auth-screen" class="auth-screen">
+    <!-- Floating Theme Switcher on Login -->
+    <button type="button" class="btn btn-secondary btn-sm theme-toggle" title="Switch Theme" style="position: absolute; top: 24px; right: 24px; z-index: 10; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-full); background: var(--bg-surface); border: 1px solid var(--border-medium);">
+      <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
+      <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor; display: none;"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.7-5.11.75.75 0 0 0-.8-1.1A8 8 0 0 1 9.8 3.09.75.75 0 0 0 9 2.15 9.77 9.77 0 0 0 12.3 2z"/></svg>
+      <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;">Mode</span>
+    </button>
+
     <div class="auth-card">
-      <h1 class="brand-title">PARURE LA PLEÈ</h1>
-      <p class="brand-subtitle">Master Admin Portal</p>
-      
-      <div id="auth-error" class="form-group hidden" style="color: var(--accent-red); font-size: 12px; text-align: center; margin-bottom: 15px;"></div>
-      <div id="auth-success" class="form-group hidden" style="color: var(--accent-green); font-size: 12px; text-align: center; margin-bottom: 15px;"></div>
+      <div class="auth-header">
+        <div class="auth-insignia">✦</div>
+        <h1 class="auth-title">PARURE LA PLEE</h1>
+        <p class="auth-subtitle">Executive Control Room & Haute-Couture Console</p>
+      </div>
+
+      <div id="auth-error" class="auth-alert auth-alert-error hidden"></div>
+      <div id="auth-success" class="auth-alert auth-alert-success hidden"></div>
 
       <form id="login-form">
         <div class="form-group">
-          <label class="form-label" for="login-email">Master Admin Email</label>
-          <input type="email" id="login-email" class="form-input" placeholder="admin@parure.app" required>
+          <label class="form-label" for="login-email">Master Admin Identifier</label>
+          <input type="email" id="login-email" class="form-input" value="admin@parure.app" required autocomplete="username">
         </div>
+
         <div class="form-group">
-          <label class="form-label" for="login-password">Password</label>
+          <label class="form-label" for="login-password">Console Secret Key</label>
           <div style="position: relative;">
-            <input type="password" id="login-password" class="form-input" placeholder="Enter password" required style="padding-right: 42px;">
-            <button type="button" id="btn-toggle-password" class="toggle-eye-btn" title="Toggle Password Visibility">
-              <svg id="eye-icon-svg" class="icon-svg" viewBox="0 0 24 24">
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••••••" required autocomplete="current-password" style="padding-right: 42px;">
+            <button type="button" id="btn-toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px;">
+              <svg id="eye-icon-svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;">
                 <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
               </svg>
+            </button>
           </div>
         </div>
-        <button type="submit" class="btn-primary" id="btn-login" style="margin-top: 20px;">SIGN IN TO DASHBOARD</button>
+
+        <button type="submit" id="btn-login" class="btn btn-primary" style="width: 100%; padding: 13px; font-weight: 600; letter-spacing: 0.1em; margin-top: 8px;">
+          ENTER ADMIN PORTAL
+        </button>
+
+        <div style="margin-top: 18px; text-align: center;">
+          <button type="button" id="btn-forgot-password" style="background: none; border: none; color: var(--text-muted); font-size: 12px; cursor: pointer; text-decoration: underline; transition: color var(--transition-fast);">
+            Forgot master credential password?
+          </button>
+        </div>
       </form>
     </div>
   </div>
 
-  <!-- ==================== MAIN DASHBOARD CONTAINER ==================== -->
-  <div id="app-container" class="app-container hidden">
+  <!-- ───────────────────────────────────────────────────────────────── -->
+  <!-- 2. EXECUTIVE APP SHELL -->
+  <!-- ───────────────────────────────────────────────────────────────── -->
+  <div id="app-shell" class="app-layout hidden">
     
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR NAVIGATION -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <h1 class="brand-title" style="font-size: 16px; margin: 0;">PARURE</h1>
-        <p class="brand-subtitle" style="font-size: 9px; margin: 0; letter-spacing: 0.1em;">ADMIN CONTROL</p>
+      <div class="sidebar-brand">
+        <h2 class="sidebar-title">PARURE LA PLEE</h2>
+        <span class="sidebar-sub">Operations Console</span>
       </div>
 
-      <nav class="sidebar-menu">
-        <div class="nav-item active" data-tab="tab-overview">
-          <span>Overview</span>
-        </div>
-        <div class="nav-item" data-tab="tab-creators">
-          <span>Creator Applications</span>
-          <span class="nav-badge" id="badge-creators-count">0</span>
-        </div>
-        <div class="nav-item" data-tab="tab-marketplace">
-          <span>High-Value Review</span>
-          <span class="nav-badge" id="badge-marketplace-count">0</span>
-        </div>
-        <div class="nav-item" data-tab="tab-orders">
-          <span>Orders & Financials</span>
-        </div>
-        <div class="nav-item" data-tab="tab-users">
-          <span>User Directory</span>
-        </div>
-        <div class="nav-item" data-tab="tab-beta">
-          <span>Beta Whitelist</span>
-        </div>
-        <div class="nav-item" data-tab="tab-notifications">
-          <span>Broadcast Push</span>
-        </div>
-        <div class="nav-item" data-tab="tab-affiliate">
-          <span>Affiliate Catalog</span>
-        </div>
-        <div class="nav-item" data-tab="tab-settings" style="margin-top: 15px; border-top: 1px solid var(--border-subtle); padding-top: 15px;">
-          <span>Admin Profile & Settings</span>
-        </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-tab="tab-overview">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          <span class="nav-label">Overview</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-creators">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span class="nav-label">Creators</span>
+          <span id="badge-creators-count" class="nav-badge">0</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-marketplace">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+          <span class="nav-label">Marketplace</span>
+          <span id="badge-marketplace-count" class="nav-badge">0</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-orders">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span class="nav-label">Orders & Escrow</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-users">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <span class="nav-label">Client Dossiers</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-beta">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          <span class="nav-label">Beta Whitelist</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-notifications">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          <span class="nav-label">Push Transmit</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-affiliate">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z"/></svg>
+          <span class="nav-label">Affiliate Catalog</span>
+        </a>
+
+        <a class="nav-item" data-tab="tab-settings">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          <span class="nav-label">Settings</span>
+        </a>
       </nav>
 
+      <!-- SIDEBAR FOOTER -->
       <div class="sidebar-footer">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <img id="admin-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" style="width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--tan); object-fit: cover;">
-          <div class="admin-profile-info">
-            <span class="admin-email" id="user-display-name">Parure Admin</span>
-            <span class="admin-role-badge">Super Admin</span>
+        <div class="user-chip">
+          <img id="admin-avatar-img" class="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Admin">
+          <div class="user-info">
+            <span id="user-display-name" class="user-name">Parure Master Admin</span>
+            <span class="user-role">admin@parure.app</span>
           </div>
         </div>
-        <button class="btn-secondary" id="btn-logout" style="padding: 5px 10px; font-size: 11px;">Logout</button>
+
+        <div style="display: flex; gap: 8px; margin-top: 12px;">
+          <button type="button" class="btn btn-secondary btn-sm theme-toggle" title="Switch Theme" style="flex: 1; justify-content: center;">
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor; display: none;"><path d="M12.3 2a10 10 0 0 0-.19 20 10 10 0 0 0 8.7-5.11.75.75 0 0 0-.8-1.1A8 8 0 0 1 9.8 3.09.75.75 0 0 0 9 2.15 9.77 9.77 0 0 0 12.3 2z"/></svg>
+          </button>
+          <button type="button" id="btn-logout" class="btn btn-secondary btn-sm" title="Sign Out" style="flex: 1; justify-content: center; color: var(--accent-red);">
+            Logout
+          </button>
+        </div>
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
+    <!-- MAIN OPERATIONS VIEW -->
+    <div class="main-content">
       
-      <!-- HEADER BAR -->
-      <div class="header-bar">
-        <div>
-          <h2 class="page-title font-serif" id="current-tab-title">Executive Dashboard Overview</h2>
-          <p class="page-description" id="current-tab-desc">Real-time stats, approvals, and system metrics</p>
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="current-tab-title" class="topbar-title font-serif">Overview</h1>
+          <p id="current-tab-desc" class="topbar-desc">Executive operations, high-value queue, and ecosystem intelligence.</p>
         </div>
-        <button class="btn-secondary" id="btn-refresh-data">
-          <svg id="refresh-icon-svg" class="icon-svg" viewBox="0 0 24 24">
-            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-          </svg>
-          <span id="refresh-btn-text">Refresh Data</span>
-        </button>
-      </div>
 
-      <!-- TOP METRICS GRID -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">End-User Members</div>
-          <div class="stat-value" id="stat-total-users">0</div>
-          <div class="stat-trend">Excluding admin accounts</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Approved Creators</div>
-          <div class="stat-value" id="stat-active-creators">0</div>
-          <div class="stat-trend" style="color: var(--tan-dark);">Active creator accounts</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Active Marketplace</div>
-          <div class="stat-value" id="stat-active-listings">0</div>
-          <div class="stat-trend">Public listings</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Pending Reviews</div>
-          <div class="stat-value" id="stat-pending-reviews">0</div>
-          <div class="stat-trend" style="color: var(--accent-amber);">Requires admin action</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Gross Sales GMV</div>
-          <div class="stat-value" id="stat-total-gmv">$0.00</div>
-          <div class="stat-trend" style="color: #4ADE80;">Completed orders</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Beta Whitelist</div>
-          <div class="stat-value" id="stat-beta-testers">0</div>
-          <div class="stat-trend">Whitelisted emails</div>
-        </div>
-      </div>
+        <div class="topbar-right">
+          <button id="btn-refresh-data" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg id="refresh-icon-svg" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;">
+              <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+            </svg>
+            <span id="refresh-btn-text">Refresh Data</span>
+          </button>
 
-      <!-- ==================== TAB 1: OVERVIEW ==================== -->
-      <section id="tab-overview" class="tab-pane">
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
-          <div style="display: flex; flex-direction: column; gap: 24px;">
-            <div class="panel-card" style="padding: 24px;">
-              <div class="flex-between" style="margin-bottom: 18px;">
-                <h4 class="font-serif" style="font-size: 20px; color: var(--tan-light);">Recent Platform Activity</h4>
-                <span style="font-size: 11px; color: var(--muted);">Live Stream</span>
-              </div>
-              <div id="recent-activity-list" class="activity-feed" style="max-height: 420px; overflow-y: auto; padding-right: 4px;">
-                <p style="color: var(--muted); font-size: 13px;">Loading live stream...</p>
-              </div>
+          <a href="../" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="text-decoration: none;">
+            Client Site ↗
+          </a>
+        </div>
+      </header>
+
+      <!-- BODY SECTIONS CONTAINER -->
+      <main class="page-body">
+
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 1: OVERVIEW -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-overview" class="tab-pane">
+          
+          <!-- PRIMARY STAT TILES -->
+          <div class="stat-grid">
+            <div class="stat-card">
+              <span class="stat-label">Total Verified Clients</span>
+              <div id="stat-total-users" class="stat-value font-serif">0</div>
+              <span class="stat-delta">Across all registered cohorts</span>
             </div>
 
-            <div class="panel-card" style="padding: 24px;">
-              <h4 class="font-serif" style="font-size: 20px; color: var(--tan-light); margin-bottom: 18px;">Color Season User Breakdown</h4>
-              <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="stat-card">
+              <span class="stat-label">Active Partner Creators</span>
+              <div id="stat-active-creators" class="stat-value font-serif">0</div>
+              <span class="stat-delta">Curated stylist network</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Published Garment Listings</span>
+              <div id="stat-active-listings" class="stat-value font-serif">0</div>
+              <span class="stat-delta">Public showroom catalog</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Pending Reviews</span>
+              <div id="stat-pending-reviews" class="stat-value font-serif" style="color: var(--accent-amber);">0</div>
+              <span class="stat-delta">Creators & items ≥$500</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Cumulative GMV Volume</span>
+              <div id="stat-total-gmv" class="stat-value font-serif" style="color: var(--gold-primary);">$0.00</div>
+              <span class="stat-delta">Marketplace gross merchandise</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Beta Whitelist Testers</span>
+              <div id="stat-beta-testers" class="stat-value font-serif">0</div>
+              <span class="stat-delta">TestFlight & Android cohort</span>
+            </div>
+          </div>
+
+          <!-- ESCROW & CONSOLIDATED 10% FEE LEDGER STRIP -->
+          <div class="card" style="margin-bottom: 24px; padding: 20px 24px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary); font-weight: 600;">ESCROW LEDGER (CONSOLIDATED 10% PLATFORM FEE)</span>
+                <h3 class="font-serif" style="font-size: 22px; margin: 4px 0 0 0; color: var(--text-primary);">Financial Money Movement Audit</h3>
+              </div>
+              <div style="display: flex; gap: 32px; flex-wrap: wrap;">
                 <div>
-                  <div class="flex-between" style="font-size: 12px; margin-bottom: 4px;">
-                    <span>Winter Season</span>
-                    <span id="season-winter-count" style="color: var(--tan);">0 users</span>
-                  </div>
-                  <div class="progress-bar-bg"><div id="season-winter-bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block;">10% Platform Revenue</span>
+                  <strong id="stat-platform-fees" style="font-size: 20px; color: var(--accent-amber);">$0.00</strong>
                 </div>
                 <div>
-                  <div class="flex-between" style="font-size: 12px; margin-bottom: 4px;">
-                    <span>Autumn Season</span>
-                    <span id="season-autumn-count" style="color: var(--tan);">0 users</span>
-                  </div>
-                  <div class="progress-bar-bg"><div id="season-autumn-bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block;">Seller Disbursed Net</span>
+                  <strong id="stat-seller-net" style="font-size: 20px; color: var(--accent-green);">$0.00</strong>
                 </div>
                 <div>
-                  <div class="flex-between" style="font-size: 12px; margin-bottom: 4px;">
-                    <span>Summer Season</span>
-                    <span id="season-summer-count" style="color: var(--tan);">0 users</span>
-                  </div>
-                  <div class="progress-bar-bg"><div id="season-summer-bar" class="progress-bar-fill" style="width: 0%;"></div></div>
-                </div>
-                <div>
-                  <div class="flex-between" style="font-size: 12px; margin-bottom: 4px;">
-                    <span>Spring Season</span>
-                    <span id="season-spring-count" style="color: var(--tan);">0 users</span>
-                  </div>
-                  <div class="progress-bar-bg"><div id="season-spring-bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block;">Processed Orders</span>
+                  <strong id="stat-escrow-status" style="font-size: 20px; color: var(--text-primary);">0 ORDERS</strong>
                 </div>
               </div>
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 24px;">
-            <div class="panel-card" style="padding: 24px;">
-              <h4 class="font-serif" style="font-size: 20px; margin-bottom: 18px; color: var(--tan);">Pending Action Center</h4>
-              <div id="quick-action-list" style="display: flex; flex-direction: column; gap: 14px;">
-                <p style="color: var(--muted); font-size: 13px;">Loading pending items...</p>
-              </div>
-            </div>
-
-            <div class="panel-card" style="padding: 24px;">
-              <h4 class="font-serif" style="font-size: 20px; margin-bottom: 18px; color: var(--tan);">E-Commerce Financial Metrics</h4>
-              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
-                <div class="flex-between">
-                  <span>Platform Fee Earnings (8%)</span>
-                  <strong id="stat-platform-fees" style="color: #4ADE80;">$0.00</strong>
-                </div>
-                <div class="flex-between">
-                  <span>Seller Net Earnings Paid</span>
-                  <strong id="stat-seller-net" style="color: var(--tan-light);">$0.00</strong>
-                </div>
-                <div class="flex-between">
-                  <span>Completed Transactions</span>
-                  <span class="status-badge badge-approved" id="stat-escrow-status">0 ORDERS</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="panel-card" style="padding: 24px;">
-              <h4 class="font-serif" style="font-size: 20px; margin-bottom: 18px; color: var(--tan);">System & API Infrastructure</h4>
-              <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
-                <div class="flex-between">
-                  <span>Supabase Remote DB</span>
-                  <span class="status-badge badge-approved">CONNECTED</span>
-                </div>
-                <div class="flex-between">
-                  <span>Master Admin Role</span>
-                  <span class="status-badge badge-gold">admin@parure.app</span>
-                </div>
-                <div class="flex-between">
-                  <span>High-Value Listing Trigger</span>
-                  <span class="status-badge badge-approved">ACTIVE (>$500)</span>
-                </div>
-                <div class="flex-between">
-                  <span>AI Edge Gateways</span>
-                  <span class="status-badge badge-approved">ONLINE</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==================== TAB 2: CREATOR APPLICATIONS ==================== -->
-      <section id="tab-creators" class="tab-pane hidden">
-        <div class="panel-card" style="padding: 28px; margin-bottom: 24px;">
-          <div class="flex-between" style="margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <!-- TWO COLUMN INTELLIGENCE -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            
+            <!-- LEFT: QUEUES & SEASON DISTRIBUTION -->
             <div>
-              <h3 class="font-serif" style="font-size: 24px; color: var(--tan-light);">Creator Applications & Referral Program</h3>
-              <p style="font-size: 12px; color: var(--muted); margin-top: 2px;">Review inbound creator applications, grant referral links, and manage partner tiers.</p>
-            </div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <input type="text" id="search-creators" class="form-input" placeholder="Search applicant or handle..." style="width: 220px; padding: 9px 12px; font-size: 12px;">
-              <select id="filter-creator-status" class="form-select">
-                <option value="pending">Pending Review</option>
-                <option value="approved">Approved Creators</option>
-                <option value="declined">Declined Applications</option>
-                <option value="all">All Applications</option>
-              </select>
-            </div>
-          </div>
+              <div class="card" style="margin-bottom: 24px;">
+                <h3 class="font-serif" style="font-size: 18px; margin: 0 0 16px 0; color: var(--text-primary);">Action Queues</h3>
+                <div id="quick-action-list">
+                  <p style="color: var(--text-muted); font-size: 13px;">Analyzing queues...</p>
+                </div>
+              </div>
 
+              <div class="card">
+                <h3 class="font-serif" style="font-size: 18px; margin: 0 0 6px 0; color: var(--text-primary);">Color Season Distribution</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 20px 0;">Algorithmic seasonal analysis across client base</p>
+                
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span>Winter Cohort</span>
+                    <span id="season-winter-count">0 users</span>
+                  </div>
+                  <div class="progress-bar-bg">
+                    <div id="season-winter-bar" class="progress-bar-fill" style="width: 0%; background: #3B82F6;"></div>
+                  </div>
+                </div>
+
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span>Autumn Cohort</span>
+                    <span id="season-autumn-count">0 users</span>
+                  </div>
+                  <div class="progress-bar-bg">
+                    <div id="season-autumn-bar" class="progress-bar-fill" style="width: 0%; background: #D97706;"></div>
+                  </div>
+                </div>
+
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span>Summer Cohort</span>
+                    <span id="season-summer-count">0 users</span>
+                  </div>
+                  <div class="progress-bar-bg">
+                    <div id="season-summer-bar" class="progress-bar-fill" style="width: 0%; background: #EC4899;"></div>
+                  </div>
+                </div>
+
+                <div class="progress-container">
+                  <div class="progress-header">
+                    <span>Spring Cohort</span>
+                    <span id="season-spring-count">0 users</span>
+                  </div>
+                  <div class="progress-bar-bg">
+                    <div id="season-spring-bar" class="progress-bar-fill" style="width: 0%; background: #10B981;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: EXECUTIVE STREAM -->
+            <div class="card">
+              <h3 class="font-serif" style="font-size: 18px; margin: 0 0 6px 0; color: var(--text-primary);">Executive Intelligence Stream</h3>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 16px 0;">Real-time ecosystem transactions and client activity</p>
+              
+              <div id="recent-activity-list" class="activity-feed">
+                <p style="color: var(--text-muted); font-size: 13px;">Loading live activity stream...</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 2: CREATOR APPLICATIONS -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-creators" class="tab-pane hidden">
           <div class="table-container">
-            <table class="admin-table">
+            <div class="table-toolbar">
+              <div class="search-box">
+                <input type="text" id="search-creators" class="form-input" placeholder="Search by name, handle or email...">
+              </div>
+              <div>
+                <select id="filter-creator-status" class="form-select">
+                  <option value="pending" selected>Pending Review</option>
+                  <option value="approved">Approved Partners</option>
+                  <option value="declined">Declined</option>
+                  <option value="all">All Applications</option>
+                </select>
+              </div>
+            </div>
+
+            <table class="data-table">
               <thead>
                 <tr>
-                  <th>Applicant Profile</th>
-                  <th>Creator Handle</th>
-                  <th>Social / Portfolio</th>
-                  <th>Audience Size</th>
+                  <th>Creator Applicant</th>
+                  <th>Handle</th>
+                  <th>Portfolio</th>
+                  <th>Reach</th>
                   <th>Status</th>
-                  <th>Applied On</th>
+                  <th>Submitted</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="creator-table-body">
-                <tr><td colspan="7" style="text-align: center; color: var(--muted);">Loading creator applications...</td></tr>
+                <tr><td colspan="7" style="text-align: center; padding: 36px; color: var(--text-muted);">Loading creator applications...</td></tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== TAB 3: MARKETPLACE HIGH-VALUE ==================== -->
-      <section id="tab-marketplace" class="tab-pane hidden">
-        <div class="panel-card" style="padding: 28px; margin-bottom: 24px;">
-          <div class="flex-between" style="margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-            <div>
-              <h3 class="font-serif" style="font-size: 24px; color: var(--tan-light);">Marketplace Listings Moderation</h3>
-              <p style="font-size: 12px; color: var(--muted); margin-top: 2px;">Review garment listings, verify luxury authenticity, and moderate high-value items.</p>
-            </div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <input type="text" id="search-marketplace" class="form-input" placeholder="Search title, brand, seller..." style="width: 220px; padding: 9px 12px; font-size: 12px;">
-              <select id="filter-marketplace-status" class="form-select">
-                <option value="pending_review" selected>Pending Review (>$500)</option>
-                <option value="active">Active Listings</option>
-                <option value="declined">Declined</option>
-                <option value="removed">Removed</option>
-                <option value="all">All Listings</option>
-              </select>
-            </div>
-          </div>
-
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 3: MARKETPLACE SHOWROOM -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-marketplace" class="tab-pane hidden">
           <div class="table-container">
-            <table class="admin-table">
+            <div class="table-toolbar">
+              <div class="search-box">
+                <input type="text" id="search-marketplace" class="form-input" placeholder="Search garments by brand, title, category, seller...">
+              </div>
+              <div>
+                <select id="filter-marketplace-status" class="form-select">
+                  <option value="pending_review" selected>Pending Review (High Value)</option>
+                  <option value="active">Active In Showroom</option>
+                  <option value="declined">Declined</option>
+                  <option value="sold">Sold Items</option>
+                  <option value="removed">Removed</option>
+                  <option value="all">All Garments</option>
+                </select>
+              </div>
+            </div>
+
+            <table class="data-table">
               <thead>
                 <tr>
-                  <th>Garment Item</th>
+                  <th>Garment Piece</th>
                   <th>Price & Category</th>
                   <th>Condition & Size</th>
                   <th>Authenticity</th>
                   <th>Status</th>
-                  <th>Listed On</th>
-                  <th>Actions</th>
+                  <th>Listed Date</th>
+                  <th>Audit Actions</th>
                 </tr>
               </thead>
               <tbody id="marketplace-table-body">
-                <tr><td colspan="7" style="text-align: center; color: var(--muted);">Loading marketplace listings...</td></tr>
+                <tr><td colspan="7" style="text-align: center; padding: 36px; color: var(--text-muted);">Loading garment showroom...</td></tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== TAB 4: ORDERS & FINANCIALS ==================== -->
-      <section id="tab-orders" class="tab-pane hidden">
-        <div class="panel-card" style="padding: 24px;">
-          <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Completed Transactions & Financial Audit</h3>
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 4: ORDERS & ESCROW -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-orders" class="tab-pane hidden">
           <div class="table-container">
-            <table class="admin-table">
+            <table class="data-table">
               <thead>
                 <tr>
-                  <th>Order ID</th>
-                  <th>Buyer ID</th>
-                  <th>Seller ID</th>
-                  <th>Total Amount</th>
-                  <th>Platform Fee</th>
+                  <th>Invoice ID</th>
+                  <th>Buyer Account</th>
+                  <th>Seller Account</th>
+                  <th>Gross Price</th>
+                  <th>10% Fee</th>
                   <th>Seller Net</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th>Audit Dossier</th>
                 </tr>
               </thead>
               <tbody id="orders-table-body">
-                <tr><td colspan="8" style="text-align: center; color: var(--muted);">Loading transactions...</td></tr>
+                <tr><td colspan="8" style="text-align: center; padding: 36px; color: var(--text-muted);">Loading financial ledger...</td></tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== TAB 5: USER DIRECTORY & 360° PROFILE DASHBOARD ==================== -->
-      <section id="tab-users" class="tab-pane hidden">
-        
-        <!-- VIEW A: LIST TABLE VIEW -->
-        <div id="user-list-view">
-          <div class="panel-card" style="padding: 24px;">
-            <div class="flex-between" style="margin-bottom: 20px;">
-              <div>
-                <h3 class="font-serif" style="font-size: 22px;">Registered User Directory</h3>
-                <p style="font-size: 12px; color: var(--muted);">Manage user accounts, roles, subscription tiers, and color season analytics.</p>
-              </div>
-              <input type="text" id="search-users" class="form-input" placeholder="Search by email, name, handle..." style="width: 280px;">
-            </div>
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 5: CLIENT DOSSIERS (USER DIRECTORY & 360°) -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-users" class="tab-pane hidden">
+          
+          <!-- 5A. USER DIRECTORY LIST VIEW -->
+          <div id="user-list-view">
             <div class="table-container">
-              <table class="admin-table">
+              <div class="table-toolbar">
+                <div class="search-box">
+                  <input type="text" id="search-users" class="form-input" placeholder="Search clients by display name, email, or @handle...">
+                </div>
+              </div>
+
+              <table class="data-table">
                 <thead>
                   <tr>
-                    <th>User Member Profile</th>
+                    <th>Client Profile</th>
                     <th>Role & Tier</th>
-                    <th>Color Season</th>
-                    <th>Wardrobe Stats</th>
+                    <th>Color Passport</th>
+                    <th>Wardrobe Size</th>
                     <th>Location</th>
-                    <th>Joined Date</th>
+                    <th>Joined</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="users-table-body">
-                  <tr><td colspan="7" style="text-align: center; color: var(--muted);">Loading users directory...</td></tr>
+                  <tr><td colspan="7" style="text-align: center; padding: 36px; color: var(--text-muted);">Loading client directory...</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
-        </div>
 
-        <!-- VIEW B: 360° HAUTE-COUTURE USER PROFILE DASHBOARD VIEW -->
-        <div id="user-detail-view" class="hidden" style="max-width: 100%; overflow-x: hidden;">
-          
-          <!-- Back Navigation & Quick Badges Bar -->
-          <div class="flex-between" style="margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
-            <button type="button" class="btn-secondary" onclick="window.closeUserProfileView()" style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; padding: 8px 18px; font-weight: 500;">
-              <svg class="icon-svg" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-              </svg>
-              <span>Back to User Directory</span>
-            </button>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <span id="ud-role-badge" class="status-badge badge-approved">USER</span>
-              <span id="ud-sub-badge" class="status-badge badge-gold">FREE TIER</span>
-              <span id="ud-creator-badge" class="status-badge badge-approved" style="display: none;">VERIFIED CREATOR</span>
-            </div>
-          </div>
-
-          <!-- HERO PROFILE SPOTLIGHT BANNER -->
-          <div style="padding: 0; overflow: hidden; margin-bottom: 24px; position: relative; border-radius: 12px; background: linear-gradient(135deg, rgba(200,184,154,0.08) 0%, rgba(30,28,24,0.95) 40%, rgba(18,17,15,1) 100%);">
-            <!-- Decorative Gradient Background -->
-            <div style="height: 120px; position: relative; overflow: hidden;">
-              <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200,184,154,0.15) 0%, rgba(120,100,72,0.08) 50%, transparent 100%);"></div>
-              <div style="position: absolute; right: -40px; top: -40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(200,184,154,0.06) 0%, transparent 70%);"></div>
-              <div style="position: absolute; left: 30%; top: 60%; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(200,184,154,0.04) 0%, transparent 70%);"></div>
-            </div>
+          <!-- 5B. EXHAUSTIVE 360° USER AUDIT VIEW -->
+          <div id="user-detail-view" class="hidden">
             
-            <div style="padding: 0 28px 24px 28px; margin-top: -48px; position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
-              <div style="display: flex; align-items: flex-end; gap: 20px;">
-                <div style="position: relative;">
-                  <img id="ud-avatar" style="width: 104px; height: 104px; border-radius: 50%; object-fit: cover; border: 3px solid var(--tan); box-shadow: 0 10px 30px rgba(0,0,0,0.8); background: #000; display: none;">
-                  <span id="ud-initial-avatar" class="user-avatar-pill" style="width: 104px; height: 104px; font-size: 38px; border: 3px solid var(--tan); display: none;">U</span>
+            <!-- BACK BUTTON BAR -->
+            <div style="margin-bottom: 20px;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.closeUserProfileView()" style="display: inline-flex; align-items: center; gap: 8px;">
+                <span>&larr; Return to Client Directory</span>
+              </button>
+            </div>
+
+            <!-- CLIENT DOSSIER HERO BANNER -->
+            <div class="card" style="margin-bottom: 24px; padding: 24px 30px;">
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                  <div style="position: relative; width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 2px solid var(--gold-primary); background: var(--bg-surface-2); display: flex; align-items: center; justify-content: center;">
+                    <img id="ud-avatar" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    <div id="ud-initial-avatar" class="avatar-initial" style="width: 100%; height: 100%; font-size: 24px;">U</div>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                      <h2 id="ud-display-name" class="font-serif" style="font-size: 26px; margin: 0; color: var(--text-primary);">Client Name</h2>
+                      <span id="ud-handle" class="badge badge-gold">@handle</span>
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-muted); display: flex; gap: 14px; flex-wrap: wrap;">
+                      <span id="ud-email">client@email.com</span>
+                      <span>•</span>
+                      <span id="ud-location-tag">Location</span>
+                      <span>•</span>
+                      <span>Joined <strong id="ud-created-at" style="color: var(--text-primary);">Date</strong></span>
+                      <span>•</span>
+                      <span>ID: <code id="ud-id" style="color: var(--text-muted); font-size: 11px;">uuid</code></span>
+                    </div>
+                  </div>
                 </div>
-                <div style="margin-bottom: 4px;">
-                  <div style="display: flex; align-items: center; gap: 10px;">
-                    <h2 id="ud-display-name" class="font-serif" style="font-size: 32px; color: var(--cream); font-weight: 600; margin: 0;">Display Name</h2>
-                    <span id="ud-handle" class="status-badge badge-gold" style="font-size: 11px; text-transform: none;">@handle</span>
-                  </div>
-                  <p id="ud-email" style="font-size: 14px; color: var(--tan-light); margin: 3px 0 0 0;">email@domain.com</p>
-                  <div style="display: flex; gap: 14px; margin-top: 8px; font-size: 11px; color: var(--muted); flex-wrap: wrap;">
-                    <span>Location: <strong id="ud-location-tag" style="color: var(--cream);">---</strong></span>
-                    <span>Joined: <strong id="ud-created-at" style="color: var(--cream);">---</strong></span>
-                    <span>ID: <code id="ud-id" style="color: var(--tan-light); font-size: 10px;">uuid</code></span>
-                  </div>
+
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <span id="ud-role-badge" class="badge badge-gold">USER</span>
+                  <span id="ud-sub-badge" class="badge badge-approved">FREE TIER</span>
+                  <span id="ud-creator-badge" class="badge badge-gold" style="display: none;">VERIFIED CREATOR</span>
                 </div>
               </div>
 
-              <!-- Quick Live Stats Summary Badges -->
-              <div style="display: flex; gap: 16px;">
-                <div style="background: rgba(0,0,0,0.5); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border-subtle); text-align: center;">
-                  <span style="font-size: 10px; color: var(--muted); text-transform: uppercase; display: block;">Wardrobe</span>
-                  <strong id="ud-stat-wardrobe" style="font-size: 18px; color: var(--tan-light);">0</strong>
+              <!-- SPOTLIGHT STAT CHIPS -->
+              <div style="display: flex; gap: 24px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap;">
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block;">Wardrobe Pieces</span>
+                  <strong id="ud-stat-wardrobe" style="font-size: 18px; color: var(--text-primary);">0</strong>
                 </div>
-                <div style="background: rgba(0,0,0,0.5); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border-subtle); text-align: center;">
-                  <span style="font-size: 10px; color: var(--muted); text-transform: uppercase; display: block;">Sales Revenue</span>
-                  <strong id="ud-stat-revenue" style="font-size: 18px; color: #4ADE80;">$0.00</strong>
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block;">Marketplace Sales Volume</span>
+                  <strong id="ud-stat-revenue" style="font-size: 18px; color: var(--accent-green);">$0.00</strong>
                 </div>
-                <div style="background: rgba(0,0,0,0.5); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border-subtle); text-align: center;">
-                  <span style="font-size: 10px; color: var(--muted); text-transform: uppercase; display: block;">Posts</span>
-                  <strong id="ud-stat-posts" style="font-size: 18px; color: var(--cream);">0</strong>
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted); display: block;">Editorial Posts</span>
+                  <strong id="ud-stat-posts" style="font-size: 18px; color: var(--text-primary);">0</strong>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- STICKY CATEGORY SUB-NAVIGATION BAR -->
-          <div class="ud-subnav-bar" id="ud-subnav-bar">
-            <button class="ud-subnav-btn active" data-subtab="ud-pane-overview">1. Profile Overview</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-wardrobe">2. Wardrobe</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-posts">3. User Posts</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-saved-posts">4. Saved Posts</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-forums">5. Forums</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-marketplace">6. Marketplace Listings</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-lookbooks">7. Lookbooks</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-moodboards">8. Moodboards</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-favorites">9. Favorites</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-seller-shop">10. My Shop (Seller Dashboard)</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-purchases">11. Purchase History</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-subscription">12. Subscription</button>
-            <button class="ud-subnav-btn" data-subtab="ud-pane-settings">13. Settings & Account</button>
-          </div>
+            <!-- SUBNAV TABS BAR -->
+            <div id="ud-subnav-bar" class="subnav-bar">
+              <button type="button" class="ud-subnav-btn active" data-subtab="ud-pane-overview">Style Passport & Bio</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-wardrobe">Digital Wardrobe</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-posts">Community Posts</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-saved-posts">Saved Posts</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-forums">Forums</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-marketplace">Marketplace</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-lookbooks">Lookbooks</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-moodboards">Moodboards</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-favorites">Favorites & Wishlist</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-seller-shop">Seller Shop</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-purchases">Purchases</button>
+              <button type="button" class="ud-subnav-btn" data-subtab="ud-pane-subscription">Subscription</button>
+            </div>
 
-          <!-- 18 CATEGORY TAB PANES CONTAINER -->
-          <div id="ud-panes-container">
-            
-            <!-- PANE 1: PROFILE OVERVIEW -->
-            <div id="ud-pane-overview" class="ud-pane">
+            <!-- SUBPANES CONTAINER -->
+            <div id="ud-panes-container">
               
-              <!-- Authentic Parure Style Passport / Color Card -->
-              <div class="panel-card" style="padding: 28px; margin-bottom: 24px; background: radial-gradient(circle at top right, rgba(200, 184, 154, 0.15) 0%, rgba(18, 17, 15, 0.95) 80%); overflow: hidden;">
-                <div class="flex-between" style="margin-bottom: 20px;">
-                  <div>
-                    <span style="font-size: 10px; color: var(--tan); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600;">PARURE STYLE PASSPORT & COLOR CARD</span>
-                    <h3 class="font-serif" style="font-size: 26px; color: var(--cream); margin-top: 2px;" id="passport-title">Color Season Profile</h3>
-                  </div>
-                  <!-- Share Color Card button hidden until functionality is ready -->
-                </div>
-
-                <!-- 2-Column Passport Layout -->
-                <div style="display: grid; grid-template-columns: 110px 1fr; gap: 24px; align-items: flex-start;">
-                  <div style="width: 110px; height: 135px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-tan); background: #000; display: flex; align-items: center; justify-content: center;">
-                    <img id="ud-selfie-img" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                    <span id="ud-no-selfie" style="font-size: 10px; color: var(--muted); text-align: center; padding: 6px;">No Photo</span>
-                  </div>
-
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
-                      <h4 id="ud-season" class="font-serif" style="font-size: 28px; color: var(--tan-light); margin: 0;">Deep Autumn</h4>
-                      <span id="ud-season-confidence" class="status-badge badge-approved" style="font-size: 11px;">88% MATCH</span>
+              <!-- 1. PANE OVERVIEW -->
+              <div id="ud-pane-overview" class="ud-pane">
+                <div style="display: grid; grid-template-columns: 320px 1fr; gap: 24px;">
+                  
+                  <!-- STYLE PASSPORT PHOTO & PALETTE -->
+                  <div class="card">
+                    <span style="font-size: 10px; font-weight: 700; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">COLOR ANALYSIS PASSPORT</span>
+                    
+                    <div style="width: 100%; height: 260px; background: var(--bg-surface-3); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 16px;">
+                      <img id="ud-selfie-img" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                      <span id="ud-no-selfie" style="color: var(--text-muted); font-size: 12px;">No Photo</span>
                     </div>
-                    <p style="font-size: 12px; color: var(--muted-light); line-height: 1.6; margin-bottom: 16px;">
-                      Warm, deep, and dramatic coloring. Dark, rich, earthy colors look stunning on you.
-                    </p>
 
-                    <!-- Swatches -->
-                    <span style="font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Best Color Palette Swatches:</span>
-                    <div id="ud-favorite-colors-container" style="display: flex; gap: 8px; flex-wrap: wrap; max-width: 100%; overflow: hidden;"></div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Grid of Core Info Cards -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 100%;">
-                
-                <!-- Core Identity & Demographics -->
-                <div class="panel-card" style="padding: 24px;">
-                  <h4 class="font-serif" style="font-size: 20px; color: var(--tan-light); margin-bottom: 18px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">Core Identity & Demographics</h4>
-                  <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
-                    <div><span style="color: var(--muted);">Bio Statement:</span> <p id="ud-bio" style="color: var(--cream); font-style: italic; margin-top: 2px;">No bio provided</p></div>
-                    <div class="flex-between"><span>Age Range:</span> <strong id="ud-age-range" style="color: var(--cream);">N/A</strong></div>
-                    <div class="flex-between"><span>Gender Identity:</span> <strong id="ud-gender" style="color: var(--cream);">N/A</strong></div>
-                    <div class="flex-between"><span>Custom Gender:</span> <span id="ud-gender-custom" style="color: var(--tan-light);">None</span></div>
-                    <div class="flex-between"><span>Pronouns:</span> <strong id="ud-pronouns" style="color: var(--cream);">N/A</strong></div>
-                    <div class="flex-between"><span>Date of Birth:</span> <span id="ud-dob" style="color: var(--cream);">N/A</span></div>
-                    <div class="flex-between"><span>Pregnancy Status:</span> <span id="ud-pregnant" class="status-badge badge-pending">No</span></div>
-                  </div>
-                </div>
-
-                <!-- Commerce & Shipping -->
-                <div class="panel-card" style="padding: 24px;">
-                  <h4 class="font-serif" style="font-size: 20px; color: var(--tan-light); margin-bottom: 18px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">Shipping & Stripe Commerce</h4>
-                  <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
-                    <div>
-                      <span style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 4px;">Shipping Address:</span>
-                      <div id="ud-shipping-address-box" style="padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 4px; color: var(--cream); font-size: 12px;">No address set</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                      <h4 id="ud-season" class="font-serif" style="font-size: 20px; margin: 0; color: var(--text-primary);">Season</h4>
+                      <span id="ud-season-confidence" class="badge badge-approved" style="font-size: 10px;">0% MATCH</span>
                     </div>
-                    <div class="flex-between"><span>Stripe Account ID:</span> <code id="ud-stripe-id" style="color: var(--accent-green); font-size: 11px;">Not connected</code></div>
-                    <div class="flex-between"><span>Stripe Charges Enabled:</span> <span id="ud-stripe-charges" class="status-badge badge-pending">False</span></div>
-                    <div class="flex-between"><span>Stripe Payouts Enabled:</span> <span id="ud-stripe-payouts" class="status-badge badge-pending">False</span></div>
-                    <div class="flex-between"><span>Referred By:</span> <span id="ud-referred-by" style="color: var(--tan-light);">Direct Signup</span></div>
+
+                    <div style="margin-top: 14px;">
+                      <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 6px;">Harmonious Color Palette:</span>
+                      <div id="ud-favorite-colors-container" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                    </div>
+                  </div>
+
+                  <!-- CLIENT BIO & IDENTITY -->
+                  <div class="card">
+                    <h3 class="font-serif" style="font-size: 20px; margin: 0 0 16px 0; color: var(--text-primary);">Client Profile Details</h3>
+                    
+                    <div style="margin-bottom: 18px;">
+                      <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Editorial Biography</span>
+                      <p id="ud-bio" style="font-size: 14px; color: var(--text-primary); line-height: 1.5; margin: 0; font-style: italic;">No biography provided.</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
+                      <div>
+                        <span style="font-size: 11px; color: var(--text-muted); display: block;">Age Range</span>
+                        <strong id="ud-age-range" style="font-size: 13px; color: var(--text-primary);">Not Set</strong>
+                      </div>
+                      <div>
+                        <span style="font-size: 11px; color: var(--text-muted); display: block;">Gender Identity</span>
+                        <strong id="ud-gender" style="font-size: 13px; color: var(--text-primary);">Not Set</strong>
+                      </div>
+                      <div>
+                        <span style="font-size: 11px; color: var(--text-muted); display: block;">Custom Gender</span>
+                        <strong id="ud-gender-custom" style="font-size: 13px; color: var(--text-primary);">None</strong>
+                      </div>
+                      <div>
+                        <span style="font-size: 11px; color: var(--text-muted); display: block;">Pronouns</span>
+                        <strong id="ud-pronouns" style="font-size: 13px; color: var(--text-primary);">Not Set</strong>
+                      </div>
+                      <div>
+                        <span style="font-size: 11px; color: var(--text-muted); display: block;">Date of Birth</span>
+                        <strong id="ud-dob" style="font-size: 13px; color: var(--text-primary);">Not Set</strong>
+                      </div>
+                      <div>
+                        <span style="font-size: 11px; color: var(--text-muted); display: block;">Maternity Profile</span>
+                        <strong id="ud-pregnant" style="font-size: 13px; color: var(--text-primary);">No</strong>
+                      </div>
+                    </div>
+
+                    <!-- SHIPPING & STRIPE CONNECT -->
+                    <div style="padding-top: 16px; border-top: 1px solid var(--border-subtle);">
+                      <h4 class="font-serif" style="font-size: 16px; margin: 0 0 12px 0; color: var(--text-primary);">Fulfillment & Payouts</h4>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div>
+                          <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Primary Shipping Destination</span>
+                          <div id="ud-shipping-address-box" style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">No Address</div>
+                        </div>
+                        <div>
+                          <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Stripe Connect Account</span>
+                          <code id="ud-stripe-id" style="font-size: 11px; color: var(--text-primary); display: block; margin-bottom: 6px;">Not Connected</code>
+                          <div style="display: flex; gap: 8px;">
+                            <span id="ud-stripe-charges" class="badge badge-pending">Charges Disabled</span>
+                            <span id="ud-stripe-payouts" class="badge badge-pending">Payouts Disabled</span>
+                          </div>
+                          <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 8px;">Referred By: <strong id="ud-referred-by" style="color: var(--text-primary);">Direct</strong></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ADMIN ROLE SWITCHER CONTROLS -->
+                    <div style="padding-top: 18px; margin-top: 20px; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+                      <span style="font-size: 12px; color: var(--text-muted);">Adjust Client Role:</span>
+                      <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="window.toggleUserRole(document.getElementById('ud-id').innerText, 'user')">Set Standard User</button>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="window.toggleUserRole(document.getElementById('ud-id').innerText, 'creator')">Elevate to Creator</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- 2. PANE WARDROBE -->
+              <div id="ud-pane-wardrobe" class="ud-pane hidden">
+                <div class="card" style="margin-bottom: 20px; padding: 16px 20px;">
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary); font-weight: 600; display: block; margin-bottom: 8px;">DIGITAL WARDROBE COMPOSITION</span>
+                  <div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-muted);">
+                    <span>Total: <strong id="wd-count-total" style="color: var(--text-primary);">0</strong></span>
+                    <span>Tops: <strong id="wd-count-tops" style="color: var(--text-primary);">0</strong></span>
+                    <span>Bottoms: <strong id="wd-count-bottoms" style="color: var(--text-primary);">0</strong></span>
+                    <span>Dresses: <strong id="wd-count-dresses" style="color: var(--text-primary);">0</strong></span>
+                    <span>Shoes: <strong id="wd-count-shoes" style="color: var(--text-primary);">0</strong></span>
+                    <span>Outerwear: <strong id="wd-count-outerwear" style="color: var(--text-primary);">0</strong></span>
+                    <span>Bags: <strong id="wd-count-bags" style="color: var(--text-primary);">0</strong></span>
+                    <span>Accessories: <strong id="wd-count-accessories" style="color: var(--text-primary);">0</strong></span>
+                    <span>Jewelry: <strong id="wd-count-jewelry" style="color: var(--text-primary);">0</strong></span>
+                    <span>Activewear: <strong id="wd-count-activewear" style="color: var(--text-primary);">0</strong></span>
+                    <span>Seasonal: <strong id="wd-count-seasonal" style="color: var(--text-primary);">0</strong></span>
+                    <span>Other: <strong id="wd-count-other" style="color: var(--text-primary);">0</strong></span>
+                  </div>
+                </div>
+                <div id="ud-wardrobe-grid"></div>
+              </div>
+
+              <!-- 3. PANE POSTS -->
+              <div id="ud-pane-posts" class="ud-pane hidden">
+                <div id="ud-user-posts-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
+              </div>
+
+              <!-- 4. PANE SAVED POSTS -->
+              <div id="ud-pane-saved-posts" class="ud-pane hidden">
+                <div id="ud-saved-posts-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;"></div>
+              </div>
+
+              <!-- 5. PANE FORUMS -->
+              <div id="ud-pane-forums" class="ud-pane hidden">
+                <div id="ud-forums-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;"></div>
+              </div>
+
+              <!-- 6. PANE MARKETPLACE -->
+              <div id="ud-pane-marketplace" class="ud-pane hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                  <h4 id="ud-mp-heading" class="font-serif" style="font-size: 18px; margin: 0; color: var(--text-primary);">Marketplace Listings Created by User</h4>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" id="ud-mp-btn-created" class="btn btn-secondary btn-sm active" onclick="window.switchMarketplaceSubView('created')">Created Items</button>
+                    <button type="button" id="ud-mp-btn-saved" class="btn btn-secondary btn-sm" onclick="window.switchMarketplaceSubView('saved')">Saved / Favorited</button>
+                  </div>
+                </div>
+                <div id="ud-marketplace-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;"></div>
+                <div id="ud-mp-saved-container" class="hidden" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;"></div>
+              </div>
+
+              <!-- 7. PANE LOOKBOOKS -->
+              <div id="ud-pane-lookbooks" class="ud-pane hidden">
+                <div id="ud-lookbooks-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;"></div>
+              </div>
+
+              <!-- 8. PANE MOODBOARDS -->
+              <div id="ud-pane-moodboards" class="ud-pane hidden">
+                <div id="ud-moodboards-container"></div>
+              </div>
+
+              <!-- 9. PANE FAVORITES -->
+              <div id="ud-pane-favorites" class="ud-pane hidden">
+                <div id="ud-unified-favorites-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;"></div>
+              </div>
+
+              <!-- 10. PANE SELLER SHOP -->
+              <div id="ud-pane-seller-shop" class="ud-pane hidden">
+                <div class="stat-grid" style="margin-bottom: 24px;">
+                  <div class="stat-card">
+                    <span class="stat-label">Total Earnings</span>
+                    <div id="shop-total-earnings" class="stat-value font-serif" style="color: var(--accent-green);">$0.00</div>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Available Balance</span>
+                    <div id="shop-available-bal" class="stat-value font-serif">$0.00</div>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Pending Payout</span>
+                    <div id="shop-pending-payout" class="stat-value font-serif">$0.00</div>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Lifetime Disbursed</span>
+                    <div id="shop-lifetime-rev" class="stat-value font-serif">$0.00</div>
                   </div>
                 </div>
 
-              </div>
-            </div>
-
-            <!-- PANE 2: WARDROBE -->
-            <div id="ud-pane-wardrobe" class="ud-pane hidden">
-              <!-- 12 Category Summary Metric Cards -->
-              <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px;">
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Total Items</span><div class="stat-value" id="wd-count-total">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Tops</span><div class="stat-value" id="wd-count-tops">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Bottoms</span><div class="stat-value" id="wd-count-bottoms">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Dresses</span><div class="stat-value" id="wd-count-dresses">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Shoes</span><div class="stat-value" id="wd-count-shoes">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Outerwear</span><div class="stat-value" id="wd-count-outerwear">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Bags</span><div class="stat-value" id="wd-count-bags">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Accessories</span><div class="stat-value" id="wd-count-accessories">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Jewelry</span><div class="stat-value" id="wd-count-jewelry">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Activewear</span><div class="stat-value" id="wd-count-activewear">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Seasonal</span><div class="stat-value" id="wd-count-seasonal">0</div></div>
-                <div class="stat-card" style="padding: 14px;"><span class="stat-label">Other</span><div class="stat-value" id="wd-count-other">0</div></div>
-              </div>
-
-              <!-- Wardrobe Items Grouped by Category -->
-              <div id="ud-wardrobe-grid" style="display: flex; flex-direction: column; gap: 28px;">
-                <p style="color: var(--muted); font-size: 13px;">Loading wardrobe catalog...</p>
-              </div>
-            </div>
-
-            <!-- PANE 3: USER POSTS -->
-            <div id="ud-pane-posts" class="ud-pane hidden">
-              <!-- Community Feed Stats Metrics -->
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;">
-                <div class="stat-card" style="padding: 12px 16px;"><span class="stat-label" style="font-size: 10px;">TOTAL POSTS</span><div class="stat-value" id="cs-posts-count" style="font-size: 20px;">0</div></div>
-                <div class="stat-card" style="padding: 12px 16px;"><span class="stat-label" style="font-size: 10px;">LIKES RECEIVED</span><div class="stat-value" id="cs-likes-received" style="font-size: 20px; color: #4ADE80;">0</div></div>
-                <div class="stat-card" style="padding: 12px 16px;"><span class="stat-label" style="font-size: 10px;">FOLLOWERS</span><div class="stat-value" id="cs-followers" style="font-size: 20px;">0</div></div>
-                <div class="stat-card" style="padding: 12px 16px;"><span class="stat-label" style="font-size: 10px;">FOLLOWING</span><div class="stat-value" id="cs-following" style="font-size: 20px;">0</div></div>
-              </div>
-
-              <div class="panel-card" style="padding: 24px;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Community Feed Posts Created by User</h3>
-                <div id="ud-user-posts-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading community posts...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 4: SAVED POSTS -->
-            <div id="ud-pane-saved-posts" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 24px;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Saved Community Posts Gallery</h3>
-                <div id="ud-saved-posts-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading saved posts...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 6: FORUMS -->
-            <div id="ud-pane-forums" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 24px;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Community Discussion Forums Created</h3>
-                <div id="ud-forums-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading discussion forums...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 6: MARKETPLACE LISTINGS & FAVORITES -->
-            <div id="ud-pane-marketplace" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 24px;">
-                <div class="flex-between" style="margin-bottom: 20px; align-items: center; flex-wrap: wrap; gap: 12px;">
-                  <h3 id="ud-mp-heading" class="font-serif" style="font-size: 22px; margin: 0;">Marketplace Listings Created by User</h3>
-                  <div class="ud-mp-toggle-group">
-                    <button type="button" class="ud-mp-toggle-btn active" id="ud-mp-btn-created" onclick="switchMarketplaceSubView('created')">My Listings</button>
-                    <button type="button" class="ud-mp-toggle-btn" id="ud-mp-btn-saved" onclick="switchMarketplaceSubView('saved')">Favorited Listings</button>
-                  </div>
-                </div>
-                <div id="ud-marketplace-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading seller listings...</p>
-                </div>
-                <div id="ud-mp-saved-container" class="hidden" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading favorited marketplace items...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 11: LOOKBOOKS -->
-            <div id="ud-pane-lookbooks" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 24px;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Curated Lookbooks</h3>
-                <div id="ud-lookbooks-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading lookbooks...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 12: MOODBOARDS -->
-            <div id="ud-pane-moodboards" class="ud-pane hidden" style="max-width: 100%; min-width: 0; overflow: hidden;">
-              <div class="panel-card" style="padding: 24px; max-width: 100%; min-width: 0; overflow: hidden; box-sizing: border-box;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Inspiration Moodboards</h3>
-                <div id="ud-moodboards-container" style="display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading moodboards...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 13: FAVORITES -->
-            <div id="ud-pane-favorites" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 24px;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Favorited Wardrobe & Wishlist Garments</h3>
-                <div id="ud-unified-favorites-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
-                  <p style="color: var(--muted); font-size: 13px;">Loading favorited garments...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- PANE 14: SELLER SHOP -->
-            <div id="ud-pane-seller-shop" class="ud-pane hidden">
-              <!-- Seller Overview Cards -->
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
-                <div class="stat-card"><span class="stat-label">Total Earnings</span><div class="stat-value" id="shop-total-earnings" style="color: #4ADE80;">$0.00</div></div>
-                <div class="stat-card"><span class="stat-label">Available Balance</span><div class="stat-value" id="shop-available-bal">$0.00</div></div>
-                <div class="stat-card"><span class="stat-label">Pending Payout</span><div class="stat-value" id="shop-pending-payout">$0.00</div></div>
-                <div class="stat-card"><span class="stat-label">Lifetime Revenue</span><div class="stat-value" id="shop-lifetime-rev">$0.00</div></div>
-              </div>
-
-              <!-- Payout History Table -->
-              <div class="panel-card" style="padding: 24px;">
-                <h4 class="font-serif" style="font-size: 20px; color: var(--tan-light); margin-bottom: 16px;">Seller Payouts & Stripe Transfers</h4>
                 <div class="table-container">
-                  <table class="admin-table">
+                  <table class="data-table">
                     <thead>
                       <tr>
-                        <th>Transaction ID</th>
+                        <th>Transfer Ref</th>
                         <th>Amount</th>
-                        <th>Stripe Payout Status</th>
-                        <th>Processed Date</th>
+                        <th>Status</th>
+                        <th>Transferred Date</th>
                       </tr>
                     </thead>
                     <tbody id="shop-payouts-tbody">
-                      <tr><td colspan="4" style="text-align: center; color: var(--muted);">No payout records found.</td></tr>
+                      <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 24px;">No payouts recorded.</td></tr>
                     </tbody>
                   </table>
                 </div>
               </div>
-            </div>
 
-            <!-- PANE 15: PURCHASES -->
-            <div id="ud-pane-purchases" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 24px;">
-                <h3 class="font-serif" style="font-size: 22px; margin-bottom: 20px;">Buyer Purchase Orders & Invoices</h3>
+              <!-- 11. PANE PURCHASES -->
+              <div id="ud-pane-purchases" class="ud-pane hidden">
                 <div class="table-container">
-                  <table class="admin-table">
+                  <table class="data-table">
                     <thead>
                       <tr>
                         <th>Order ID</th>
-                        <th>Garment Item</th>
+                        <th>Item</th>
                         <th>Seller</th>
-                        <th>Total Paid</th>
-                        <th>Status</th>
-                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Fulfillment</th>
+                        <th>Purchased On</th>
                         <th>Invoice</th>
                       </tr>
                     </thead>
                     <tbody id="ud-purchases-tbody">
-                      <tr><td colspan="7" style="text-align: center; color: var(--muted);">No purchases recorded.</td></tr>
+                      <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">No purchases recorded.</td></tr>
                     </tbody>
                   </table>
                 </div>
               </div>
-            </div>
 
-            <!-- PANE 16: SUBSCRIPTION -->
-            <div id="ud-pane-subscription" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 28px; max-width: 650px;">
-                <h3 class="font-serif" style="font-size: 24px; color: var(--tan-light); margin-bottom: 20px;">Membership Subscription Status</h3>
-                <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
-                  <div class="flex-between"><span>Active Plan:</span> <span id="sub-plan-badge" class="status-badge badge-approved">FREE MEMBERSHIP</span></div>
-                  <div class="flex-between"><span>Billing Cycle:</span> <span id="sub-cycle" style="color: var(--cream);">Monthly</span></div>
-                  <div class="flex-between"><span>Trial Status:</span> <span id="sub-trial" style="color: var(--tan-light);">N/A</span></div>
-                  <div class="flex-between"><span>Start Date:</span> <span id="sub-start-date" style="color: var(--muted);">---</span></div>
-                  <div class="flex-between"><span>Renewal / Expiry Date:</span> <span id="sub-renewal-date" style="color: var(--cream);">Lifetime Free</span></div>
-                  <div class="flex-between"><span>Status:</span> <span id="sub-status-badge" class="status-badge badge-approved">ACTIVE</span></div>
+              <!-- 12. PANE SUBSCRIPTION -->
+              <div id="ud-pane-subscription" class="ud-pane hidden">
+                <div class="card" style="max-width: 600px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle);">
+                    <div>
+                      <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary); font-weight: 600;">ACTIVE PLAN</span>
+                      <h4 id="sub-plan-badge" class="font-serif" style="font-size: 22px; margin: 4px 0 0 0; color: var(--text-primary);">PREMIUM MEMBER</h4>
+                    </div>
+                    <span id="sub-status-badge" class="badge badge-approved">ACTIVE</span>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                      <span style="font-size: 11px; color: var(--text-muted); display: block;">Billing Cadence</span>
+                      <strong id="sub-cycle" style="font-size: 14px; color: var(--text-primary);">Monthly</strong>
+                    </div>
+                    <div>
+                      <span style="font-size: 11px; color: var(--text-muted); display: block;">Trial Phase</span>
+                      <strong id="sub-trial" style="font-size: 14px; color: var(--text-primary);">N/A</strong>
+                    </div>
+                    <div>
+                      <span style="font-size: 11px; color: var(--text-muted); display: block;">Started On</span>
+                      <strong id="sub-start-date" style="font-size: 14px; color: var(--text-primary);">---</strong>
+                    </div>
+                    <div>
+                      <span style="font-size: 11px; color: var(--text-muted); display: block;">Renewal / Expiry</span>
+                      <strong id="sub-renewal-date" style="font-size: 14px; color: var(--text-primary);">---</strong>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- PANE 18: SETTINGS & ACCOUNT -->
-            <div id="ud-pane-settings" class="ud-pane hidden">
-              <div class="panel-card" style="padding: 28px; max-width: 650px;">
-                <h3 class="font-serif" style="font-size: 24px; color: var(--tan-light); margin-bottom: 20px;">Account Settings & System Configuration</h3>
-                <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
-                  <div class="flex-between"><span>Personal Information:</span> <strong style="color: var(--cream);">Verified</strong></div>
-                  <div class="flex-between"><span>Login Method:</span> <span class="status-badge badge-gold">Email & Password / OAuth</span></div>
-                  <div class="flex-between"><span>Notification Preferences:</span> <span class="status-badge badge-approved">Push Enabled</span></div>
-                  <div class="flex-between"><span>Privacy Settings:</span> <span style="color: var(--muted);">Standard Public Profile</span></div>
-                  <div class="flex-between"><span>App Version:</span> <code style="color: var(--tan);">v2.4.0 (Build 2026)</code></div>
-                </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 6: BETA WHITELIST -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-beta" class="tab-pane hidden">
+          <div class="table-container">
+            <div class="table-toolbar">
+              <div class="search-box">
+                <input type="text" id="search-beta-testers" class="form-input" placeholder="Search beta emails...">
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span id="beta-testers-count-badge" class="badge badge-gold">0 Emails</span>
+                <button type="button" id="btn-open-add-beta" class="btn btn-primary btn-sm">
+                  + Add Beta Tester
+                </button>
               </div>
             </div>
 
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ==================== TAB 6: BETA TESTERS WHITELIST ==================== -->
-      <section id="tab-beta" class="tab-pane hidden">
-        <div class="panel-card" style="padding: 28px;">
-          <div class="flex-between" style="margin-bottom: 24px; align-items: center; flex-wrap: wrap; gap: 16px;">
-            <div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <h3 class="font-serif" style="font-size: 24px; color: var(--cream); margin: 0;">Beta Testers Whitelist</h3>
-                <span id="beta-testers-count-badge" class="status-badge badge-gold" style="font-size: 11px;">0 Emails</span>
-              </div>
-              <p style="font-size: 12px; color: var(--muted); margin-top: 4px; margin-bottom: 0;">Emails in this whitelist bypass onboarding paywalls during early testing.</p>
-            </div>
-            
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <input type="text" id="search-beta-testers" class="form-input" placeholder="Search beta email..." style="width: 220px; padding: 8px 14px; font-size: 12px; height: 38px;">
-              <button class="btn-primary" id="btn-open-add-beta" style="width: auto; padding: 8px 18px; font-size: 12px; height: 38px; display: inline-flex; align-items: center; gap: 6px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Add Beta Email
-              </button>
-            </div>
-          </div>
-
-          <div class="table-container" style="border-radius: 8px; border: 1px solid var(--border-subtle); overflow: hidden;">
-            <table class="admin-table">
+            <table class="data-table">
               <thead>
                 <tr>
-                  <th>Email Address</th>
-                  <th>Added By</th>
-                  <th>Date Added</th>
+                  <th>Invited Email Address</th>
+                  <th>Authorized By</th>
+                  <th>Added On</th>
                   <th style="text-align: right;">Action</th>
                 </tr>
               </thead>
               <tbody id="beta-testers-table-body">
-                <tr><td colspan="4" style="text-align: center; color: var(--muted); padding: 30px;">Loading beta whitelist...</td></tr>
+                <tr><td colspan="4" style="text-align: center; padding: 30px; color: var(--text-muted);">Loading beta whitelist...</td></tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== TAB 8: BROADCAST PUSH ==================== -->
-      <section id="tab-notifications" class="tab-pane hidden">
-        <div class="panel-card" style="padding: 28px; max-width: 600px;">
-          <h3 class="font-serif" style="color: var(--tan-light); font-size: 22px; margin-bottom: 20px;">Broadcast Push Campaign Dispatcher</h3>
-          <form id="push-form">
-            <div class="form-group">
-              <label class="form-label">Notification Title</label>
-              <input type="text" id="push-title" class="form-input" placeholder="Special Creator Announcement" required>
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 7: PUSH TRANSMIT -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-notifications" class="tab-pane hidden">
+          <div class="card" style="max-width: 680px;">
+            <div style="margin-bottom: 24px;">
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary); font-weight: 600;">EXPO NOTIFICATION INFRASTRUCTURE</span>
+              <h2 class="font-serif" style="font-size: 24px; margin: 4px 0 6px 0; color: var(--text-primary);">Broadcast Push Transmission</h2>
+              <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Dispatches push notifications directly to iOS and Android devices running Parure La Plee.</p>
             </div>
-            <div class="form-group">
-              <label class="form-label">Message Body</label>
-              <textarea id="push-message" class="form-textarea" rows="3" placeholder="Enter your push message here..." required></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Target Audience Segment</label>
-              <select id="push-segment" class="form-select" style="width: 100%;">
-                <option value="all">All Registered Users</option>
-                <option value="creators">Approved Creators Only</option>
-                <option value="premium">Premium Subscribers</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-primary">DISPATCH BROADCAST NOTIFICATION</button>
-          </form>
-        </div>
-      </section>
 
-      <!-- ==================== TAB 9: AFFILIATE CATALOG ==================== -->
-      <section id="tab-affiliate" class="tab-pane hidden">
-        <div class="panel-card" style="padding: 28px;">
-          <div class="flex-between" style="margin-bottom: 24px; align-items: center; flex-wrap: wrap; gap: 16px;">
-            <div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <h3 class="font-serif" style="font-size: 24px; color: var(--cream); margin: 0;">Affiliate Products Catalog</h3>
-                <span id="affiliate-count-badge" class="status-badge badge-gold" style="font-size: 11px;">0 Products</span>
+            <form id="push-form">
+              <div class="form-group">
+                <label class="form-label" for="push-segment">Target Audience Cohort</label>
+                <select id="push-segment" class="form-select">
+                  <option value="all">Broadcast to All Clients (Everyone)</option>
+                  <option value="creators">Verified Partner Creators Only</option>
+                  <option value="premium">Premium Tier Subscribers Only</option>
+                </select>
               </div>
-              <p style="font-size: 12px; color: var(--muted); margin-top: 4px; margin-bottom: 0;">Managed affiliate inventory synced from Awin, CJ, and partner luxury networks.</p>
-            </div>
 
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <input type="text" id="search-affiliate-products" class="form-input" placeholder="Search title, brand, merchant..." style="width: 240px; padding: 8px 14px; font-size: 12px; height: 38px;">
-              
-              <select id="filter-affiliate-network" class="form-select" style="width: 140px; height: 38px; font-size: 12px; padding: 0 12px;">
-                <option value="all">All Networks</option>
-                <option value="awin">Awin Network</option>
-                <option value="cj">CJ Network</option>
-              </select>
+              <div class="form-group">
+                <label class="form-label" for="push-title">Transmission Headline</label>
+                <input type="text" id="push-title" class="form-input" placeholder="e.g. Exclusive New Autumn Drop Is Live" required>
+              </div>
 
-              <button class="btn-secondary" id="btn-trigger-affiliate-sync" style="padding: 8px 16px; font-size: 12px; height: 38px;">Sync Affiliate Catalog</button>
-            </div>
+              <div class="form-group">
+                <label class="form-label" for="push-message">Notification Body Text</label>
+                <textarea id="push-message" class="form-textarea" rows="4" placeholder="Craft your message with editorial poise..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 13px; font-weight: 600;">
+                DISPATCH BROADCAST NOTIFICATION
+              </button>
+            </form>
           </div>
+        </section>
 
-          <div class="table-container" style="border-radius: 8px; border: 1px solid var(--border-subtle); overflow: hidden;">
-            <table class="admin-table">
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 8: AFFILIATE CATALOG -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-affiliate" class="tab-pane hidden">
+          <div class="table-container">
+            <div class="table-toolbar">
+              <div class="search-box">
+                <input type="text" id="search-affiliate-products" class="form-input" placeholder="Search catalog by title, brand, merchant...">
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <select id="filter-affiliate-network" class="form-select">
+                  <option value="all">All Networks</option>
+                  <option value="awin">Awin Network</option>
+                  <option value="rakuten">Rakuten Advertising</option>
+                  <option value="cj">CJ Affiliate</option>
+                  <option value="impact">Impact</option>
+                </select>
+                <span id="affiliate-count-badge" class="badge badge-gold">0 Products</span>
+                <button type="button" id="btn-trigger-affiliate-sync" class="btn btn-secondary btn-sm">
+                  Sync Catalog
+                </button>
+              </div>
+            </div>
+
+            <table class="data-table">
               <thead>
                 <tr>
-                  <th style="width: 55px; text-align: center;">Image</th>
-                  <th>Product Title</th>
+                  <th style="width: 50px;">Img</th>
+                  <th>Product Details</th>
                   <th>Brand</th>
-                  <th>Merchant & ID</th>
+                  <th>Merchant</th>
                   <th>Network</th>
-                  <th>Price & Currency</th>
+                  <th>Price</th>
                   <th>Category</th>
                   <th style="text-align: right;">Action</th>
                 </tr>
               </thead>
               <tbody id="affiliate-table-body">
-                <tr><td colspan="8" style="text-align: center; color: var(--muted); padding: 30px;">Loading affiliate catalog...</td></tr>
+                <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">Loading affiliate catalog...</td></tr>
               </tbody>
             </table>
+
             <div id="affiliate-pagination-controls"></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ==================== TAB 11: ADMIN PROFILE & SETTINGS ==================== -->
-      <section id="tab-settings" class="tab-pane hidden">
-        
-        <!-- Hero Header Profile Banner -->
-        <div class="panel-card" style="padding: 28px; margin-bottom: 24px; background: radial-gradient(circle at top right, rgba(200, 184, 154, 0.15) 0%, rgba(22, 21, 19, 0.95) 80%); overflow: hidden; border: 1px solid var(--border-tan);">
-          <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
-            <div style="position: relative; width: 90px; height: 90px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--gold-primary), var(--border-tan)); box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-              <div style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center;">
-                <img id="admin-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" style="width: 100%; height: 100%; object-fit: cover;">
-              </div>
-              <label for="admin-avatar-file-input" style="position: absolute; bottom: 0; right: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--gold-primary); color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" title="Upload Profile Picture">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-              </label>
-              <input type="file" id="admin-avatar-file-input" accept="image/*" style="display: none;">
-            </div>
-
-            <div>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <h3 id="admin-profile-hero-name" class="font-serif" style="font-size: 26px; color: var(--cream); margin: 0;">Parure Master Admin</h3>
-                <span class="status-badge badge-gold" style="font-size: 10px;">SUPER ADMIN</span>
-              </div>
-              <p id="admin-profile-hero-email" style="font-size: 13px; color: var(--muted-light); margin-top: 4px; margin-bottom: 0;">admin@parure.app</p>
-            </div>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-          
-          <!-- Profile Edit Card -->
-          <div class="panel-card" style="padding: 28px; border: 1px solid var(--border-subtle);">
-            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 14px; margin-bottom: 20px;">
-              <h3 class="font-serif" style="color: var(--cream); font-size: 22px; margin: 0;">Edit Admin Profile</h3>
-              <p style="font-size: 12px; color: var(--muted); margin-top: 4px; margin-bottom: 0;">Update your public display identity and profile picture.</p>
-            </div>
-
-            <form id="form-update-profile">
-              <div class="form-group" style="margin-bottom: 18px;">
-                <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-                  <span>Admin System Email</span>
-                  <span class="status-badge badge-approved" style="font-size: 9px; padding: 2px 6px;">🔒 NON-EDITABLE</span>
-                </label>
-                <input type="email" id="admin-email-input" class="form-input" value="admin@parure.app" readonly style="background: rgba(0,0,0,0.6); color: var(--muted); cursor: not-allowed; border-color: rgba(255,255,255,0.08);">
-              </div>
-
-              <div class="form-group" style="margin-bottom: 18px;">
-                <label class="form-label">Display Name</label>
-                <input type="text" id="admin-name-input" class="form-input" value="Parure Master Admin" placeholder="Enter your full display name" required style="padding: 12px 14px;">
-              </div>
-
-              <div class="form-group" style="margin-bottom: 20px;">
-                <label class="form-label">Profile Picture (Upload File or Image URL)</label>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                  <input type="url" id="admin-avatar-input" class="form-input" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" placeholder="https://..." style="padding: 12px 14px;">
-                  <button type="button" class="btn-secondary" id="btn-browse-avatar" style="padding: 12px 16px; white-space: nowrap; font-size: 12px;">Upload File</button>
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <!-- TAB 9: SETTINGS -->
+        <!-- ───────────────────────────────────────────────────────────── -->
+        <section id="tab-settings" class="tab-pane hidden">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1100px;">
+            
+            <!-- MASTER ADMIN PROFILE -->
+            <div class="card">
+              <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border-subtle);">
+                <img id="admin-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Preview" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-primary);">
+                <div>
+                  <h3 id="admin-profile-hero-name" class="font-serif" style="font-size: 20px; margin: 0; color: var(--text-primary);">Parure Master Admin</h3>
+                  <span id="admin-profile-hero-email" style="font-size: 12px; color: var(--text-muted);">admin@parure.app</span>
                 </div>
               </div>
 
-              <button type="submit" id="btn-save-admin-profile" class="btn-primary" style="width: 100%; padding: 12px; font-size: 12px; margin-top: 8px;">SAVE PROFILE CHANGES</button>
-            </form>
-          </div>
+              <form id="form-update-profile">
+                <div class="form-group">
+                  <label class="form-label" for="admin-name-input">Display Name</label>
+                  <input type="text" id="admin-name-input" class="form-input" required>
+                </div>
 
-          <!-- Password Reset Card -->
-          <div class="panel-card" style="padding: 28px; border: 1px solid var(--border-subtle);">
-            <div style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 14px; margin-bottom: 20px;">
-              <h3 class="font-serif" style="color: var(--cream); font-size: 22px; margin: 0;">Security & Password</h3>
-              <p style="font-size: 12px; color: var(--muted); margin-top: 4px; margin-bottom: 0;">Update your admin password to keep your dashboard secure.</p>
+                <div class="form-group">
+                  <label class="form-label" for="admin-email-input">Master Identifier</label>
+                  <input type="email" id="admin-email-input" class="form-input" disabled style="opacity: 0.6;">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="admin-avatar-input">Avatar Image URL</label>
+                  <div style="display: flex; gap: 8px;">
+                    <input type="text" id="admin-avatar-input" class="form-input" placeholder="https://...">
+                    <button type="button" id="btn-browse-avatar" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Upload</button>
+                    <input type="file" id="admin-avatar-file-input" accept="image/*" style="display: none;">
+                  </div>
+                </div>
+
+                <button type="submit" id="btn-save-admin-profile" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                  SAVE PROFILE CHANGES
+                </button>
+              </form>
             </div>
 
-            <form id="form-change-password">
-              <div class="form-group" style="margin-bottom: 18px;">
-                <label class="form-label">New Password</label>
-                <input type="password" id="input-new-password" class="form-input" placeholder="At least 6 characters" required style="padding: 12px 14px;">
-              </div>
+            <!-- SECURITY & CREDENTIALS -->
+            <div class="card">
+              <h3 class="font-serif" style="font-size: 20px; margin: 0 0 6px 0; color: var(--text-primary);">Security & Passwords</h3>
+              <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 20px 0;">Update your master administrative password.</p>
 
-              <div class="form-group" style="margin-bottom: 20px;">
-                <label class="form-label">Confirm New Password</label>
-                <input type="password" id="input-confirm-password" class="form-input" placeholder="Repeat new password" required style="padding: 12px 14px;">
-              </div>
+              <form id="form-change-password">
+                <div class="form-group">
+                  <label class="form-label" for="input-new-password">New Secret Password</label>
+                  <input type="password" id="input-new-password" class="form-input" placeholder="••••••••••••" minlength="6" required>
+                </div>
 
-              <button type="submit" id="btn-save-admin-password" class="btn-primary" style="width: 100%; padding: 12px; font-size: 12px; margin-top: 8px;">RESET & SAVE PASSWORD</button>
-            </form>
+                <div class="form-group">
+                  <label class="form-label" for="input-confirm-password">Confirm Secret Password</label>
+                  <input type="password" id="input-confirm-password" class="form-input" placeholder="••••••••••••" minlength="6" required>
+                </div>
+
+                <button type="submit" id="btn-save-admin-password" class="btn btn-secondary" style="width: 100%; margin-top: 10px;">
+                  RESET & SAVE PASSWORD
+                </button>
+              </form>
+            </div>
+
           </div>
+        </section>
 
-        </div>
-      </section>
-
-    </main>
+      </main>
+    </div>
   </div>
 
-  <!-- MODAL 1: ADD BETA TESTER -->
-  <div id="modal-add-beta" class="modal-overlay">
-    <div class="modal-box">
-      <h3 class="modal-title font-serif">Add Email to Beta Whitelist</h3>
+  <!-- ───────────────────────────────────────────────────────────────── -->
+  <!-- 3. MODALS -->
+  <!-- ───────────────────────────────────────────────────────────────── -->
+
+  <!-- GLOBAL CONFIRM MODAL -->
+  <div id="modal-confirm-action" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 440px;">
+      <h3 id="confirm-modal-title" class="font-serif" style="font-size: 20px; margin: 0 0 8px 0; color: var(--text-primary);">Confirm Action</h3>
+      <p id="confirm-modal-message" style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0 0 20px 0;">Are you sure?</p>
+      
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" id="confirm-modal-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+        <button type="button" id="confirm-modal-proceed" class="btn btn-danger btn-sm">Confirm & Execute</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD BETA TESTER MODAL -->
+  <div id="modal-add-beta" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 440px;">
+      <h3 class="font-serif" style="font-size: 20px; margin: 0 0 6px 0; color: var(--text-primary);">Add Beta Whitelist Client</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 16px 0;">Grant early iOS TestFlight & Android access.</p>
+
       <form id="form-add-beta">
         <div class="form-group">
-          <label class="form-label">Tester Email Address</label>
-          <input type="email" id="input-beta-email" class="form-input" placeholder="tester@example.com" required>
+          <label class="form-label" for="input-beta-email">Client Email Address</label>
+          <input type="email" id="input-beta-email" class="form-input" placeholder="client@domain.com" required>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
-          <button type="button" class="btn-secondary" id="btn-close-beta-modal">Cancel</button>
-          <button type="submit" class="btn-primary" style="width: auto; padding: 10px 20px;">Add Tester</button>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" id="btn-close-beta-modal" class="btn btn-secondary btn-sm">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add Tester</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 2: LUXURY BOUTIQUE SHOWROOM MARKETPLACE DETAIL MODAL -->
-  <div id="modal-marketplace-detail" class="modal-overlay">
-    <div class="modal-box" style="max-width: 1160px; width: 94%; padding: 0; overflow: hidden; border-radius: 16px; box-shadow: 0 40px 100px rgba(0,0,0,0.9); border: 1px solid var(--border-tan); background: #161513;">
-      <div style="padding: 24px 32px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(180deg, rgba(30, 28, 25, 0.9) 0%, rgba(20, 19, 17, 0.9) 100%); backdrop-filter: blur(12px);">
+  <!-- MARKETPLACE GARMENT DETAIL SHOWROOM MODAL -->
+  <div id="modal-marketplace-detail" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 860px; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
         <div>
-          <h3 id="modal-item-title" class="font-serif" style="font-size: 28px; color: var(--cream); letter-spacing: 0.02em; font-weight: 600;">Garment Title</h3>
-          <div style="display: flex; align-items: center; gap: 10px; margin-top: 6px;">
-            <span id="modal-item-brand" class="status-badge badge-gold" style="font-size: 11px; padding: 3px 10px; letter-spacing: 0.06em;">BRAND</span>
-            <span style="font-size: 12px; color: var(--muted);">Listed by: <strong id="modal-item-seller" style="color: var(--tan-light);">Seller</strong> <code id="modal-item-seller-id" style="font-size: 10px; color: var(--muted); opacity: 0.7;">(id)</code></span>
-          </div>
+          <span id="modal-item-brand" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary); font-weight: 600;">BRAND</span>
+          <h2 id="modal-item-title" class="font-serif" style="font-size: 24px; margin: 4px 0 0 0; color: var(--text-primary);">Garment Title</h2>
         </div>
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <span id="modal-item-auth-badge" class="status-badge badge-pending" style="font-size: 11px; padding: 6px 14px; letter-spacing: 0.05em;">UNVERIFIED</span>
-          <span id="modal-item-status-badge" class="status-badge badge-gold" style="font-size: 11px; padding: 6px 14px; letter-spacing: 0.05em;">PENDING</span>
-          <button type="button" id="btn-close-marketplace-modal" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: var(--cream); font-size: 22px; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Close Modal">&times;</button>
-        </div>
+        <button type="button" id="btn-close-marketplace-modal" class="btn btn-ghost btn-sm" style="font-size: 18px; padding: 4px 8px;">✕</button>
       </div>
 
-      <div style="padding: 32px; display: grid; grid-template-columns: 460px 1fr; gap: 36px; max-height: 82vh; overflow-y: auto;">
+      <div style="display: grid; grid-template-columns: 360px 1fr; gap: 24px;">
+        
+        <!-- CAROUSEL -->
         <div>
-          <div style="width: 100%; height: 480px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-tan); background: radial-gradient(circle at center, #252320 0%, #0d0c0b 100%); margin-bottom: 16px; position: relative; display: flex; align-items: center; justify-content: center;">
-            <img id="modal-main-image" src="" style="max-width: 96%; max-height: 96%; object-fit: contain;">
-            <button type="button" id="modal-carousel-prev" onclick="window.prevModalImage()" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; background: rgba(20, 19, 17, 0.85); border: 1px solid var(--border-tan); color: var(--tan-light); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
-            <button type="button" id="modal-carousel-next" onclick="window.nextModalImage()" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; background: rgba(20, 19, 17, 0.85); border: 1px solid var(--border-tan); color: var(--tan-light); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
-            <div id="modal-image-count" style="position: absolute; bottom: 14px; right: 14px; background: rgba(13, 12, 11, 0.85); color: var(--tan-light); font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-tan);">1 / 1</div>
+          <div style="position: relative; width: 100%; height: 380px; background: var(--bg-surface-3); border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-subtle); margin-bottom: 12px; cursor: pointer;" onclick="window.openFullImageLight()">
+            <img id="modal-main-image" src="" alt="Main Garment" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            
+            <button type="button" id="modal-carousel-prev" onclick="event.stopPropagation(); window.prevModalImage();" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--border-subtle); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: none; align-items: center; justify-content: center;">‹</button>
+            <button type="button" id="modal-carousel-next" onclick="event.stopPropagation(); window.nextModalImage();" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--border-subtle); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: none; align-items: center; justify-content: center;">›</button>
+
+            <span id="modal-image-count" style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 10px;">1 / 1</span>
           </div>
-          <div id="modal-image-gallery" style="display: flex; gap: 12px; overflow-x: auto;"></div>
+
+          <div id="modal-image-gallery" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;"></div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 24px;">
-          <div style="padding: 24px 28px; background: linear-gradient(135deg, rgba(200, 184, 154, 0.12) 0%, rgba(26, 26, 24, 0.7) 100%); border: 1px solid var(--tan-dark); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center;">
+        <!-- DETAILS & ACTIONS -->
+        <div>
+          <!-- FINANCIAL SPLIT -->
+          <div style="background: var(--bg-surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; text-align: center;">
             <div>
-              <span style="font-size: 11px; color: var(--tan); text-transform: uppercase;">Price</span>
-              <h4 id="modal-item-price" class="font-serif" style="font-size: 36px; color: var(--cream); margin-top: 4px;">$0.00</h4>
+              <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Gross Price</span>
+              <strong id="modal-item-price" style="display: block; font-size: 18px; color: var(--text-primary);">$0.00</strong>
             </div>
-            <div style="text-align: right; font-size: 13px;">
-              <div>Platform Fee (10%): <strong id="modal-item-fee" style="color: var(--accent-amber);">$0.00</strong></div>
-              <div>Seller Net: <strong id="modal-item-net" style="color: #4ADE80;">$0.00</strong></div>
+            <div>
+              <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">10% Fee</span>
+              <strong id="modal-item-fee" style="display: block; font-size: 18px; color: var(--accent-amber);">$0.00</strong>
+            </div>
+            <div>
+              <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Seller Net</span>
+              <strong id="modal-item-net" style="display: block; font-size: 18px; color: var(--accent-green);">$0.00</strong>
             </div>
           </div>
-          <div id="modal-item-description" style="padding: 18px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 13px; color: var(--cream);">Description...</div>
+
+          <!-- SPECS GRID -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px; margin-bottom: 18px;">
+            <div><span style="color: var(--text-muted);">Seller:</span> <strong id="modal-item-seller" style="color: var(--text-primary);">Seller</strong> <span id="modal-item-seller-id" style="color: var(--text-muted); font-size: 10px;"></span></div>
+            <div><span style="color: var(--text-muted);">Category:</span> <strong id="modal-item-category" style="color: var(--text-primary);">Tops</strong></div>
+            <div><span style="color: var(--text-muted);">Subcategory:</span> <strong id="modal-item-subcategory" style="color: var(--text-primary);">N/A</strong></div>
+            <div><span style="color: var(--text-muted);">Size:</span> <strong id="modal-item-size" style="color: var(--text-primary);">Medium</strong></div>
+            <div><span style="color: var(--text-muted);">Condition:</span> <strong id="modal-item-condition" style="color: var(--text-primary);">Like New</strong></div>
+            <div><span style="color: var(--text-muted);">Gender:</span> <strong id="modal-item-gender" style="color: var(--text-primary);">Unisex</strong></div>
+            <div><span style="color: var(--text-muted);">Season Tag:</span> <strong id="modal-item-season" style="color: var(--text-primary);">All Season</strong></div>
+            <div><span style="color: var(--text-muted);">Auth Status:</span> <strong id="modal-item-auth-status-field" style="color: var(--text-primary);">pending</strong></div>
+            <div><span style="color: var(--text-muted);">Listed On:</span> <span id="modal-item-created-at" style="color: var(--text-secondary);">Date</span></div>
+            <div><span style="color: var(--text-muted);">Verified At:</span> <span id="modal-item-auth-confirmed-at" style="color: var(--text-secondary);">Not Yet</span></div>
+          </div>
+
+          <!-- DOMINANT COLOR -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <span style="font-size: 12px; color: var(--text-muted);">Dominant Color:</span>
+            <span id="modal-item-color-swatch" style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: inline-block;"></span>
+            <span id="modal-item-color-name" style="font-size: 12px; color: var(--text-primary);">Color</span>
+            <code id="modal-item-color-hex-tag" style="font-size: 10px; color: var(--text-muted);">#HEX</code>
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div style="margin-bottom: 20px;">
+            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Editorial Description</span>
+            <p id="modal-item-description" style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; background: var(--bg-surface-2); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);"></p>
+          </div>
+
+          <!-- BADGES & ACTIONS -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px;">
+            <div style="display: flex; gap: 8px;">
+              <span id="modal-item-status-badge" class="badge badge-pending">PENDING</span>
+              <span id="modal-item-auth-badge" class="badge badge-pending">UNVERIFIED</span>
+            </div>
+            <button type="button" id="modal-btn-toggle-auth" class="btn btn-secondary btn-sm">Confirm Authenticity</button>
+          </div>
+
+          <div id="modal-action-buttons-container" style="display: flex; gap: 10px; justify-content: flex-end;"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightbox-modal" class="modal-backdrop">
+    <div style="max-width: 90vw; max-height: 90vh; display: flex; align-items: center; justify-content: center;">
+      <img id="lightbox-full-image" src="" alt="Full Resolution" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--radius-md);">
+    </div>
+  </div>
+
+  <!-- ORDER DETAIL INVOICE MODAL -->
+  <div id="modal-order-detail" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+        <div>
+          <span style="font-size: 10px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;">ESCROW TRANSACTION DOSSIER</span>
+          <h2 id="order-modal-invoice-no" class="font-serif" style="font-size: 24px; margin: 4px 0 0 0; color: var(--text-primary);">INV-2026-XXXX</h2>
+          <span id="order-modal-invoice-date" style="font-size: 12px; color: var(--text-muted);">Date</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <span id="order-modal-status-badge" class="badge badge-approved">PAID</span>
+          <button type="button" onclick="document.getElementById('modal-order-detail').classList.remove('active')" class="btn btn-ghost btn-sm" style="font-size: 18px;">✕</button>
+        </div>
+      </div>
+
+      <!-- PURCHASED ITEM -->
+      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px; padding: 14px; background: var(--bg-surface-2); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+        <img id="order-modal-item-img" src="" alt="Item" style="width: 54px; height: 54px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <div style="flex-grow: 1;">
+          <h4 id="order-modal-item-title" style="font-size: 14px; margin: 0 0 4px 0; color: var(--text-primary);">Garment Title</h4>
+          <span id="order-modal-item-brand" style="font-size: 11px; color: var(--gold-primary); text-transform: uppercase;">Brand</span>
+        </div>
+        <div>
+          <span style="font-size: 11px; color: var(--text-muted); display: block;">Unit Price</span>
+          <strong id="order-modal-item-unit-price" style="font-size: 15px; color: var(--text-primary);">$0.00</strong>
+        </div>
+      </div>
+
+      <!-- BUYER & SELLER AUDIT -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 12px;">
+        <div class="card" style="padding: 14px;">
+          <strong style="color: var(--text-primary); font-size: 13px; display: block; margin-bottom: 6px;">Verified Buyer</strong>
+          <div>Name: <span id="order-modal-buyer-name" style="color: var(--text-secondary);"></span></div>
+          <div>Email: <span id="order-modal-buyer-email" style="color: var(--text-secondary);"></span></div>
+          <div style="margin-top: 6px;">Shipping: <span id="order-modal-shipping-address" style="color: var(--text-secondary);"></span></div>
+        </div>
+
+        <div class="card" style="padding: 14px;">
+          <strong style="color: var(--text-primary); font-size: 13px; display: block; margin-bottom: 6px;">Verified Seller</strong>
+          <div>Name: <span id="order-modal-seller-name" style="color: var(--text-secondary);"></span></div>
+          <div>Email: <span id="order-modal-seller-email" style="color: var(--text-secondary);"></span></div>
+          <div style="margin-top: 6px;">Stripe: <code id="order-modal-seller-stripe-id" style="font-size: 10px;"></code></div>
+        </div>
+      </div>
+
+      <!-- MONEY MOVEMENT AUDIT -->
+      <div class="card" style="margin-bottom: 24px; padding: 16px;">
+        <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-primary); font-weight: 600; display: block; margin-bottom: 12px;">STRIPE MONEY MOVEMENT BREAKDOWN</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; text-align: center;">
+          <div>
+            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Buyer Paid</span>
+            <strong id="order-modal-buyer-paid" style="display: block; font-size: 15px; color: var(--text-primary);">$0.00</strong>
+          </div>
+          <div>
+            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Stripe Fee</span>
+            <strong id="order-modal-stripe-fee" style="display: block; font-size: 15px; color: var(--accent-red);">$0.00</strong>
+          </div>
+          <div>
+            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">10% App Fee</span>
+            <strong id="order-modal-app-fee" style="display: block; font-size: 15px; color: var(--accent-amber);">$0.00</strong>
+          </div>
+          <div>
+            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Owner Net</span>
+            <strong id="order-modal-owner-net" style="display: block; font-size: 15px; color: var(--gold-primary);">$0.00</strong>
+          </div>
+          <div>
+            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Seller Net</span>
+            <strong id="order-modal-seller-net" style="display: block; font-size: 15px; color: var(--accent-green);">$0.00</strong>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-size: 11px; color: var(--text-muted);">Total Order Value:</span>
+          <strong id="order-modal-summary-total" style="font-size: 20px; color: var(--text-primary); margin-left: 8px;">$0.00</strong>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.triggerLuxuryPrintInvoice()">
+          Print Official Invoice
+        </button>
+      </div>
+
+      <span id="order-modal-item-total-price" style="display:none;"></span>
+      <span id="order-modal-summary-subtotal" style="display:none;"></span>
+    </div>
+  </div>
+
+  <!-- PRINTABLE LUXURY INVOICE (Hidden on screen, styled for print) -->
+  <div id="printable-invoice-container" class="hidden" style="background: #fff; color: #111; padding: 40px; font-family: 'Inter', sans-serif;">
+    <div style="border-bottom: 2px solid #C8B89A; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between;">
+      <div>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; margin: 0; color: #111;">PARURE LA PLEE</h1>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: #666; letter-spacing: 0.1em; text-transform: uppercase;">Haute-Couture Wardrobe & Marketplace</p>
+      </div>
+      <div style="text-align: right;">
+        <h2 id="print-inv-no" style="font-size: 20px; margin: 0; color: #111;">INV-2026-0000</h2>
+        <p id="print-inv-date" style="margin: 4px 0 0 0; font-size: 12px; color: #666;">Date</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px; font-size: 13px;">
+      <div>
+        <strong style="text-transform: uppercase; font-size: 11px; color: #888; display: block; margin-bottom: 6px;">Billed To (Buyer):</strong>
+        <div id="print-buyer-name" style="font-weight: 600;">Buyer Name</div>
+        <div id="print-buyer-email" style="color: #555;">buyer@email.com</div>
+        <div id="print-buyer-address" style="color: #555; margin-top: 4px;">Address</div>
+      </div>
+      <div>
+        <strong style="text-transform: uppercase; font-size: 11px; color: #888; display: block; margin-bottom: 6px;">Consignor (Seller):</strong>
+        <div id="print-seller-name" style="font-weight: 600;">Seller Name</div>
+        <div id="print-seller-email" style="color: #555;">seller@email.com</div>
+        <div id="print-seller-stripe-id" style="color: #888; font-size: 11px;">Stripe Account</div>
+      </div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px;">
+      <thead>
+        <tr style="border-bottom: 1px solid #ddd; text-align: left;">
+          <th style="padding: 10px 0;">Item Description</th>
+          <th style="padding: 10px 0;">Brand</th>
+          <th style="padding: 10px 0; text-align: right;">Unit Price</th>
+          <th style="padding: 10px 0; text-align: right;">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td id="print-item-title" style="padding: 14px 0; font-weight: 500;">Garment Item</td>
+          <td id="print-item-brand" style="padding: 14px 0; color: #666;">Brand</td>
+          <td id="print-item-unit-price" style="padding: 14px 0; text-align: right;">$0.00</td>
+          <td id="print-item-total-price" style="padding: 14px 0; text-align: right; font-weight: 600;">$0.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 30px;">
+      <div style="width: 240px; font-size: 13px;">
+        <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+          <span style="color: #666;">Subtotal:</span>
+          <span id="print-summary-subtotal">$0.00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #ddd; font-weight: 700; font-size: 16px;">
+          <span>Total:</span>
+          <span id="print-summary-total">$0.00</span>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- MODAL 3: ORDER DETAIL INVOICE MODAL -->
-  <div id="modal-order-detail" class="modal-overlay" style="z-index: 2500;">
-    <div class="modal-box" style="max-width: 920px; width: 94%; padding: 0; border-radius: 12px; background: #ffffff; color: #111111;">
-      <div style="padding: 16px 24px; background: #161513; display: flex; align-items: center; justify-content: space-between; color: var(--cream);">
-        <span style="font-size: 11px; color: var(--tan); font-weight: 500;">PARURE OFFICIAL BOUTIQUE INVOICE</span>
-        <button type="button" class="btn-primary" onclick="window.triggerLuxuryPrintInvoice()" style="font-size: 12px; padding: 7px 18px; width: auto;">Print / Save PDF ↗</button>
-      </div>
-      <div style="padding: 40px 48px; background: #ffffff; color: #111111;">
-        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 34px; margin: 0;">PARURE LA PLEÈ</h1>
-        <p style="font-size: 11px; color: #666; margin-top: 4px;">Tax Invoice INV-2026-AEF7BBCA</p>
-      </div>
+    <div style="border-top: 1px solid #eee; padding-top: 16px; font-size: 11px; color: #888;">
+      <div>Platform Audit: Buyer <span id="print-audit-buyer">$0.00</span> | Processing Fee <span id="print-audit-stripe-fee">-$0.00</span> | 10% Fee <span id="print-audit-app-fee">+$0.00</span> | Net Owner <span id="print-audit-owner-net">+$0.00</span> | Net Consignor <span id="print-audit-seller-net">$0.00</span></div>
+      <div style="margin-top: 8px;">Parure La Plee Inc. • Confidential Luxury Client Document • Powered by Stripe Connect</div>
     </div>
   </div>
 
-  <!-- DEDICATED PRINTABLE INVOICE CONTAINER -->
-  <div id="printable-invoice-container" class="printable-invoice hidden">
-    <div style="padding: 24px;">
-      <h1>PARURE LA PLEÈ TAX INVOICE</h1>
-    </div>
-  </div>
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
 
-  <!-- GLOBAL CONFIRMATION MODAL -->
-  <div id="modal-confirm-action" class="modal-overlay" style="z-index: 3000;">
-    <div class="modal-box" style="max-width: 480px; width: 90%; padding: 32px 28px; border-radius: 14px; border: 1px solid var(--tan-dark); text-align: center; background: #181715;">
-      <h3 id="confirm-modal-title" class="font-serif" style="font-size: 24px; color: var(--cream); margin-bottom: 8px;">Confirm Action</h3>
-      <p id="confirm-modal-message" style="font-size: 13px; color: var(--muted-light); margin-bottom: 28px;">Are you sure?</p>
-      <div style="display: flex; gap: 14px; justify-content: center;">
-        <button type="button" class="btn-secondary" id="confirm-modal-cancel">Cancel</button>
-        <button type="button" class="btn-danger" id="confirm-modal-proceed">Confirm & Execute</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- APP SCRIPT -->
-  <script type="module" src="app.js"></script>
+  <!-- MAIN ENTRY MODULE -->
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

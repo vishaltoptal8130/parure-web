@@ -45,3 +45,9 @@
   from = "/join*"
   to = "/join/index.html"
   status = 200
+
+[[redirects]]
+  from = "/admin2/*"
+  to = "/admin/:splat"
+  status = 301
+

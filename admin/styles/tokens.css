@@ -1,0 +1,157 @@
+/* ─────────────────────────────────────────────────────────────────────
+   PARURE LA PLEÈ — ADMIN DESIGN TOKENS
+   Luxury fashion-tech control room aesthetic
+   Light: warm cream paper + charcoal ink
+   Dark:  deep espresso + cream type + tan/gold accents
+   ───────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── DARK MODE (DEFAULT) ── */
+:root,
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-body:        #0E0E10;
+  --bg-sidebar:     #141416;
+  --bg-surface:     #141416;
+  --bg-surface-2:   #1A1A1E;
+  --bg-surface-3:   #222228;
+  --bg-card:        rgba(20, 20, 22, 0.85);
+  --bg-card-hover:  rgba(26, 26, 30, 0.95);
+  --bg-elevated:    rgba(28, 28, 32, 0.9);
+  --bg-input:       rgba(0, 0, 0, 0.5);
+  --bg-badge:       rgba(200, 184, 154, 0.10);
+
+  /* Text */
+  --text-primary:   #F8F6F2;
+  --text-secondary: #C8C2B8;
+  --text-muted:     #888176;
+  --text-faint:     #524E48;
+
+  /* Brand Palette & Gold Metallic Accents */
+  --gold-primary:   #C8B89A;
+  --gold-light:     #E8DDD0;
+  --gold-dark:      #8C7A62;
+  --tan:            #C8B89A;
+  --tan-light:      #E8DDD0;
+  --tan-dark:       #8C7A62;
+  --cream:          #FAF8F5;
+  --cream-deep:     #F2EDE6;
+  --charcoal:       #141416;
+  --charcoal-light: #242428;
+
+  /* Borders */
+  --border-subtle:  rgba(200, 184, 154, 0.12);
+  --border-medium:  rgba(200, 184, 154, 0.22);
+  --border-strong:  rgba(200, 184, 154, 0.45);
+
+  /* Semantic Highlights */
+  --green:          #4A7C59;
+  --green-light:    #4ADE80;
+  --green-bg:       rgba(74, 222, 128, 0.12);
+  --green-border:   rgba(74, 222, 128, 0.28);
+  --accent-green:   #4ADE80;
+
+  --red:            #A84444;
+  --red-light:      #F87171;
+  --red-bg:         rgba(248, 113, 113, 0.12);
+  --red-border:     rgba(248, 113, 113, 0.28);
+  --accent-red:     #F87171;
+
+  --amber:          #B8860B;
+  --amber-light:    #FBBF24;
+  --amber-bg:       rgba(251, 191, 36, 0.12);
+  --amber-border:   rgba(251, 191, 36, 0.28);
+  --accent-amber:   #FBBF24;
+
+  /* Sidebar indicator */
+  --nav-active-bg:  rgba(200, 184, 154, 0.08);
+  --nav-active-bar: #C8B89A;
+
+  /* Shadows */
+  --shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md:      0 4px 16px rgba(0, 0, 0, 0.6);
+  --shadow-lg:      0 16px 48px rgba(0, 0, 0, 0.75);
+  --shadow-glow:    0 0 25px rgba(200, 184, 154, 0.12);
+
+  /* Dimensions & Timing */
+  --sidebar-width:      250px;
+  --header-height:      68px;
+  --radius-xs:          3px;
+  --radius-sm:          6px;
+  --radius-md:          10px;
+  --radius-lg:          16px;
+  --radius-full:        9999px;
+  --ease:               cubic-bezier(0.16, 1, 0.3, 1);
+  --transition:         all 0.22s var(--ease);
+  --transition-fast:    0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal:  0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Fonts */
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ── LIGHT MODE (EDITORIAL RUNWAY) ── */
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-body:        #F8F5F0;
+  --bg-sidebar:     #FAF7F2;
+  --bg-surface:     #FFFFFF;
+  --bg-surface-2:   #F3EEE7;
+  --bg-surface-3:   #EAE3D8;
+  --bg-card:        rgba(255, 255, 255, 0.96);
+  --bg-card-hover:  rgba(255, 255, 255, 1);
+  --bg-elevated:    rgba(245, 240, 232, 0.9);
+  --bg-input:       #FFFFFF;
+  --bg-badge:       rgba(140, 122, 98, 0.08);
+
+  /* Text */
+  --text-primary:   #181716;
+  --text-secondary: #48433E;
+  --text-muted:     #827361;
+  --text-faint:     #B2A696;
+
+  /* Brand Palette */
+  --gold-primary:   #8C7A62;
+  --gold-light:     #6D5D48;
+  --gold-dark:      #4A3D2D;
+  --tan:            #8C7A62;
+  --tan-light:      #6D5D48;
+  --tan-dark:       #4A3D2D;
+  --cream:          #181716;
+  --cream-deep:     #2D2B28;
+  --charcoal:       #FFFFFF;
+  --charcoal-light: #F3EEE7;
+
+  /* Borders */
+  --border-subtle:  rgba(140, 122, 98, 0.16);
+  --border-medium:  rgba(140, 122, 98, 0.28);
+  --border-strong:  rgba(140, 122, 98, 0.50);
+
+  /* Semantic */
+  --green-light:    #15803D;
+  --green-bg:       rgba(21, 128, 61, 0.08);
+  --green-border:   rgba(21, 128, 61, 0.22);
+  --accent-green:   #15803D;
+
+  --red-light:      #B91C1C;
+  --red-bg:         rgba(185, 28, 28, 0.08);
+  --red-border:     rgba(185, 28, 28, 0.22);
+  --accent-red:     #B91C1C;
+
+  --amber-light:    #B45309;
+  --amber-bg:       rgba(180, 83, 9, 0.08);
+  --amber-border:   rgba(180, 83, 9, 0.22);
+  --accent-amber:   #B45309;
+
+  /* Sidebar */
+  --nav-active-bg:  rgba(140, 122, 98, 0.09);
+  --nav-active-bar: #8C7A62;
+
+  /* Shadows */
+  --shadow-sm:      0 1px 3px rgba(40, 30, 20, 0.06);
+  --shadow-md:      0 4px 16px rgba(40, 30, 20, 0.08);
+  --shadow-lg:      0 16px 44px rgba(40, 30, 20, 0.12);
+  --shadow-glow:    0 0 25px rgba(140, 122, 98, 0.08);
+}
