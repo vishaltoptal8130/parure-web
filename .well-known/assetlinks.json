@@ -5,7 +5,10 @@
       "namespace": "android_app",
       "package_name": "com.parurelaplee.app",
       "sha256_cert_fingerprints": [
-        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
+        "8C:FE:18:5E:D0:DE:B2:45:27:EE:95:93:76:CA:1F:CD:FF:45:CA:AE:F5:06:FE:49:9A:CC:6B:96:7F:74:AE:14",
+        "05:60:63:AD:97:A5:D0:02:D4:29:E9:69:B3:F7:0A:97:F1:4F:9B:0B:07:6C:05:2D:66:AC:38:A7:D8:D5:EB:0B",
+        "D7:39:42:D1:2A:2A:03:A3:9F:12:93:1F:9C:B2:35:80:3B:BF:AA:BE:8D:8F:74:42:21:7B:A9:8A:8B:FA:95:D3"
       ]
     }
   }
