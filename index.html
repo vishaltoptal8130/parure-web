@@ -4,13 +4,13 @@
 <meta name='impact-site-verification' value='8187be4b-ff34-4fb5-8833-5e294d3ca8ae'>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Parure La Plee — Get dressed in ten seconds</title>
+<title>Parure La Plee — Style is more fun when it's shared</title>
 <meta name="description" content="Parure La Plee finds your colour season, organizes your closet and styles outfits from clothes you already own. Free to download.">
 <meta name="theme-color" content="#F7F3EC">
 <link rel="icon" href="join/icon.png">
 <meta property="og:title" content="Parure La Plee — Get dressed in ten seconds">
 <meta property="og:description" content="Your colour season, your closet, and outfits styled from clothes you already own.">
-<meta property="og:image" content="newdesign-assets/hero-model.jpg">
+<meta property="og:image" content="newdesign-assets/newdemo.jpg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Parure La Plee">
 <meta property="og:url" content="https://parure.app/">
@@ -507,6 +507,140 @@ footer .wrap{display:block}
   .fstage{border-radius:30px}
 }
 @media (prefers-reduced-motion:reduce){.fbar{display:none}.sp-img{transition:none}}
+
+/* ---------- DEMO v2: one hero message + stylist band ---------- */
+nav.top{background:rgba(247,243,236,.92);backdrop-filter:blur(18px) saturate(1.4);border-color:var(--line)}
+.hero3{padding:calc(76px + clamp(24px,3.4vw,48px)) 0 clamp(36px,4vw,56px);overflow:hidden;background:radial-gradient(760px 520px at 78% 60%,rgba(200,149,42,.13),transparent 70%),var(--ivory)}
+.hero3-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,88px);align-items:center}
+.hero3 h1{font-size:clamp(48px,6.4vw,104px);line-height:.98;letter-spacing:-.03em;margin-bottom:24px;text-wrap:balance;animation:rise3 1.1s var(--ease) both}
+.hero3 .lede{color:var(--ink-2);max-width:44ch;margin-bottom:32px}
+.hero3-fine{font:400 14px var(--sans);color:var(--muted);margin-top:18px}
+.hero3-stage{position:relative;height:clamp(420px,35vw,520px);animation:rise3 1.2s .15s var(--ease) both}
+.hero3-arch{position:absolute;left:0;top:0;width:58%;aspect-ratio:3/4.2;overflow:hidden;border-radius:999px 999px 28px 28px;box-shadow:0 40px 70px -34px rgba(60,35,10,.5)}
+.hero3-arch img{width:100%;height:100%;object-fit:cover;object-position:30% 50%}
+.hero3-phone{position:absolute;right:0;bottom:0;width:clamp(180px,15.5vw,230px);padding:8px;border-radius:40px;background:linear-gradient(150deg,#46423d,#0c0c0b 60%);box-shadow:0 60px 90px -34px rgba(60,35,10,.55),inset 0 0 0 1px rgba(255,255,255,.1);transform:rotate(3deg)}
+.hero3-phone img{border-radius:33px;width:100%;aspect-ratio:1206/2622;object-fit:cover;object-position:top}
+@keyframes rise3{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+.pros-band{padding:clamp(48px,5.5vw,84px) 0 clamp(64px,7vw,104px)}
+.pros-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,88px);align-items:start}
+.pros-band h2{font-size:clamp(40px,5vw,78px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.pros-tag{font:italic 400 clamp(24px,2.4vw,34px)/1.15 var(--serif);color:var(--gold);margin:20px 0 26px;max-width:28ch;text-wrap:balance}
+.pros-main .lede{max-width:56ch;margin-bottom:16px}
+.pros-cta{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:28px}
+.pros-link{font:500 15px var(--sans);color:var(--tan);text-underline-offset:5px;display:inline-block;padding:13px 4px}
+.pros-band .hero3-fine{color:rgba(247,243,236,.6)}
+.pros-photo{border-radius:28px;overflow:hidden;aspect-ratio:4/5;max-width:440px;justify-self:end;width:100%}
+.pros-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.pros-how{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(24px,4vw,56px);padding-top:36px;border-top:1px solid rgba(200,184,154,.28)}
+.pros-how .pn{display:block;font:500 14px var(--sans);color:var(--tan);margin-bottom:12px}
+.pros-how h3{font-size:clamp(26px,2.4vw,34px);line-height:1.1;margin-bottom:12px}
+.pros-how p{color:rgba(247,243,236,.68);font-size:16px;line-height:1.6;max-width:36ch}
+.pros-stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,56px);padding-top:36px;border-top:1px solid rgba(200,184,154,.28)}
+.pros-stats b{display:block;font:400 clamp(40px,4.4vw,60px)/1 var(--serif);color:#F7F3EC}
+.pros-stats span{display:block;font:400 14px/1.5 var(--sans);color:rgba(247,243,236,.66);margin-top:8px;max-width:28ch}
+.pros-who{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,5vw,80px);padding-top:36px;border-top:1px solid rgba(200,184,154,.28)}
+.pros-who h3{font-size:clamp(30px,3vw,44px);line-height:1.05}
+.pros-who ul{list-style:none;margin:0;padding:0}
+.pros-who li{padding:14px 0;border-bottom:1px solid rgba(200,184,154,.2);color:rgba(247,243,236,.8);font-size:16px;line-height:1.55}
+.pros-who li:first-child{padding-top:0}
+@media (max-width:1020px){
+  .hero3-grid,.pros-grid,.pros-who{grid-template-columns:1fr}
+  .hero3-stage{height:clamp(420px,92vw,540px);max-width:520px}
+  .pros-stats,.pros-how{grid-template-columns:1fr;gap:28px}
+  .pros-photo{justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){.hero3 h1,.hero3-stage{animation:none}}
+
+/* review fixes: 44px tap targets, hero images load first */
+.nav-links a{display:inline-block;padding:13px 4px}
+
+/* ---------- SHOP v2: season tabs + colour-field picks ---------- */
+.shop-head{margin-bottom:40px}
+.shop-head h2{margin-bottom:22px}
+.stabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.stab{display:flex;align-items:center;gap:12px;padding:12px 20px 12px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;font:500 15px var(--sans);color:var(--ink-2);transition:background .25s,border-color .25s,color .25s}
+.stab:hover{border-color:var(--tan-deep)}
+.stab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--ivory)}
+.stab .sdots{display:flex}
+.stab .sdots i{display:block;width:16px;height:16px;border-radius:50%;margin-left:-5px;box-shadow:0 0 0 2px var(--ivory-2)}
+.stab .sdots i:first-child{margin-left:0}
+.stab[aria-selected="true"] .sdots i{box-shadow:0 0 0 2px var(--ink)}
+.spanel{display:grid;grid-template-columns:minmax(200px,280px) 1fr;gap:clamp(28px,4vw,64px);align-items:start}
+.spanel[hidden]{display:none}
+.spanel:not([hidden]){animation:panelin .5s var(--ease)}
+@keyframes panelin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.spanel-intro h3{font-size:clamp(36px,3.6vw,52px);line-height:1;margin-bottom:12px}
+.spanel-intro p{font:italic 400 clamp(22px,2vw,28px)/1.2 var(--serif);color:var(--camel)}
+.pick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pick{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.pick:hover{transform:translateY(-4px);box-shadow:0 28px 46px -30px rgba(60,35,10,.5)}
+.pick-sw{position:relative;aspect-ratio:4/3.1;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;background-image:linear-gradient(160deg,rgba(255,255,255,.16),transparent 55%,rgba(0,0,0,.14))}
+.pick-sw .pw{font:italic 400 clamp(40px,4vw,58px)/1 var(--serif);letter-spacing:-.02em;opacity:.92}
+.pick-sw .pc{font:500 14px var(--sans);opacity:.85}
+.pick-body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pick-body h4{font:400 26px/1.1 var(--serif);color:var(--ink)}
+.pick-body p{color:var(--muted);font-size:15.5px;line-height:1.55;flex:1}
+.pick-link{font:500 15px var(--sans);color:var(--ink);text-decoration:none;border-bottom:1px solid var(--camel);align-self:flex-start;padding:10px 0 3px;transition:color .3s}
+.pick-link:hover{color:var(--camel)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.shoes-block{margin-top:clamp(64px,8vw,112px);padding-top:clamp(40px,5vw,64px);border-top:1px solid var(--line)}
+.shoes-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:32px}
+.shoes-head h3{font-size:clamp(32px,3.2vw,46px)}
+.shoes-head p{color:var(--muted);max-width:46ch}
+.shoe-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 40px}
+.shoe{display:flex;gap:18px;padding:22px 0;border-bottom:1px solid var(--line)}
+.shoe-sw{flex:none;width:52px;height:52px;border-radius:50%}
+.shoe-sw.sw-ring{box-shadow:inset 0 0 0 1px rgba(140,122,98,.4)}
+.shoe h4{font:400 24px/1.1 var(--serif);color:var(--ink);margin-bottom:6px}
+.shoe p{color:var(--muted);font-size:15px;line-height:1.5}
+.shoe .shoe-se{font:500 14px var(--sans);color:var(--green);margin-top:6px}
+.anne-picks{margin-top:clamp(56px,7vw,96px);background:var(--ink);color:#F7F3EC;border-radius:28px;padding:clamp(28px,4vw,52px);display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.anne-picks h3{color:#F7F3EC;font-size:clamp(34px,3.6vw,52px);margin-bottom:10px}
+.anne-picks p{color:rgba(247,243,236,.72);max-width:58ch}
+.anne-picks .ap-sub{font:italic 400 22px/1.25 var(--serif);color:var(--gold);margin-bottom:12px}
+@media (max-width:1020px){
+  .spanel{grid-template-columns:1fr}
+  .pick-grid{grid-template-columns:1fr}
+  .pick{flex-direction:row}
+  .pick-sw{aspect-ratio:auto;width:42%;min-height:190px}
+  .shoe-grid{grid-template-columns:1fr}
+}
+@media (max-width:560px){.pick{flex-direction:column}.pick-sw{width:auto;min-height:0;aspect-ratio:16/9}}
+@media (prefers-reduced-motion:reduce){.spanel:not([hidden]){animation:none}}
+
+
+
+/* ---------- HOW IT WORKS v4: stacked colour panels (Firsty-style) ---------- */
+.hf{background:var(--ivory)}
+.hf-head{max-width:640px;margin-bottom:clamp(32px,5vw,64px)}
+.hf-head h2{margin-bottom:20px}
+.hf-stack{display:flex;flex-direction:column;gap:28px;padding-bottom:clamp(24px,4vw,56px)}
+.hf-card{--bg:#E8DDD0;position:sticky;top:calc(92px + var(--i) * 18px);height:clamp(460px,72vh,580px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(24px,4vw,64px);padding:clamp(32px,4.4vw,64px) clamp(28px,4.6vw,72px) 0;border-radius:36px;background:var(--bg);overflow:hidden;box-shadow:0 -14px 40px -28px rgba(60,35,10,.45)}
+.hf-copy{align-self:center;padding-bottom:clamp(32px,4.4vw,64px)}
+.hf-meta{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+.hf-no{font:400 40px/1 var(--serif);color:var(--camel);font-variant-numeric:tabular-nums}
+.hf-lbl{font:italic 400 22px var(--serif);color:var(--tan-deep)}
+.hf-card h3{font-size:clamp(36px,4.4vw,64px);line-height:1;letter-spacing:-.025em;margin-bottom:18px;text-wrap:balance}
+.hf-card p{max-width:40ch;color:var(--ink-2);opacity:.82;font-size:clamp(16px,1.3vw,18px);line-height:1.65}
+.hf-feats{list-style:none;margin:24px 0 0;padding:20px 0 0;border-top:1px solid rgba(30,29,27,.16);display:flex;flex-wrap:wrap;gap:8px 26px;max-width:44ch}
+.hf-feats li{display:flex;align-items:center;gap:10px;font:500 15px var(--sans);color:var(--ink)}
+.hf-feats li::before{content:"";width:6px;height:6px;background:var(--camel);transform:rotate(45deg);flex:none}
+.hf-visual{position:relative;align-self:end;display:flex;justify-content:center}
+.hf-phone{width:min(310px,84%);padding:8px 8px 0;border-radius:44px 44px 0 0;background:linear-gradient(150deg,#46423d,#0c0c0b 60%);box-shadow:0 -10px 60px -20px rgba(60,35,10,.5),inset 0 0 0 1px rgba(255,255,255,.1);transform:translateY(6%)}
+.hf-phone img{width:100%;aspect-ratio:1206/2622;object-fit:cover;object-position:top;border-radius:36px 36px 0 0;display:block}
+.hf-dark{color:#F7F3EC}
+.hf-dark h3,.hf-dark .hf-feats li{color:#F7F3EC}
+.hf-dark p{color:rgba(247,243,236,.78);opacity:1}
+.hf-dark .hf-lbl{color:var(--tan)}
+.hf-dark .hf-no{color:var(--gold)}
+.hf-dark .hf-feats{border-top-color:rgba(247,243,236,.2)}
+@media (max-width:1020px){
+  .hf-card{position:relative;top:auto;height:auto;grid-template-columns:1fr;padding:32px 24px 0;border-radius:28px;box-shadow:none}
+  .hf-copy{padding-bottom:8px}
+  .hf-visual{height:340px}
+  .hf-phone{width:min(270px,76%);transform:none}
+}
 </style>
 </head>
 <body>
@@ -516,12 +650,12 @@ footer .wrap{display:block}
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Parure La Plee home"><b>PARURE</b><i>La Plee</i></a>
     <ul class="nav-links">
+      <li><a href="#top">Style Circle</a></li>
+      <li><a href="#for-stylists">For stylists</a></li>
       <li><a href="#how">How it works</a></li>
       <li><a href="#features">Features</a></li>
-      <li><a href="#style-circle">Style Circle</a></li>
       <li><a href="#shop">Shop</a></li>
       <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#trusted-partner">For stylists</a></li>
       <li><a href="/support">Support</a></li>
     </ul>
     <div class="nav-right">
@@ -531,51 +665,55 @@ footer .wrap{display:block}
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-  <a href="#how">How it works</a><a href="#features">Features</a><a href="#style-circle">Style Circle</a><a href="#shop">Shop</a><a href="#pricing">Pricing</a><a href="#trusted-partner">For stylists</a><a href="/support">Support</a><a href="#waitlist">Join Newsletter</a>
+  <a href="#how">How it works</a><a href="#features">Features</a><a href="#top">Style Circle</a><a href="#shop">Shop</a><a href="#pricing">Pricing</a><a href="#for-stylists">For stylists</a><a href="/support">Support</a><a href="#waitlist">Join Newsletter</a>
 </div>
 
-<header class="hero" id="top">
-  <div class="wrap top">
-    <h1><span class="ln"><span>Get dressed</span></span><span class="ln"><span>in <em>ten seconds.</em></span></span></h1>
-    <div class="sub">
-      <p class="lede">Parure La Plee finds your colour season, organizes your closet, and styles outfits from clothes you already own.</p>
+<header class="hero3" id="top">
+  <div class="wrap hero3-grid">
+    <div class="hero3-copy">
+      <h1>Style is more fun when it's shared.</h1>
+      <p class="lede">Follow people whose style you love. Share your best looks. Shop pre-loved pieces, all filtered to your own colour season.</p>
       <div class="stores">
-        <a class="store" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.6 2.2 13.4 12 3.6 21.8a1.5 1.5 0 0 1-.6-1.2V3.4c0-.5.2-.9.6-1.2Z" fill="#00d3ff"/><path d="m16.7 8.7-3.3 3.3 3.3 3.3 3.9-2.2c.9-.5.9-1.7 0-2.2l-3.9-2.2Z" fill="#ffd400"/><path d="M13.4 12 3.6 2.2c.4-.3 1-.3 1.5 0l11.6 6.5L13.4 12Z" fill="#00f076"/><path d="M13.4 12l3.3 3.3L5.1 21.8c-.5.3-1.1.3-1.5 0L13.4 12Z" fill="#ff3a44"/></svg>
-          <span><b>Google Play</b></span>
-        </a>
-        <a class="store" href="https://apps.apple.com/" data-store="ios">
-          <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.4 12.7c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.5 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.9ZM14 5.3c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4Z"/></svg>
-          <span><b>App Store</b></span>
-        </a>
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.6 2.2 13.4 12 3.6 21.8a1.5 1.5 0 0 1-.6-1.2V3.4c0-.5.2-.9.6-1.2Z" fill="#00d3ff"/><path d="m16.7 8.7-3.3 3.3 3.3 3.3 3.9-2.2c.9-.5.9-1.7 0-2.2l-3.9-2.2Z" fill="#ffd400"/><path d="M13.4 12 3.6 2.2c.4-.3 1-.3 1.5 0l11.6 6.5L13.4 12Z" fill="#00f076"/><path d="M13.4 12l3.3 3.3L5.1 21.8c-.5.3-1.1.3-1.5 0L13.4 12Z" fill="#ff3a44"/></svg><span><b>Google Play</b></span></a>
+        <a class="store" href="https://apps.apple.com/" data-store="ios"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.4 12.7c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.5 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.9ZM14 5.3c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4Z"/></svg><span><b>App Store</b></span></a>
       </div>
-      <div class="fine"><span>Free to start</span><span>14-day Premium trial</span><span>For every style and body</span></div>
+      <p class="hero3-fine">Free to start. 14-day Premium trial.</p>
     </div>
-  </div>
-
-  <div class="wrap">
-    <div class="deck" id="deck">
-      <div class="arch arch-l" data-s="-.05"><img src="newdesign-assets/hero-model.jpg" alt="Woman in a camel trench coat walking down a cobbled street" width="1000" height="1333"></div>
-      <div class="arch arch-r" data-s="-.09"><img src="newdesign-assets/occ-wedding-guest.jpg" alt="Woman in a blush gown under a rose-covered arch" width="700" height="850"></div>
-      <div class="ph ph-l" data-s="-.07"><img src="newdesign-assets/app-wardrobe.jpg" alt="Wardrobe screen with Best Match tags" width="460" height="1000"></div>
-      <div class="ph ph-r" data-s="-.12"><img src="newdesign-assets/app-colourcard.jpg" alt="Colour card for a Warm Autumn season" width="460" height="1000"></div>
-      <div class="ph ph-c" data-s="-.02"><img src="newdesign-assets/app-home.jpg" alt="Home dashboard with a weather-aware look for today" width="460" height="1000"></div>
-      <div class="chip c1"><i></i>Best match</div>
-      <div class="chip c2"><i></i>Warm Autumn</div>
-      <div class="chip c3"><i></i>4 pieces you own</div>
+    <div class="hero3-stage">
+      <div class="hero3-arch"><img src="newdesign-assets/newdemo.jpg" alt="A stylist choosing pieces from a rail of clothes" width="600" height="900" fetchpriority="high"></div>
+      <div class="hero3-phone"><img src="newdesign-assets/app-circle.jpg" alt="The Style Circle feed in the Parure La Plee app" width="414" height="900"></div>
     </div>
   </div>
 </header>
 
-<div class="marquee" aria-hidden="true">
-  <div class="track">
-    <span>Sunday brunch</span><span>Date night</span><span>School pickup</span><span>Wedding guest</span><span>Concert</span><span>Work week</span><span>Weekend getaway</span><span>Errand day</span>
-    <span>Sunday brunch</span><span>Date night</span><span>School pickup</span><span>Wedding guest</span><span>Concert</span><span>Work week</span><span>Weekend getaway</span><span>Errand day</span>
+<section class="pros-band dark" id="for-stylists" aria-labelledby="pros-h">
+  <div class="wrap pros-grid">
+    <div class="pros-main">
+      <div class="kicker">Trusted Partners · Parure La Plee Style Team</div>
+      <h2 id="pros-h">For stylists and personal shoppers.</h2>
+      <p class="pros-tag">Work inside your clients' wardrobes. Earn as you grow.</p>
+      <p class="lede">A curated partnership for verified style professionals who help others look and feel their best. Parure La Plee Trusted Partners are professionals such as fashion stylists, personal shoppers, photographers, makeup artists, wardrobe consultants and other qualified style professionals whose work involves creating, coordinating or influencing complete looks for clients.</p>
+      <p class="lede">Approved Trusted Partners gain access to the Parure La Plee Style Team, giving them tools to collaborate with clients inside their wardrobes, create personalized edits, recommend pieces and build a business alongside the clients they already serve.</p>
+      <div class="pros-cta">
+        <a class="btn btn-tan" href="https://forms.gle/Wzi5UBzDvYvxGcjD6" target="_blank" rel="noopener noreferrer">Apply to Join the Parure La Plee Style Team</a>
+        <a class="pros-link" href="#trusted-partner">How it works</a>
+      </div>
+    </div>
+    <div class="pros-photo"><img src="newdesign-assets/newdemo.jpg" alt="A stylist browsing a rail of clothes" loading="lazy" width="900" height="1352"></div>
+
+    <div class="pros-how" id="trusted-partner"><article><span class="pn">Remote</span><h3>Work inside a client's wardrobe.</h3><p>Clients invite you into their closet. Build looks from what they already own, from any city, and send them for approval.</p></article><article><span class="pn">Wardrobe gaps</span><h3>Add linked items for what's missing.</h3><p>Spot a gap and attach a linked piece to the look. Your client sees the exact item and where to buy it.</p></article><article><span class="pn">Commission</span><h3>Tiered commission for every referral.</h3><p>Earn 15–25% on every Premium subscriber you refer, tiered by referral performance, for the life of their membership.</p></article></div>
+
+    <div class="pros-stats"><div><b>15–25%</b><span>Tiered commission on referred subscribers</span></div><div><b>∞ Lifetime</b><span>Earnings per referred subscriber</span></div><div><b>20% Off</b><span>Premium access for approved Trusted Partners for one year</span></div></div>
+
+    <div class="pros-who">
+      <h3>Who can become a Trusted Partner?</h3>
+      <div>
+        <ul><li>Works professionally in styling, fashion, beauty, photography or a related field that contributes to creating complete client looks</li><li>Provides evidence of professional work, portfolio, business or client experience</li><li>Style, fashion, beauty or lifestyle expertise</li><li>Genuine professional or audience engagement</li><li>Alignment with Parure La Plee's approach to personal colour intelligence and intentional style</li><li>5,000+ followers can be considered, but a following is not required</li></ul>
+        <p class="hero3-fine">Anne reviews every application personally · Response within 5–7 business days</p>
+      </div>
+    </div>
   </div>
-</div>
-
-<a class="pro-strip" href="#trusted-partner"><span>Stylist or personal shopper?</span> Work inside your clients' wardrobes and earn tiered commission. <b>See how it works</b></a>
-
+</section>
 <section class="section problem" id="sustainability">
   <div class="wrap">
     <div class="big"><span id="count" data-to="20">0</span><sup>%</sup></div>
@@ -593,60 +731,66 @@ footer .wrap{display:block}
   </div>
 </section>
 
-<section class="section story" id="how">
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Sunday brunch</span><span>Date night</span><span>School pickup</span><span>Wedding guest</span><span>Concert</span><span>Work week</span><span>Weekend getaway</span><span>Errand day</span>
+    <span>Sunday brunch</span><span>Date night</span><span>School pickup</span><span>Wedding guest</span><span>Concert</span><span>Work week</span><span>Weekend getaway</span><span>Errand day</span>
+  </div>
+</div>
+
+<section class="section hf" id="how">
   <div class="wrap">
-    <div class="story-head">
+    <div class="hf-head">
       <div class="kicker">How it works</div>
       <h2 class="split">From selfie to styled.</h2>
+      <p class="lede">Five steps from one photo of your face to a week of outfits from clothes you already own.</p>
     </div>
-    <div class="story-grid">
-      <div class="steps">
-        <div class="step on" data-i="0" data-glow="#E8DDD0">
-          <div class="no">First</div>
+    <div class="hf-stack">
+      <article class="hf-card" style="--i:0;--bg:#E8DDD0">
+        <div class="hf-copy">
+          <div class="hf-meta"><span class="hf-no">01</span><span class="hf-lbl">First</span></div>
           <h3>Upload one selfie.</h3>
           <p>Parure La Plee reads your skin tone, hair and eye colour and finds your colour season. Your selfie is used only for the colour analysis, and you can delete it at any time.</p>
-          <div class="tags"><span>Natural light</span><span>Bare face</span><span>Front facing</span></div>
-          <div class="m-phone"><img src="newdesign-assets/app-colours.jpg" alt="Your Colour Edit screen" loading="lazy" width="460" height="1000"></div>
+          <ul class="hf-feats"><li>Natural light</li><li>Bare face</li><li>Front facing</li></ul>
         </div>
-        <div class="step" data-i="1" data-glow="#E9C9A4">
-          <div class="no">Then</div>
+        <div class="hf-visual"><div class="hf-phone"><img src="newdesign-assets/app-colours.jpg" alt="Your Colour Edit screen" width="460" height="1000"></div></div>
+      </article>
+      <article class="hf-card" style="--i:1;--bg:#E6C7A3">
+        <div class="hf-copy">
+          <div class="hf-meta"><span class="hf-no">02</span><span class="hf-lbl">Then</span></div>
           <h3>Get your colour card.</h3>
           <p>Your season, your flattering shades, and the colours that pair well with them. Share your colour card with friends or your stylist.</p>
-          <div class="tags"><span>Best for you</span><span>Complementary</span><span>Style with purpose</span></div>
-          <div class="m-phone"><img src="newdesign-assets/app-colourcard.jpg" alt="Colour card screen" loading="lazy" width="460" height="1000"></div>
+          <ul class="hf-feats"><li>Best for you</li><li>Complementary</li><li>Style with purpose</li></ul>
         </div>
-        <div class="step" data-i="2" data-glow="#E4D2B4">
-          <div class="no">Next</div>
+        <div class="hf-visual"><div class="hf-phone"><img src="newdesign-assets/app-colourcard.jpg" alt="Colour card screen" width="460" height="1000" loading="lazy"></div></div>
+      </article>
+      <article class="hf-card hf-dark" style="--i:2;--bg:#2A2420">
+        <div class="hf-copy">
+          <div class="hf-meta"><span class="hf-no">03</span><span class="hf-lbl">Next</span></div>
           <h3>Fill your closet.</h3>
           <p>Add what you own and the background is removed for you. Every piece is tagged for your colouring, and the app tells you what you haven't worn this season.</p>
-          <div class="tags"><span>Best match</span><span>Search and filter</span><span>Season review</span></div>
-          <div class="m-phone"><img src="newdesign-assets/app-wardrobe.jpg" alt="Wardrobe screen" loading="lazy" width="460" height="1000"></div>
+          <ul class="hf-feats"><li>Best match</li><li>Search and filter</li><li>Season review</li></ul>
         </div>
-        <div class="step" data-i="3" data-glow="#EBD3C2">
-          <div class="no">Now</div>
+        <div class="hf-visual"><div class="hf-phone"><img src="newdesign-assets/app-wardrobe.jpg" alt="Wardrobe screen" width="460" height="1000" loading="lazy"></div></div>
+      </article>
+      <article class="hf-card" style="--i:3;--bg:#EBCBBF">
+        <div class="hf-copy">
+          <div class="hf-meta"><span class="hf-no">04</span><span class="hf-lbl">Now</span></div>
           <h3>Pick an occasion.</h3>
           <p>Brunch, school pickup, a wedding. You get complete looks from your own pieces with a preview on a model. Swap, add or remove any piece in a tap.</p>
-          <div class="tags"><span>45 occasions</span><span>AI model view</span><span>Swap pieces</span></div>
-          <div class="m-phone"><img src="newdesign-assets/app-style.jpg" alt="Outfit look details screen" loading="lazy" width="460" height="1000"></div>
+          <ul class="hf-feats"><li>45 occasions</li><li>AI model view</li><li>Swap pieces</li></ul>
         </div>
-        <div class="step" data-i="4" data-glow="#DCCFB8">
-          <div class="no">Finally</div>
+        <div class="hf-visual"><div class="hf-phone"><img src="newdesign-assets/app-style.jpg" alt="Outfit look details screen" width="460" height="1000" loading="lazy"></div></div>
+      </article>
+      <article class="hf-card" style="--i:4;--bg:#CDD6D2">
+        <div class="hf-copy">
+          <div class="hf-meta"><span class="hf-no">05</span><span class="hf-lbl">Finally</span></div>
           <h3>Plan your week.</h3>
           <p>Put looks on your calendar, check the forecast, and pack for a trip with the Getaway Edit. Tomorrow's outfit is already decided.</p>
-          <div class="tags"><span>Outfit calendar</span><span>Getaway Edit</span><span>Weather-aware</span></div>
-          <div class="m-phone"><img src="newdesign-assets/app-planning.jpg" alt="Week Ahead calendar screen" loading="lazy" width="460" height="1000"></div>
+          <ul class="hf-feats"><li>Outfit calendar</li><li>Getaway Edit</li><li>Weather-aware</li></ul>
         </div>
-      </div>
-      <div class="stage" aria-hidden="true">
-        <div class="ph"><div class="screen">
-          <img class="on" src="newdesign-assets/app-colours.jpg" alt="">
-          <img src="newdesign-assets/app-colourcard.jpg" alt="">
-          <img src="newdesign-assets/app-wardrobe.jpg" alt="">
-          <img src="newdesign-assets/app-style.jpg" alt="">
-          <img src="newdesign-assets/app-planning.jpg" alt="">
-        </div>
-        <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
-      </div>
+        <div class="hf-visual"><div class="hf-phone"><img src="newdesign-assets/app-planning.jpg" alt="Week Ahead calendar screen" width="460" height="1000" loading="lazy"></div></div>
+      </article>
     </div>
   </div>
 </section>
@@ -705,7 +849,7 @@ footer .wrap{display:block}
       </ul>
       <div class="fstage" style="--tint:#E9D9C0">
         <div class="sphone"><div class="sp-screen">
-          <img class="sp-img is-on" src="newdesign-assets/app-home.jpg" alt="Home dashboard with a weather-aware look for the day" width="460" height="1000">
+          <img class="sp-img is-on" src="newdesign-assets/app-home-new.jpg" alt="Home dashboard with a weather-aware look for the day" width="460" height="1000">
           <img class="sp-img" src="newdesign-assets/app-circle.jpg" alt="Style Circle feed" width="460" height="1000" loading="lazy">
           <img class="sp-img" src="newdesign-assets/app-getaway.jpg" alt="Getaway Edit AI Pack screen for a New York trip" width="460" height="1000" loading="lazy">
           <img class="sp-img" src="newdesign-assets/app-colourcard.jpg" alt="Colour card showing the Warm Autumn season and best shades" width="460" height="1000" loading="lazy">
@@ -719,58 +863,7 @@ footer .wrap{display:block}
   </div>
 </section>
 
-<section class="section dark partners" id="trusted-partner">
-  <div class="wrap">
-    <div>
-      <div class="kicker">Trusted Partners · Parure La Plee Style Team</div>
-      <h2 class="split">For stylists and personal shoppers.</h2>
-      <p class="tp-tag">Work inside your clients' wardrobes. Earn as you grow.</p>
-      <p class="lede">A curated partnership for verified style professionals who help others look and feel their best. Parure La Plee Trusted Partners are professionals such as fashion stylists, personal shoppers, photographers, makeup artists, wardrobe consultants and other qualified style professionals whose work involves creating, coordinating or influencing complete looks for clients.</p>
-      <p class="lede" style="margin-top:16px">Approved Trusted Partners gain access to the Parure La Plee Style Team, giving them tools to collaborate with clients inside their wardrobes, create personalized edits, recommend pieces and build a business alongside the clients they already serve.</p>
-    </div>
-    <div class="photo"><img src="newdesign-assets/newdemo.jpg" alt="A stylist browsing a rail of clothes" loading="lazy" width="900" height="1352"></div>
-  </div>
-  <div class="wrap tp-cap">
-    <article><span class="n">Remote</span><h3>Work inside a client's wardrobe.</h3><p>Clients invite you into their closet. Build looks from what they already own, from any city, and send them for approval.</p></article>
-    <article><span class="n">Wardrobe gaps</span><h3>Add linked items for what's missing.</h3><p>Spot a gap and attach a linked piece to the look. Your client sees the exact item and where to buy it.</p></article>
-    <article><span class="n">Commission</span><h3>Tiered commission for every referral.</h3><p>Earn 15–25% on every Premium subscriber you refer, tiered by referral performance, for the life of their membership.</p></article>
-  </div>
-  <div class="wrap tp-body">
-    <div class="tp-stats">
-      <div><b>15–25%</b><span>Tiered commission on referred subscribers</span></div>
-      <div><b>∞ Lifetime</b><span>Earnings per referred subscriber</span></div>
-      <div><b>20% Off</b><span>Premium access for approved Trusted Partners for one year</span></div>
-    </div>
-    <div class="tp-who">
-      <h3>Who can become a Trusted Partner?</h3>
-      <ul>
-        <li>Works professionally in styling, fashion, beauty, photography or a related field that contributes to creating complete client looks</li>
-        <li>Provides evidence of professional work, portfolio, business or client experience</li>
-        <li>Style, fashion, beauty or lifestyle expertise</li>
-        <li>Genuine professional or audience engagement</li>
-        <li>Alignment with Parure La Plee's approach to personal colour intelligence and intentional style</li>
-        <li>5,000+ followers can be considered, but a following is not required</li>
-      </ul>
-      <a class="btn btn-tan" href="https://forms.gle/Wzi5UBzDvYvxGcjD6" target="_blank" rel="noopener noreferrer">Apply to Join the Parure La Plee Style Team</a>
-      <p class="tp-note">Anne reviews every application personally · Response within 5–7 business days</p>
-    </div>
-  </div>
-</section>
 
-<section class="section community" id="style-circle">
-  <div class="wrap">
-    <div class="comm-head">
-      <div class="kicker">The Parure La Plee Style Circle</div>
-      <h2 class="split">Style is more fun when it's shared.</h2>
-      <p class="lede">Follow people whose style you love. Share your best looks. Shop pre-loved pieces. And if you're a verified style professional, apply to become a Parure La Plee Trusted Partner. Earn 15–25% commissions on every Premium subscriber you refer, growing as your referrals grow.</p>
-    </div>
-    <div class="comm-cards">
-      <article class="ccard"><div class="cc-top"><span class="av">JL</span><div><b>Jenna Lewis</b><small>Following</small></div></div><p>Follow people whose style you love, see their outfits and closet listings, and get inspired, all filtered to your own colour season.</p></article>
-      <article class="ccard"><div class="cc-top"><span class="av gold">SV</span><div><b>StyleVault · Trusted Partner</b><small>✦ Trusted Partner</small></div></div><p>Verified style professionals earn 15–25% commission on every Premium subscriber they refer, tiered by referral performance, paid for life of memberships. <a href="#trusted-partner">Apply to become a Trusted Partner →</a></p></article>
-      <article class="ccard"><div class="cc-top"><span class="av">TR</span><div><b>Tara Reynolds</b><small>For sale · $65</small></div></div><p>Cleaning out your closet? List items for your followers to shop first. Give great pieces a second life and earn while you do it.</p></article>
-    </div>
-  </div>
-</section>
 
 <section class="section colour" id="colour">
   <div class="wrap">
@@ -796,21 +889,19 @@ footer .wrap{display:block}
 
 <section class="section shop" id="shop">
   <div class="wrap">
-    <div class="shop-head"><div class="kicker">Curated by colour season</div><h2 class="split">Shop your season.</h2><p class="lede">Every piece below is selected for a specific colour season. Discover your season in the app, then find the pieces that were made for you.</p></div>
-    <h3 class="sgroup">Warm Autumn</h3>
-    <div class="sgrid"><article class="scard"><h4>Camel Sweater</h4><p>A Warm Autumn Best Match. Earthy, golden, and harmonious with warm skin tones.</p><a href="https://www.amazon.com/s?k=camel+cashmere+sweater+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Rust Blouse</h4><p>The Warm Autumn signature colour. Terracotta and rust are your most flattering tones.</p><a href="https://www.amazon.com/s?k=rust+blouse+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Olive Jacket</h4><p>Warm olive is a Warm Autumn core colour. It's grounded, earthy, and effortlessly wearable.</p><a href="https://www.amazon.com/s?k=olive+green+jacket+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article></div>
-    <h3 class="sgroup">True Winter</h3>
-    <div class="sgrid"><article class="scard"><h4>Royal Blue Blazer</h4><p>True Winter's signature is vivid, cool, high-contrast blue. It makes cool-toned skin glow.</p><a href="https://www.amazon.com/s?k=royal+blue+blazer+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Black Trench Coat</h4><p>True black is a True Winter staple. It's the only season where pure black is a Best Match colour.</p><a href="https://www.amazon.com/s?k=classic+black+trench+coat+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Emerald Dress</h4><p>Vivid emerald is pure True Winter energy. It's cool, saturated, and striking against high contrast colouring.</p><a href="https://www.amazon.com/s?k=emerald+green+dress+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article></div>
-    <h3 class="sgroup">True Summer</h3>
-    <div class="sgrid"><article class="scard"><h4>Dusty Rose Blouse</h4><p>Dusty rose is quintessential True Summer. It's soft, cool, and luminous against rosy skin tones.</p><a href="https://www.amazon.com/s?k=dusty+rose+blouse+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Lavender Cardigan</h4><p>Soft lavender is a True Summer signature. It's cool, muted, and effortlessly elegant.</p><a href="https://www.amazon.com/s?k=lavender+cardigan+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Powder Blue Linen</h4><p>Cool powder blue is a True Summer essential. It's soft, airy, and perfectly in tune with cool undertones.</p><a href="https://www.amazon.com/s?k=powder+blue+linen+pants+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article></div>
-    <h3 class="sgroup">True Spring</h3>
-    <div class="sgrid"><article class="scard"><h4>Coral Wrap Dress</h4><p>Warm coral is a True Spring standout. It's bright, warm, and luminous against golden undertones.</p><a href="https://www.amazon.com/s?k=coral+wrap+dress+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Warm Teal Top</h4><p>Warm teal bridges the gap between green and blue in a way that perfectly complements True Spring colouring.</p><a href="https://www.amazon.com/s?k=warm+teal+top+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Camel Crossbody</h4><p>Warm camel is a True Spring staple accessory. It's golden, earthy, and endlessly versatile for warm seasons.</p><a href="https://www.amazon.com/s?k=camel+crossbody+bag+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article></div>
-    <h3 class="sgroup">Sandals &amp; Wedges — Summer Essentials</h3>
-    <p class="sub">Shoes for every colour season. Neutrals that work universally and season-specific accent shades.</p>
-    <div class="sgrid sgrid-4"><article class="scard"><h4>Tan Leather Flat Sandal</h4><p>A warm-season universal. Warm Autumn, True Spring, and Soft Autumn women reach for tan leather instinctively. Now you know why.</p><div class="seasons">✓ Warm Autumn · True Spring · Soft Autumn</div><a href="https://www.amazon.com/s?k=tan+leather+flat+sandals+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Nude Block Heel Sandal</h4><p>A cool-toned nude elongates the leg beautifully for Summer and Winter seasons. It also photographs effortlessly on camera.</p><div class="seasons">✓ True Summer · Light Summer · True Winter</div><a href="https://www.amazon.com/s?k=nude+block+heel+sandal+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Espadrille Wedge</h4><p>Natural jute and warm neutrals make espadrilles a perfect warm-season summer staple. They're earthy, textured, and relaxed.</p><div class="seasons">✓ Warm Autumn · True Spring · Clear Spring</div><a href="https://www.amazon.com/s?k=espadrille+wedge+sandal+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Strappy Heeled Sandal</h4><p>A strappy heel in your season's best neutral is an occasion staple. Parure La Plee generates outfit suggestions for exactly these moments.</p><div class="seasons">✓ All seasons — choose your neutral</div><a href="https://www.amazon.com/s?k=strappy+heeled+sandal+women+summer&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>White Platform Sandal</h4><p>White is a universal staple in every colour season. A white platform sandal is one of the most versatile summer shoes you can own.</p><div class="seasons">✓ Universal staple — every season</div><a href="https://www.amazon.com/s?k=white+platform+sandal+women+summer&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article><article class="scard"><h4>Cork Wedge Sandal</h4><p>Natural cork and earthy warm tones make this the warm-season summer shoe. It's grounded, elevated, and effortlessly seasonal.</p><div class="seasons">✓ Warm Autumn · Deep Autumn · True Spring</div><a href="https://www.amazon.com/s?k=cork+wedge+sandal+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon →</a></article></div>
-    <h3 class="sgroup">Anne's Fall Trends</h3>
-    <p class="sub">My personal picks this season — curated for warm-season palettes and effortless summer dressing.</p>
-    <article class="scard wide"><h4>Z Supply Fall Trends</h4><p>Effortless, warm-toned summer pieces personally selected by Anne. Z Supply's soft fabrics and relaxed silhouettes work beautifully for Spring and Autumn colour seasons.</p><a href="https://amzn.to/4hhWU8X" target="_blank" rel="noopener noreferrer sponsored" aria-label="Shop Z Supply fall trends on Amazon">Shop Anne's Picks on Amazon →</a></article>
+    <div class="shop-head"><h2 class="split">Shop your season.</h2><p class="lede">Every piece below is selected for a specific colour season. Discover your season in the app, then find the pieces that were made for you.</p></div>
+    <div class="stabs" role="tablist" aria-label="Colour season"><button type="button" class="stab" role="tab" id="tab-warm-autumn" aria-selected="true" aria-controls="panel-warm-autumn" tabindex="0"><span class="sdots"><i style="background:#C69C6D"></i><i style="background:#B5502A"></i><i style="background:#6B6F3A"></i></span><span class="nm">Warm Autumn</span></button><button type="button" class="stab" role="tab" id="tab-true-winter" aria-selected="false" aria-controls="panel-true-winter" tabindex="-1"><span class="sdots"><i style="background:#2A4FB8"></i><i style="background:#1F1F1F"></i><i style="background:#0B6B4D"></i></span><span class="nm">True Winter</span></button><button type="button" class="stab" role="tab" id="tab-true-summer" aria-selected="false" aria-controls="panel-true-summer" tabindex="-1"><span class="sdots"><i style="background:#D6A1A5"></i><i style="background:#B9A7DC"></i><i style="background:#A8C5E2"></i></span><span class="nm">True Summer</span></button><button type="button" class="stab" role="tab" id="tab-true-spring" aria-selected="false" aria-controls="panel-true-spring" tabindex="-1"><span class="sdots"><i style="background:#FF7F6E"></i><i style="background:#1A8F8C"></i><i style="background:#C69C6D"></i></span><span class="nm">True Spring</span></button></div>
+    <div class="spanels"><div class="spanel" role="tabpanel" id="panel-warm-autumn" aria-labelledby="tab-warm-autumn"><div class="spanel-intro"><h3>Warm Autumn</h3><p>Earthy, golden and warm.</p></div><div class="pick-grid"><article class="pick"><div class="pick-sw" style="background:#C69C6D;color:#1E1D1B"><span class="pw">Sweater</span><span class="pc">Camel</span></div><div class="pick-body"><h4>Camel Sweater</h4><p>A Warm Autumn Best Match. Earthy, golden, and harmonious with warm skin tones.</p><a class="pick-link" href="https://www.amazon.com/s?k=camel+cashmere+sweater+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Camel Sweater)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#B5502A;color:#F7F3EC"><span class="pw">Blouse</span><span class="pc">Rust</span></div><div class="pick-body"><h4>Rust Blouse</h4><p>The Warm Autumn signature colour. Terracotta and rust are your most flattering tones.</p><a class="pick-link" href="https://www.amazon.com/s?k=rust+blouse+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Rust Blouse)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#6B6F3A;color:#F7F3EC"><span class="pw">Jacket</span><span class="pc">Olive</span></div><div class="pick-body"><h4>Olive Jacket</h4><p>Warm olive is a Warm Autumn core colour. It's grounded, earthy, and effortlessly wearable.</p><a class="pick-link" href="https://www.amazon.com/s?k=olive+green+jacket+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Olive Jacket)</span></a></div></article></div></div><div class="spanel" role="tabpanel" id="panel-true-winter" aria-labelledby="tab-true-winter" hidden><div class="spanel-intro"><h3>True Winter</h3><p>Cool, vivid and high contrast.</p></div><div class="pick-grid"><article class="pick"><div class="pick-sw" style="background:#2A4FB8;color:#F7F3EC"><span class="pw">Blazer</span><span class="pc">Royal blue</span></div><div class="pick-body"><h4>Royal Blue Blazer</h4><p>True Winter's signature is vivid, cool, high-contrast blue. It makes cool-toned skin glow.</p><a class="pick-link" href="https://www.amazon.com/s?k=royal+blue+blazer+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Royal Blue Blazer)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#1F1F1F;color:#F7F3EC"><span class="pw">Coat</span><span class="pc">True black</span></div><div class="pick-body"><h4>Black Trench Coat</h4><p>True black is a True Winter staple. It's the only season where pure black is a Best Match colour.</p><a class="pick-link" href="https://www.amazon.com/s?k=classic+black+trench+coat+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Black Trench Coat)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#0B6B4D;color:#F7F3EC"><span class="pw">Dress</span><span class="pc">Emerald</span></div><div class="pick-body"><h4>Emerald Dress</h4><p>Vivid emerald is pure True Winter energy. It's cool, saturated, and striking against high contrast colouring.</p><a class="pick-link" href="https://www.amazon.com/s?k=emerald+green+dress+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Emerald Dress)</span></a></div></article></div></div><div class="spanel" role="tabpanel" id="panel-true-summer" aria-labelledby="tab-true-summer" hidden><div class="spanel-intro"><h3>True Summer</h3><p>Soft, cool and luminous.</p></div><div class="pick-grid"><article class="pick"><div class="pick-sw" style="background:#D6A1A5;color:#1E1D1B"><span class="pw">Blouse</span><span class="pc">Dusty rose</span></div><div class="pick-body"><h4>Dusty Rose Blouse</h4><p>Dusty rose is quintessential True Summer. It's soft, cool, and luminous against rosy skin tones.</p><a class="pick-link" href="https://www.amazon.com/s?k=dusty+rose+blouse+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Dusty Rose Blouse)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#B9A7DC;color:#1E1D1B"><span class="pw">Cardigan</span><span class="pc">Lavender</span></div><div class="pick-body"><h4>Lavender Cardigan</h4><p>Soft lavender is a True Summer signature. It's cool, muted, and effortlessly elegant.</p><a class="pick-link" href="https://www.amazon.com/s?k=lavender+cardigan+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Lavender Cardigan)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#A8C5E2;color:#1E1D1B"><span class="pw">Linen</span><span class="pc">Powder blue</span></div><div class="pick-body"><h4>Powder Blue Linen</h4><p>Cool powder blue is a True Summer essential. It's soft, airy, and perfectly in tune with cool undertones.</p><a class="pick-link" href="https://www.amazon.com/s?k=powder+blue+linen+pants+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Powder Blue Linen)</span></a></div></article></div></div><div class="spanel" role="tabpanel" id="panel-true-spring" aria-labelledby="tab-true-spring" hidden><div class="spanel-intro"><h3>True Spring</h3><p>Bright, warm and clear.</p></div><div class="pick-grid"><article class="pick"><div class="pick-sw" style="background:#FF7F6E;color:#1E1D1B"><span class="pw">Dress</span><span class="pc">Coral</span></div><div class="pick-body"><h4>Coral Wrap Dress</h4><p>Warm coral is a True Spring standout. It's bright, warm, and luminous against golden undertones.</p><a class="pick-link" href="https://www.amazon.com/s?k=coral+wrap+dress+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Coral Wrap Dress)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#1A8F8C;color:#F7F3EC"><span class="pw">Top</span><span class="pc">Warm teal</span></div><div class="pick-body"><h4>Warm Teal Top</h4><p>Warm teal bridges the gap between green and blue in a way that perfectly complements True Spring colouring.</p><a class="pick-link" href="https://www.amazon.com/s?k=warm+teal+top+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Warm Teal Top)</span></a></div></article><article class="pick"><div class="pick-sw" style="background:#C69C6D;color:#1E1D1B"><span class="pw">Crossbody</span><span class="pc">Camel</span></div><div class="pick-body"><h4>Camel Crossbody</h4><p>Warm camel is a True Spring staple accessory. It's golden, earthy, and endlessly versatile for warm seasons.</p><a class="pick-link" href="https://www.amazon.com/s?k=camel+crossbody+bag+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Camel Crossbody)</span></a></div></article></div></div></div>
+
+    <div class="shoes-block">
+      <div class="shoes-head"><h3>Sandals &amp; wedges</h3><p>Shoes for every colour season. Neutrals that work universally and season-specific accent shades.</p></div>
+      <div class="shoe-grid"><article class="shoe"><span class="shoe-sw" style="background:#B98B5E" aria-hidden="true"></span><div><h4>Tan Leather Flat Sandal</h4><p>A warm-season universal. Warm Autumn, True Spring, and Soft Autumn women reach for tan leather instinctively. Now you know why.</p><p class="shoe-se">✓ Warm Autumn · True Spring · Soft Autumn</p><a class="pick-link" href="https://www.amazon.com/s?k=tan+leather+flat+sandals+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Tan Leather Flat Sandal)</span></a></div></article><article class="shoe"><span class="shoe-sw" style="background:#D9B8A0" aria-hidden="true"></span><div><h4>Nude Block Heel Sandal</h4><p>A cool-toned nude elongates the leg beautifully for Summer and Winter seasons. It also photographs effortlessly on camera.</p><p class="shoe-se">✓ True Summer · Light Summer · True Winter</p><a class="pick-link" href="https://www.amazon.com/s?k=nude+block+heel+sandal+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Nude Block Heel Sandal)</span></a></div></article><article class="shoe"><span class="shoe-sw" style="background:#D8BC8A" aria-hidden="true"></span><div><h4>Espadrille Wedge</h4><p>Natural jute and warm neutrals make espadrilles a perfect warm-season summer staple. They're earthy, textured, and relaxed.</p><p class="shoe-se">✓ Warm Autumn · True Spring · Clear Spring</p><a class="pick-link" href="https://www.amazon.com/s?k=espadrille+wedge+sandal+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Espadrille Wedge)</span></a></div></article><article class="shoe"><span class="shoe-sw" style="background:#3A2A22" aria-hidden="true"></span><div><h4>Strappy Heeled Sandal</h4><p>A strappy heel in your season's best neutral is an occasion staple. Parure La Plee generates outfit suggestions for exactly these moments.</p><p class="shoe-se">✓ All seasons — choose your neutral</p><a class="pick-link" href="https://www.amazon.com/s?k=strappy+heeled+sandal+women+summer&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Strappy Heeled Sandal)</span></a></div></article><article class="shoe"><span class="shoe-sw sw-ring" style="background:#F1EDE6" aria-hidden="true"></span><div><h4>White Platform Sandal</h4><p>White is a universal staple in every colour season. A white platform sandal is one of the most versatile summer shoes you can own.</p><p class="shoe-se">✓ Universal staple — every season</p><a class="pick-link" href="https://www.amazon.com/s?k=white+platform+sandal+women+summer&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (White Platform Sandal)</span></a></div></article><article class="shoe"><span class="shoe-sw" style="background:#B8895A" aria-hidden="true"></span><div><h4>Cork Wedge Sandal</h4><p>Natural cork and earthy warm tones make this the warm-season summer shoe. It's grounded, elevated, and effortlessly seasonal.</p><p class="shoe-se">✓ Warm Autumn · Deep Autumn · True Spring</p><a class="pick-link" href="https://www.amazon.com/s?k=cork+wedge+sandal+women&amp;tag=parurelaplee2-20" target="_blank" rel="noopener noreferrer sponsored">Shop on Amazon<span class="sr"> (Cork Wedge Sandal)</span></a></div></article></div>
+    </div>
+
+    <aside class="anne-picks">
+      <div><h3>Anne's Fall Trends</h3><p class="ap-sub">My personal picks this season — curated for warm-season palettes and effortless summer dressing.</p><p>Effortless, warm-toned summer pieces personally selected by Anne. Z Supply's soft fabrics and relaxed silhouettes work beautifully for Spring and Autumn colour seasons.</p></div>
+      <a class="btn btn-tan" href="https://amzn.to/4hhWU8X" target="_blank" rel="noopener noreferrer sponsored" aria-label="Shop Z Supply fall trends on Amazon">Shop Anne's Picks on Amazon</a>
+    </aside>
     <p class="disclose">As an Amazon Associate I earn from qualifying purchases. Product links above open Amazon.com and are affiliate links — purchasing through them supports Parure La Plee at no extra cost to you.</p>
   </div>
 </section>
@@ -854,7 +945,7 @@ footer .wrap{display:block}
       </ol>
       <div class="solo-cta"><a class="btn btn-ink" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" data-smart>Start free</a><span>14-day Premium trial, no stylist required.</span></div>
     </div>
-    <div class="solo-ph"><div class="ph side"><img src="newdesign-assets/app-home.jpg" alt="Home dashboard showing today's outfit, picked for the weather" loading="lazy" width="460" height="1000"></div><div class="solo-badge"><b>10</b><span>seconds to dressed</span></div></div>
+    <div class="solo-ph"><div class="ph side"><img src="newdesign-assets/app-home-new.jpg" alt="Home dashboard showing today's outfit, picked for the weather" loading="lazy" width="460" height="1000"></div><div class="solo-badge"><b>10</b><span>seconds to dressed</span></div></div>
   </div>
 </section>
 
@@ -883,7 +974,7 @@ footer .wrap{display:block}
 </section>
 
 <section class="final">
-  <div class="bg"><img src="newdesign-assets/hero-model.jpg" alt="" loading="lazy"></div>
+  <div class="bg"><img src="newdesign-assets/newdemo.jpg" alt="" loading="lazy"></div>
   <div class="wrap">
     <h2 class="split">Your closet is ready <em>when you are.</em></h2>
     <p class="lede">Download Parure La Plee and see your first look in minutes.</p>
@@ -1076,6 +1167,20 @@ window.addEventListener('pointerup', function(){ if (!down) return; down = false
   ['mouseenter','focusin','touchstart'].forEach(function(e){root.addEventListener(e,function(){root.classList.add('paused');},{passive:true});});
   ['mouseleave','focusout'].forEach(function(e){root.addEventListener(e,function(){root.classList.remove('paused');});});
   show(0);
+})();
+</script>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.stab')),panels=[].slice.call(document.querySelectorAll('.spanel'));
+  function show(i,focus){tabs.forEach(function(t,k){var on=k===i;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;panels[k].hidden=!on});if(focus)tabs[i].focus()}
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){show(i)});
+    t.addEventListener('keydown',function(e){
+      var n=tabs.length,k=i;
+      if(e.key==='ArrowRight')k=(i+1)%n;else if(e.key==='ArrowLeft')k=(i-1+n)%n;else if(e.key==='Home')k=0;else if(e.key==='End')k=n-1;else return;
+      e.preventDefault();show(k,true);
+    });
+  });
 })();
 </script>
 </body>
