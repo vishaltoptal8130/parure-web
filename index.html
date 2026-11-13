@@ -86,6 +86,10 @@ em{font-style:italic}
 .store small{display:block;font:400 12px/1.1 var(--sans);opacity:.75}
 .store b{display:block;font:500 19px/1.15 var(--sans);letter-spacing:-.01em}
 .dark .store,.final .store{background:#000}
+.store-badge{display:inline-flex;border-radius:9px;transition:transform .4s var(--ease),box-shadow .4s var(--ease);box-shadow:0 14px 30px -14px rgba(30,29,27,.6)}
+.store-badge:hover{transform:translateY(-3px);box-shadow:0 22px 40px -16px rgba(30,29,27,.7)}
+.store-badge:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.store-badge img{display:block;height:52px;width:auto}
 .btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:15px 28px;font:500 15px var(--sans);text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .35s var(--ease),background .3s}
 .btn-ink{background:var(--ink);color:var(--ivory)}.btn-ink:hover{background:#000;transform:translateY(-2px)}
 .btn-tan{background:var(--tan);color:var(--ink)}.btn-tan:hover{background:var(--tan-soft);transform:translateY(-2px)}
@@ -327,6 +331,8 @@ footer a{text-decoration:none}footer a:hover{color:var(--tan)}
 @media (max-width:560px){
   .wrap{padding:0 20px}.rail{--pad:20px}
   .store{flex:1;min-width:150px;padding:11px 16px 11px 14px}
+  .stores{gap:10px}
+  .store-badge img{height:42px}
   .facts{gap:22px}
   .plan{padding:32px}.arrows{display:none}
   .tile{padding:28px}
@@ -756,10 +762,7 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
       <div class="hero4-copy">
     <h1>Style is more fun when it's shared.</h1>
     <p class="lede">Follow people whose style you love. Share your best looks. Shop pre-loved pieces, all filtered to your own colour season.</p>
-    <div class="stores">
-        <a class="store" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.6 2.2 13.4 12 3.6 21.8a1.5 1.5 0 0 1-.6-1.2V3.4c0-.5.2-.9.6-1.2Z" fill="#00d3ff"/><path d="m16.7 8.7-3.3 3.3 3.3 3.3 3.9-2.2c.9-.5.9-1.7 0-2.2l-3.9-2.2Z" fill="#ffd400"/><path d="M13.4 12 3.6 2.2c.4-.3 1-.3 1.5 0l11.6 6.5L13.4 12Z" fill="#00f076"/><path d="M13.4 12l3.3 3.3L5.1 21.8c-.5.3-1.1.3-1.5 0L13.4 12Z" fill="#ff3a44"/></svg><span><b>Google Play</b></span></a>
-        <a class="store" href="https://apps.apple.com/us/app/parure-la-plee/id6784032743" data-store="ios"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.4 12.7c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.5 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.9ZM14 5.3c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4Z"/></svg><span><b>App Store</b></span></a>
-      </div>
+    <div class="stores"><a class="store-badge" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app"><img src="images/badge-google-play.svg" alt="Get it on Google Play" width="176" height="52"></a><a class="store-badge" href="https://apps.apple.com/us/app/parure-la-plee/id6784032743" data-store="ios"><img src="images/badge-app-store.svg" alt="Download on the App Store" width="156" height="52"></a></div>
     <p class="hero3-fine">Free to start. 14-day Premium trial.</p>
   </div>
       <div class="hero4-phone"><img src="newdesign-assets/app-circle.jpg" alt="The Style Circle feed in the Parure La Plee app" width="414" height="900"></div>
@@ -1084,7 +1087,7 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
   <div class="wrap">
     <h2 class="split">Your closet is ready <em>when you are.</em></h2>
     <p class="lede">Download Parure La Plee and see your first look in minutes.</p>
-    <div class="stores"><a class="store" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.6 2.2 13.4 12 3.6 21.8a1.5 1.5 0 0 1-.6-1.2V3.4c0-.5.2-.9.6-1.2Z" fill="#00d3ff"/><path d="m16.7 8.7-3.3 3.3 3.3 3.3 3.9-2.2c.9-.5.9-1.7 0-2.2l-3.9-2.2Z" fill="#ffd400"/><path d="M13.4 12 3.6 2.2c.4-.3 1-.3 1.5 0l11.6 6.5L13.4 12Z" fill="#00f076"/><path d="M13.4 12l3.3 3.3L5.1 21.8c-.5.3-1.1.3-1.5 0L13.4 12Z" fill="#ff3a44"/></svg><span><b>Google Play</b></span></a><a class="store" href="https://apps.apple.com/us/app/parure-la-plee/id6784032743" data-store="ios"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.4 12.7c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.5 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.9ZM14 5.3c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4Z"/></svg><span><b>App Store</b></span></a></div>
+    <div class="stores"><a class="store-badge" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app"><img src="images/badge-google-play.svg" alt="Get it on Google Play" width="176" height="52"></a><a class="store-badge" href="https://apps.apple.com/us/app/parure-la-plee/id6784032743" data-store="ios"><img src="images/badge-app-store.svg" alt="Download on the App Store" width="156" height="52"></a></div>
   </div>
 </section>
 

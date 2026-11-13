@@ -2,12 +2,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
 <style>
 .lg2{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
-.vis{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 20% 10%,#3A2616,#0D0C0B 70%);padding:48px;display:flex;flex-direction:column;justify-content:space-between}
-.vis:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-160px;bottom:-160px;background:radial-gradient(circle,rgba(217,164,65,.35),transparent 70%);animation:fl 9s ease-in-out infinite alternate}
-@keyframes fl{to{transform:translate(-60px,-40px) scale(1.15)}}
-.vis h2{font:400 clamp(40px,4.4vw,64px)/1.02 "Instrument Serif",serif;letter-spacing:-.02em;max-width:12ch;position:relative}.vis h2 em{color:var(--camel)}
-.vis p{color:rgba(247,243,236,.6);max-width:36ch;margin-top:18px;position:relative}
-.sw6{display:flex;gap:8px;position:relative}.sw6 i{width:44px;height:44px;border-radius:14px}
+.vis{position:relative;overflow:hidden;background:#14110E url('/newdesign-assets/login-hero.jpg') center 18%/cover no-repeat;padding:44px 48px;display:flex;flex-direction:column;justify-content:space-between;color:#F7F3EC}
+.vis:before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,14,.92) 0%,rgba(20,17,14,.55) 38%,rgba(20,17,14,0) 62%),linear-gradient(to bottom,rgba(20,17,14,.45),rgba(20,17,14,0) 22%)}
+.vis>*{position:relative}
+.vis .mk{font:400 26px/1 "Instrument Serif",serif;letter-spacing:-.01em;color:#F7F3EC}
+.vis .mk small{display:block;font:400 13px/1.4 "Instrument Sans",sans-serif;letter-spacing:0;color:rgba(247,243,236,.72);margin-top:6px}
+.vis h2{font:400 clamp(44px,4.6vw,68px)/.98 "Instrument Serif",serif;letter-spacing:-.025em;max-width:11ch;color:#F7F3EC}
+.vis p{color:rgba(247,243,236,.74);max-width:34ch;margin-top:16px;font-size:15px;line-height:1.55}
 .form{display:grid;place-items:center;padding:40px}
 .box{width:min(400px,100%)}
 .box .brand{padding:0 0 38px}.box h1{font:400 40px/1.05 "Instrument Serif",serif;margin-bottom:8px}.box>p{color:var(--tx2);margin-bottom:28px}
@@ -18,8 +19,8 @@
 .er{color:var(--bad);font-size:13px;margin-top:-8px;margin-bottom:14px;display:none}
 @media(max-width:900px){.lg2{grid-template-columns:1fr}.vis{display:none}}
 </style></head>
-<body><div class="lg2"><div class="vis"><div class="brand" style="padding:0;position:relative"><b style="font:500 14px/1 'Instrument Sans';letter-spacing:.22em;display:block">PARURE</b><i style="font:italic 400 16px 'Instrument Serif',serif;color:var(--camel)">Operations</i></div>
-<div><h2>The quiet <em>back office</em> of Parure.</h2><p>Clients, creators, marketplace and money, in one calm place.</p></div><div class="sw6"><i style="background:#7A3B12"></i><i style="background:#C17F47"></i><i style="background:#D9A441"></i><i style="background:#5A6B3A"></i><i style="background:#F0DFC4"></i></div></div>
+<body><div class="lg2"><div class="vis"><div class="mk">Parure<small>Operations console</small></div>
+<div><h2>The back office of Parure.</h2><p>Clients, creators, marketplace and payouts, managed in one place.</p></div></div>
 <div class="form"><form class="box" id="f" novalidate><div class="brand"><b style="font:500 13px/1 'Instrument Sans';letter-spacing:.22em;display:block">PARURE</b></div><h1 id="t">Welcome back</h1><p id="lead">Sign in to the operations console.</p>
 <div class="fld"><label for="e">Admin email</label><input id="e" type="email" value="admin@parure.app" autocomplete="username"></div>
 <div class="fld"><label for="p">Password</label><div class="pw"><input id="p" type="password" placeholder="••••••••••••" autocomplete="current-password" style="width:100%;padding-right:60px"><button type="button" id="sh">Show</button></div></div>
