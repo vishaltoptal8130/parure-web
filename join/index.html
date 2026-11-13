@@ -23,89 +23,27 @@
   /></noscript>
   <!-- End Meta Pixel Code -->
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #1e1d1b;
-      color: #faf8f5;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(200, 149, 42, 0.3);
-      border-radius: 24px;
-      padding: 40px 24px;
-      max-width: 380px;
-      width: 88%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    }
-    .logo {
-      width: 72px;
-      height: 72px;
-      border-radius: 36px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      background: #c8b89a;
-      color: #1e1d1b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Georgia, serif;
-      font-size: 28px;
-      font-weight: 500;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .home-link {
-      display: block;
-      margin-top: 16px;
-      color: rgba(255, 255, 255, 0.45);
-      font-size: 13px;
-      text-decoration: none;
-    }
-    .home-link:hover { color: #c8b89a; }
-    h1 {
-      font-family: "Georgia", serif;
-      font-size: 24px;
-      font-weight: 500;
-      margin: 0 0 12px 0;
-      color: #ffffff;
-    }
-    p {
-      color: #c8b89a;
-      font-size: 14px;
-      line-height: 1.5;
-      margin: 0 0 28px 0;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #c8952a;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 15px;
-      text-decoration: none;
-      padding: 14px 28px;
-      border-radius: 30px;
-      width: 80%;
-      transition: opacity 0.2s;
-    }
-    .btn:hover {
-      opacity: 0.9;
-    }
-    .footer {
-      margin-top: 24px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.4);
-    }
+    :root{--ink:#1E1D1B;--ivory:#F7F3EC;--ivory-2:#EFE8DC;--paper:#FFFDF9;--tan:#C8B89A;--camel:#C17F47;--muted:#6F6A62;--line:rgba(30,29,27,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:32px 16px;text-align:center;background:var(--ivory);color:var(--ink);font:400 16px/1.6 "Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased;position:relative;overflow:hidden}
+    body:before{content:"";position:absolute;width:620px;height:620px;border-radius:50%;top:-220px;right:-200px;background:radial-gradient(circle,rgba(193,127,71,.22),transparent 68%);pointer-events:none}
+    body:after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;bottom:-240px;left:-180px;background:radial-gradient(circle,rgba(200,184,154,.4),transparent 68%);pointer-events:none}
+    .card{position:relative;z-index:1;background:var(--paper);border:1px solid var(--line);border-radius:32px;padding:44px 32px 36px;max-width:420px;width:100%;box-shadow:0 40px 80px -48px rgba(30,29,27,.35)}
+    .logo{width:64px;height:64px;border-radius:20px;margin:0 auto 22px;background:var(--ink);color:var(--ivory);display:flex;align-items:center;justify-content:center;font:400 30px/1 "Instrument Serif",Georgia,serif}
+    h1{font:400 clamp(30px,6vw,38px)/1.08 "Instrument Serif",Georgia,serif;letter-spacing:-.01em;margin:0 0 12px;color:var(--ink)}
+    p{color:var(--muted);font-size:15.5px;line-height:1.6;margin:0 0 28px}
+    .btn{display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--ivory);font-weight:500;font-size:15px;text-decoration:none;padding:15px 28px;border-radius:999px;width:100%;margin-bottom:10px;transition:transform .25s ease,background .25s}
+    .btn:hover{transform:translateY(-2px);background:#000}
+    .btn.secondary{background:transparent;border:1px solid var(--line);color:var(--ink)}
+    .btn.secondary:hover{background:var(--ivory-2)}
+    .home-link{display:block;margin-top:18px;color:var(--muted);font-size:13.5px;text-decoration:underline;text-decoration-color:var(--camel);text-underline-offset:3px}
+    .home-link:hover{color:var(--camel)}
+    .footer{position:relative;z-index:1;font-size:12.5px;color:rgba(30,29,27,.45)}
+    :focus-visible{outline:2px solid var(--camel);outline-offset:3px}
   </style>
 </head>
 <body>
