@@ -1,0 +1,58 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Creators · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button></div></div>
+<div class="head"><div><h1>Creators</h1><p>Your Trusted Partner stylists and the people waiting to join.</p></div></div>
+<div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+<div class="card kpi"><small>Active partners</small><b id="k1">–</b><span class="d flat">Creator accounts</span></div>
+<div class="card kpi"><small>Pending applications</small><b id="k2">–</b><span class="d flat" id="k2d"></span></div>
+<div class="card kpi gold"><small>Trusted partners</small><b id="k3">–</b><span class="d flat">Verified status</span></div>
+<div class="card kpi"><small>All applications</small><b id="k4">–</b><span class="d flat">Ever received</span></div></div>
+
+<div class="chead" style="margin:8px 0 14px"><h3 class="serif" style="font-size:28px">Applications</h3></div>
+<div class="tools2"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="q" placeholder="Search name, handle or email"></div><span class="pill on" data-s="pending">Pending</span><span class="pill" data-s="approved">Approved</span><span class="pill" data-s="declined">Declined</span><span class="pill" data-s="all">All</span></div>
+<div class="card tw" style="margin-bottom:34px"><table><thead><tr><th>Applicant</th><th>Handle</th><th>Portfolio</th><th>Followers</th><th>Status</th><th>Applied</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+
+<div class="chead" style="margin:8px 0 14px"><h3 class="serif" style="font-size:28px">Partners</h3></div>
+<div class="cr" id="cr"></div>
+</div></div>
+<div class="pal" id="cf"><div class="box" style="padding:26px"><h3 class="serif" id="cft" style="font-size:28px"></h3><p class="sub" id="cfm" style="margin:8px 0 22px;color:var(--tx2)"></p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn" id="cfn">Cancel</button><button class="btn pri" id="cfy">Confirm</button></div></div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, liveListings, liveTx, txParts, usd, timeAgo, esc, SETTLED } from "./js/data.js";
+const $=id=>document.getElementById(id);
+let A=[],f='pending',q='';
+const cu=(el,n)=>{el.dataset.to=n;el.dataset.pre='';el.dataset.dec=0;countUp(el)};
+const nm=a=>{const e=(a.email||'Applicant').split('@')[0];return (a.full_name&&a.full_name.toLowerCase()!==(a.email||'').toLowerCase())?a.full_name:e.charAt(0).toUpperCase()+e.slice(1)};
+const ini=n=>n.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const fmtN=n=>n>=1000?(n/1000).toFixed(n>=10000?0:1)+'k':String(n);
+function confirmBox(title,msg,btn,fn){$('cft').textContent=title;$('cfm').textContent=msg;$('cfy').textContent=btn;$('cf').classList.add('on');$('cfn').onclick=()=>$('cf').classList.remove('on');$('cfy').onclick=async()=>{$('cfy').disabled=true;await fn();$('cfy').disabled=false;$('cf').classList.remove('on')}}
+async function setStatus(id,status){const {error}=await supabase.from('creator_applications').update({status}).eq('id',id);if(error){alert('Could not update: '+error.message);return}await loadApps()}
+window.appr=id=>confirmBox('Approve this creator?','They will receive partner status and affiliate commission access.','Approve creator',()=>setStatus(id,'approved'));
+window.decl=id=>confirmBox('Decline or revoke?','This sets the application to declined.','Yes, decline',()=>setStatus(id,'declined'));
+function draw(){const R=A.filter(a=>(f==='all'||a.status===f)&&((nm(a)+' '+(a.email||'')+' '+(a.handle||'')).toLowerCase().includes(q)));
+ $('tb').innerHTML=R.map((a,i)=>{const h=String(a.handle||'creator').replace(/^@+/,'');return `<tr class="r" style="animation-delay:${Math.min(i,15)*30}ms"><td><div class="who"><span class="av" style="width:34px;height:34px;font-size:12px">${esc(ini(nm(a)))}</span><div><b>${esc(nm(a))}</b><small>${esc(a.email||'')}</small></div></div></td><td><span class="chip cam">@${esc(h)}</span></td><td>${a.portfolio_url?`<a class="btn" style="padding:5px 12px" target="_blank" rel="noopener" href="${esc(a.portfolio_url)}">Portfolio ↗</a>`:'<span style="color:var(--tx3)">N/A</span>'}</td><td>${a.follower_count?fmtN(a.follower_count):'<span style="color:var(--tx3)">N/A</span>'}</td><td><span class="chip ${a.status==='approved'?'ok':a.status==='pending'?'warn':'bad'}">${esc(a.status)}</span></td><td style="color:var(--tx3)">${timeAgo(a.created_at)}</td><td>${a.status==='pending'?`<button class="btn pri" style="padding:6px 12px" onclick="appr('${a.id}')">Approve</button> <button class="btn" style="padding:6px 12px;color:var(--bad)" onclick="decl('${a.id}')">Decline</button>`:a.status==='approved'?`<button class="btn" style="padding:6px 12px;color:var(--bad)" onclick="decl('${a.id}')">Revoke</button>`:`<button class="btn" style="padding:6px 12px" onclick="appr('${a.id}')">Re-evaluate</button>`}</td></tr>`}).join('')||`<tr><td colspan="7" style="padding:46px;text-align:center;color:var(--tx3)">${f==='pending'&&!q?'You are all caught up. No pending applications.':'No applications match.'}</td></tr>`}
+async function loadApps(){const {data}=await supabase.from('creator_applications').select('*').order('created_at',{ascending:false});A=data||[];
+ const p=A.filter(a=>a.status==='pending').length;cu($('k2'),p);$('k2d').textContent=p?'Needs review':'Queue is clear';cu($('k4'),A.length);shellApi.setBadge('creators',p);draw()}
+$('q').oninput=e=>{q=e.target.value.toLowerCase();draw()};
+document.querySelectorAll('.pill').forEach(p=>p.onclick=()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');f=p.dataset.s;draw()});
+const ses=await requireAdmin();
+if(ses){
+  const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('creators',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';
+  await loadApps();
+  const [pr,ls,tx]=await Promise.all([
+    supabase.from('user_profiles').select('id,email,display_name,handle,creator_title,creator_type,partner_type,is_trusted_partner,follower_count,wardrobe_item_count,created_at').eq('role','creator').order('created_at',{ascending:false}),
+    liveListings('seller_user_id,status'),
+    liveTx('seller_user_id,amount,platform_fee_amount,seller_net_amount,seller_reversed_amount,status').in('status',SETTLED)]);
+  const P=pr.data||[];cu($('k1'),P.length);cu($('k3'),P.filter(p=>p.is_trusted_partner).length);
+  const L={},S={},N={};(ls.data||[]).forEach(l=>{if(l.status==='active')L[l.seller_user_id]=(L[l.seller_user_id]||0)+1});
+  (tx.data||[]).forEach(t=>{S[t.seller_user_id]=(S[t.seller_user_id]||0)+txParts(t).net;N[t.seller_user_id]=(N[t.seller_user_id]||0)+1});
+  $('cr').innerHTML=P.map((c,i)=>{const n=c.display_name||c.handle||(c.email||'').split('@')[0]||'Creator';return `<a class="cc" href="dossier.html?id=${c.id}" style="animation-delay:${i*70}ms;display:block"><div class="top2"><div class="av" style="background:linear-gradient(135deg,var(--camel),var(--gold));color:#1E1D1B">${esc(ini(n))}</div><div><h4>${esc(n)}</h4><small>${esc(c.creator_title||c.partner_type||c.creator_type||'Creator')}</small></div></div>
+  <div class="nums"><div><small>Followers</small><b>${fmtN(c.follower_count||0)}</b></div><div><small>Live items</small><b>${L[c.id]||0}</b></div><div><small>Seller net</small><b style="color:var(--gold)">${usd(S[c.id]||0,0)}</b></div></div>
+  <div class="ft2"><span class="chip ${c.is_trusted_partner?'cam':''}">${c.is_trusted_partner?'Trusted partner':'Creator'}</span><span class="btn">Open dossier</span></div></a>`}).join('')||'<p class="sub">No creator accounts yet.</p>';
+}
+</script></body></html>

@@ -1,0 +1,51 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Beta whitelist · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button></div></div>
+<div class="head"><div><h1>Beta whitelist</h1><p>Emails invited to the TestFlight and Android early-access builds.</p></div></div>
+<div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+<div class="card kpi"><small>Beta testers</small><b id="k1">–</b><span class="d flat" id="k1d"></span></div>
+<div class="card kpi"><small>Joined the app</small><b id="k2">–</b><span class="d flat" id="k2d"></span></div>
+<div class="card kpi"><small>Not joined yet</small><b id="k3">–</b><span class="d flat">Invited, no account</span></div></div>
+<div class="row r2" style="grid-template-columns:minmax(0,1.8fr) minmax(0,1fr)">
+<div><div class="tools2"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="q" placeholder="Search by email"></div><span class="pill on" data-s="all">All</span><span class="pill" data-s="joined">Joined</span><span class="pill" data-s="not">Not joined yet</span></div>
+<div class="card tw"><table><thead><tr><th>Tester</th><th>Status</th><th>Added by</th><th>Added</th><th></th></tr></thead><tbody id="tb"></tbody></table><div class="tf"><span id="cnt"></span><span></span></div></div></div>
+<div class="card" style="align-self:start"><div class="chead"><div><h3>Add a tester</h3><p class="sub">Add an email to the whitelist</p></div></div>
+<form id="af"><div class="fi" style="max-width:none;margin-bottom:12px"><input id="em" type="email" placeholder="name@example.com" aria-label="Email" autocomplete="off"></div><div class="er" id="er" style="display:none;color:var(--bad);font-size:13px;margin-bottom:10px"></div>
+<button class="btn pri" style="width:100%;justify-content:center" type="submit" id="add">Add tester</button></form>
+<p class="sub" style="margin-top:16px;line-height:1.6">Testers can sign in to the early-access build once their email is on this list.</p></div></div>
+</div></div>
+<div class="pal" id="cf"><div class="box" style="padding:26px"><h3 class="serif" id="cft" style="font-size:28px"></h3><p class="sub" id="cfm" style="margin:8px 0 22px;color:var(--tx2)"></p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn" id="cfn">Cancel</button><button class="btn pri" id="cfy">Confirm</button></div></div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, timeAgo, esc } from "./js/data.js";
+const $=id=>document.getElementById(id);
+let B=[],J=new Set(),f='all',q='';
+const cu=(el,n)=>{el.dataset.to=n;el.dataset.pre='';el.dataset.dec=0;countUp(el)};
+function confirmBox(title,msg,btn,fn){$('cft').textContent=title;$('cfm').textContent=msg;$('cfy').textContent=btn;$('cf').classList.add('on');$('cfn').onclick=()=>$('cf').classList.remove('on');$('cfy').onclick=async()=>{$('cfy').disabled=true;await fn();$('cfy').disabled=false;$('cf').classList.remove('on')}}
+window.del=(id,email)=>confirmBox('Remove this tester?',email+' will be removed from the beta whitelist.','Remove tester',async()=>{const {error}=await supabase.from('beta_testers').delete().eq('id',id);if(error)alert('Could not remove: '+error.message);else await load()});
+const joined=b=>J.has((b.email||'').toLowerCase());
+function draw(){const R=B.filter(b=>(f==='all'||(f==='joined'?joined(b):!joined(b)))&&(b.email||'').toLowerCase().includes(q));
+ $('tb').innerHTML=R.map((b,i)=>`<tr class="r" style="animation-delay:${Math.min(i,15)*30}ms"><td><div class="who"><span class="av" style="width:34px;height:34px;font-size:12px">${esc((b.email||'?')[0].toUpperCase())}</span><b>${esc(b.email)}</b></div></td><td><span class="chip ${joined(b)?'ok':'warn'}">${joined(b)?'Joined':'Not joined yet'}</span></td><td style="color:var(--tx3)">${b.added_by?(String(b.added_by).length>12?String(b.added_by).slice(0,8)+'…':esc(b.added_by)):'Master admin'}</td><td style="color:var(--tx3)">${timeAgo(b.created_at)}</td><td style="text-align:right"><button class="btn" style="padding:6px 12px;color:var(--bad)" onclick="del('${b.id}','${esc(b.email).replace(/'/g,'')}')">Remove</button></td></tr>`).join('')||`<tr><td colspan="5" style="padding:46px;text-align:center;color:var(--tx3)">${q?'No tester matches your search.':'Add your first TestFlight or early-access email.'}</td></tr>`;
+ $('cnt').textContent=`Showing ${R.length} of ${B.length} testers`}
+async function load(){
+  const {data}=await supabase.from('beta_testers').select('*').order('created_at',{ascending:false});B=data||[];
+  const emails=B.map(b=>(b.email||'').toLowerCase()).filter(Boolean);J=new Set();
+  if(emails.length){const {data:pr}=await supabase.from('user_profiles').select('email').in('email',emails);(pr||[]).forEach(p=>J.add((p.email||'').toLowerCase()))}
+  const wk=B.filter(b=>new Date(b.created_at)>Date.now()-7*864e5).length,j=B.filter(joined).length;
+  cu($('k1'),B.length);cu($('k2'),j);cu($('k3'),B.length-j);$('k1d').textContent=wk?'↑ '+wk+' this week':'None added this week';$('k2d').textContent=B.length?Math.round(j/B.length*100)+'% of testers':'';shellApi.setBadge('beta',B.length);draw()}
+$('q').oninput=e=>{q=e.target.value.toLowerCase();draw()};
+document.querySelectorAll('.pill').forEach(p=>p.onclick=()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');f=p.dataset.s;draw()});
+$('af').onsubmit=async e=>{e.preventDefault();const em=$('em').value.trim().toLowerCase(),er=$('er');er.style.display='none';
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){er.textContent='Enter a valid email address.';er.style.display='block';return}
+ if(B.some(b=>(b.email||'').toLowerCase()===em)){er.textContent='That email is already on the list.';er.style.display='block';return}
+ $('add').disabled=true;const {error}=await supabase.from('beta_testers').insert({email:em});$('add').disabled=false;
+ if(error){er.textContent='Could not add tester: '+error.message;er.style.display='block';return}
+ $('em').value='';await load()};
+const ses=await requireAdmin();
+if(ses){const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('beta',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';await load()}
+</script></body></html>

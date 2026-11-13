@@ -1,0 +1,49 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Affiliate catalog · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button><button class="btn pri" id="sync">Sync catalog</button></div></div>
+<div class="head"><div><h1>Affiliate catalog</h1><p>The shopping picks synced from affiliate networks, with their merchant links.</p></div></div>
+<div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+<div class="card kpi"><small>Products</small><b id="k1">–</b><span class="d flat">In the catalog</span></div>
+<div class="card kpi"><small>Networks</small><b id="k2">–</b><span class="d flat" id="k2d"></span></div>
+<div class="card kpi gold"><small>Latest product</small><b id="k3" style="font-size:26px">–</b><span class="d flat" id="k3d"></span></div></div>
+<div class="tools2"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="q" placeholder="Search title, brand or merchant"></div><span id="nets" style="display:contents"></span></div>
+<div class="card tw"><table><thead><tr><th></th><th>Product</th><th>Brand</th><th>Merchant</th><th>Network</th><th>Price</th><th>Category</th><th></th></tr></thead><tbody id="tb"></tbody></table>
+<div class="tf"><span id="cnt"></span><span style="display:flex;gap:10px;align-items:center"><button class="btn" id="pv">← Prev</button><span id="pg"></span><button class="btn" id="nx">Next →</button></span></div></div>
+</div></div>
+<div class="pal" id="cf"><div class="box" style="padding:26px"><h3 class="serif" id="cft" style="font-size:28px"></h3><p class="sub" id="cfm" style="margin:8px 0 22px;color:var(--tx2)"></p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn" id="cfn">Cancel</button><button class="btn pri" id="cfy">Confirm</button></div></div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, timeAgo, esc } from "./js/data.js";
+import { AFFILIATE_PAGE_SIZE as PS } from "./js/config.js";
+const $=id=>document.getElementById(id);
+let page=1,net='all',q='',total=0,timer;
+const cu=(el,n)=>{el.dataset.to=n;el.dataset.pre='';el.dataset.dec=0;countUp(el)};
+function confirmBox(title,msg,btn,fn){$('cft').textContent=title;$('cfm').textContent=msg;$('cfy').textContent=btn;$('cf').classList.add('on');$('cfn').onclick=()=>$('cf').classList.remove('on');$('cfy').onclick=async()=>{$('cfy').disabled=true;await fn();$('cfy').disabled=false;$('cf').classList.remove('on')}}
+$('sync').onclick=()=>confirmBox('Sync the affiliate catalog?','This runs the affiliate-sync function and refreshes products from the networks.','Sync now',async()=>{$('sync').textContent='Syncing…';const {error}=await supabase.functions.invoke('affiliate-sync');$('sync').textContent='Sync catalog';if(error)alert('Sync note: '+error.message);await load(1)});
+const price=i=>{if(i.price==null)return 'N/A';const n=typeof i.price==='number'?i.price:parseFloat(i.price);return (i.currency||'USD')+' '+(isNaN(n)?i.price:n.toFixed(2))};
+const link=i=>i.deep_link||i.deeplink||i.url||i.link||i.product_url||i.affiliate_url||'';
+async function load(p=1){page=p;const from=(p-1)*PS,to=from+PS-1;
+ let s=supabase.from('affiliate_products').select('*',{count:'exact'});if(net!=='all')s=s.eq('network',net);
+ if(q){const x=q.replace(/[,()%]/g,' ');s=s.or(`title.ilike.%${x}%,brand.ilike.%${x}%,merchant_name.ilike.%${x}%`)}
+ const {data,count,error}=await s.order('created_at',{ascending:false,nullsFirst:false}).range(from,to);
+ if(error){$('tb').innerHTML=`<tr><td colspan="8" style="padding:40px;text-align:center;color:var(--bad)">Could not load the catalog: ${esc(error.message)}</td></tr>`;return}
+ total=count||0;
+ $('tb').innerHTML=(data||[]).map((i,k)=>{const im=i.image_url||i.image_link||i.image||i.imageUrl,l=link(i);return `<tr class="r" style="animation-delay:${k*25}ms"><td style="width:56px"><div style="width:40px;height:40px;border-radius:10px;background:var(--card2) ${im?`url('${esc(im)}') center/cover`:''}"></div></td><td style="max-width:260px"><b style="font-weight:500;display:block;overflow:hidden;text-overflow:ellipsis" title="${esc(i.title||'')}">${esc(i.title||'Untitled')}</b><small style="color:var(--tx3)">${esc(i.external_id||String(i.id||'').slice(0,8))}</small></td><td>${esc(i.brand||'Unbranded')}</td><td style="color:var(--tx2)">${esc(i.merchant_name||'Merchant')}</td><td><span class="chip cam">${esc((i.network||'AWIN').toUpperCase())}</span></td><td>${esc(price(i))}</td><td><span class="chip">${esc(i.category||i.google_product_category||'Fashion')}</span></td><td style="text-align:right">${l?`<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(/^https?:/.test(l)?l:'https://'+l)}">View ↗</a>`:''}</td></tr>`}).join('')||`<tr><td colspan="8" style="padding:46px;text-align:center;color:var(--tx3)">${q||net!=='all'?'No items match your filter.':'No affiliate products synced yet.'}</td></tr>`;
+ const pages=Math.max(1,Math.ceil(total/PS));$('cnt').textContent=total?`Showing ${from+1}–${Math.min(to+1,total)} of ${total.toLocaleString()}`:'0 products';$('pg').textContent=`Page ${p} of ${pages}`;$('pv').disabled=p<=1;$('nx').disabled=p>=pages;
+ if(net==='all'&&!q){cu($('k1'),total)}}
+$('pv').onclick=()=>load(page-1);$('nx').onclick=()=>load(page+1);
+$('q').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>{q=e.target.value.trim();load(1)},300)};
+const ses=await requireAdmin();
+if(ses){const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('affiliate',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';
+  const [n,l]=await Promise.all([supabase.from('affiliate_products').select('network').limit(5000),supabase.from('affiliate_products').select('title,created_at').order('created_at',{ascending:false,nullsFirst:false}).limit(1)]);
+  const ks=[...new Set((n.data||[]).map(r=>r.network||'AWIN'))],N={};await Promise.all(ks.map(async k=>{const {count}=await supabase.from('affiliate_products').select('*',{count:'exact',head:true}).eq('network',k);N[k]=count||0}));cu($('k2'),ks.length);$('k2d').textContent=ks.map(k=>k.toUpperCase()+' '+N[k].toLocaleString()).join(' · ');
+  const lp=l.data?.[0];$('k3').textContent=lp?(lp.title||'Product').slice(0,22):'None';$('k3d').textContent=lp?.created_at?'Added '+timeAgo(lp.created_at):'';
+  $('nets').innerHTML=`<span class="pill on" data-n="all">All</span>`+ks.map(k=>`<span class="pill" data-n="${esc(k)}">${esc(k.toUpperCase())} · ${N[k].toLocaleString()}</span>`).join('');
+  document.querySelectorAll('#nets .pill').forEach(p=>p.onclick=()=>{document.querySelectorAll('#nets .pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');net=p.dataset.n;load(1)});
+  await load(1)}
+</script></body></html>

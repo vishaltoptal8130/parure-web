@@ -1,0 +1,66 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clients · Parure Operations</title><meta name="robots" content="noindex"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css"></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button><button class="btn pri" id="csv">Export CSV</button></div></div>
+<div class="head"><div><h1>Clients</h1><p>Every verified client and their style profile. Click a row for details.</p></div></div>
+<div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+<div class="card kpi"><small>Total clients</small><b id="k1">–</b><span class="d flat" id="k1d"></span></div>
+<div class="card kpi"><small>Color analysed</small><b id="k2">–</b><span class="d flat" id="k2d"></span></div>
+<div class="card kpi"><small>With wardrobe</small><b id="k3">–</b><span class="d flat" id="k3d"></span></div>
+<div class="card kpi"><small>Active this week</small><b id="k4">–</b><span class="d flat">Opened the app</span></div></div>
+<div class="tools2"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="q" placeholder="Filter by name or email"></div>
+<span class="pill on" data-s="all">All</span><span class="pill" data-s="Winter" style="--c:#7C9CE0"><i></i>Winter</span><span class="pill" data-s="Autumn" style="--c:var(--camel)"><i></i>Autumn</span><span class="pill" data-s="Summer" style="--c:#E58AA8"><i></i>Summer</span><span class="pill" data-s="Spring" style="--c:#6DBE8C"><i></i>Spring</span></div>
+<div class="card tw"><table><thead><tr><th data-k="n">Client</th><th data-k="s">Season</th><th data-k="p">Plan</th><th data-k="w">Wardrobe</th><th data-k="o">Orders</th><th data-k="a">Last active</th></tr></thead><tbody id="tb"></tbody></table><div class="tf"><span id="cnt"></span><span id="note"></span></div></div>
+</div></div>
+<div class="sc" id="sc"></div>
+<aside class="dr" id="dr" aria-label="Client dossier"></aside>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, liveTx, timeAgo, esc, SETTLED } from "./js/data.js";
+const SC={Winter:'#7C9CE0',Autumn:'#C17F47',Summer:'#E58AA8',Spring:'#6DBE8C'};
+const $=id=>document.getElementById(id);
+const seasonOf=s=>{s=(s||'').toLowerCase();for(const k in SC)if(s.includes(k.toLowerCase()))return k;return null};
+const ini=n=>n.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+let U=[],f='all',q='',dir=1;
+const rows=()=>U.filter(r=>(f==='all'||r.season===f)&&((r.nm+' '+(r.email||'')).toLowerCase().includes(q)));
+function draw(){const R=rows().slice(0,100);
+ $('tb').innerHTML=R.map((r,i)=>`<tr class="r" data-id="${r.id}" style="animation-delay:${Math.min(i,20)*30}ms"><td><div class="who"><span class="av" style="background:${SC[r.season]||'var(--card2)'};color:${r.season?'#1E1D1B':'var(--tx2)'}">${esc(ini(r.nm))}</span><div><b>${esc(r.nm)}</b><small>${esc(r.email||'')}</small></div></div></td><td>${r.season?`<span class="se" style="--c:${SC[r.season]}"><i></i>${r.season}</span>`:'<span style="color:var(--tx3)">Not analysed</span>'}</td><td><span class="chip ${r.subscription_tier==='premium'?'cam':''}">${r.subscription_tier==='premium'?'Premium':'Free'}</span></td><td>${r.wardrobe_item_count||0} items</td><td>${r.orders}</td><td style="color:var(--tx3)">${r.last_active_at?timeAgo(r.last_active_at):'Never'}</td></tr>`).join('')||'<tr><td colspan="6" style="padding:40px;text-align:center;color:var(--tx3)">No clients match. Try another season or search.</td></tr>';
+ const all=rows().length;$('cnt').textContent=`Showing ${R.length} of ${all} clients`;$('note').textContent=all>100?'Refine the search to see the rest':'';
+ document.querySelectorAll('tr.r').forEach(t=>t.onclick=()=>open(t.dataset.id));}
+const dr=$('dr'),sc=$('sc');
+const close=()=>{dr.classList.remove('on');sc.classList.remove('on')};
+async function open(id){const r=U.find(u=>u.id===id);if(!r)return;
+ const pal=(r.color_palettes?.bestColors||[]).slice(0,5);
+ dr.innerHTML=`<button class="btn x" id="cl">Close</button><div class="av" style="width:64px;height:64px;font-size:20px;background:${SC[r.season]||'var(--card2)'};color:#1E1D1B">${esc(ini(r.nm))}</div><h2>${esc(r.nm)}</h2><small style="color:var(--tx3)">${esc(r.email||'')}</small><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><span class="chip ${r.subscription_tier==='premium'?'cam':''}">${r.subscription_tier==='premium'?'Premium':'Free'}</span>${r.season?`<span class="chip" style="color:${SC[r.season]}">${esc(r.color_season)}</span>`:''}${r.role==='creator'?'<span class="chip cam">Creator</span>':''}</div>
+ <div class="stat"><div><small>Wardrobe</small><b>${r.wardrobe_item_count||0}</b></div><div><small>Orders</small><b>${r.orders}</b></div><div><small>Saved looks</small><b id="sl">…</b></div></div>
+ ${pal.length?`<small style="color:var(--tx3)">Best colors${r.color_season_confidence?' · confidence '+Math.round(r.color_season_confidence*100)+'%':''}</small><div class="pal5">${pal.map(c=>`<i style="background:${esc(c)}"></i>`).join('')}</div>`:''}
+ <div class="tl"><div>Last active<time>${r.last_active_at?timeAgo(r.last_active_at):'Never'}</time></div><div>Joined<time>${timeAgo(r.created_at)}</time></div></div>
+ <div style="display:flex;gap:10px;margin-top:22px"><a class="btn pri" href="dossier.html?id=${r.id}">Open full dossier</a>${r.email?`<a class="btn" href="mailto:${esc(r.email)}">Email</a>`:''}</div>`;
+ dr.classList.add('on');sc.classList.add('on');$('cl').onclick=close;
+ const {count}=await supabase.from('saved_looks').select('id',{count:'exact',head:true}).eq('user_id',id);const e=$('sl');if(e)e.textContent=count??0}
+sc.onclick=close;addEventListener('keydown',e=>e.key==='Escape'&&close());
+$('q').oninput=e=>{q=e.target.value.toLowerCase();draw()};
+document.querySelectorAll('.pill').forEach(p=>p.onclick=()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');f=p.dataset.s;draw()});
+const key={n:u=>u.nm.toLowerCase(),s:u=>u.season||'',p:u=>u.subscription_tier||'',w:u=>u.wardrobe_item_count||0,o:u=>u.orders,a:u=>u.last_active_at||''};
+document.querySelectorAll('th').forEach(h=>h.onclick=()=>{const k=key[h.dataset.k];U.sort((a,b)=>(k(a)>k(b)?1:-1)*dir);dir*=-1;draw()});
+$('csv').onclick=()=>{const R=rows();const c=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const t=['Name,Email,Season,Plan,Wardrobe items,Orders,Last active,Joined'].concat(R.map(r=>[r.nm,r.email,r.season||'',r.subscription_tier||'free',r.wardrobe_item_count||0,r.orders,r.last_active_at||'',r.created_at].map(c).join(','))).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='parure-clients.csv';a.click()};
+const ses=await requireAdmin();
+if(ses){
+  const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('clients',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';
+  const [users,tx]=await Promise.all([
+    supabase.from('user_profiles').select('id,email,display_name,handle,color_season,color_season_confidence,color_palettes,subscription_tier,role,wardrobe_item_count,last_active_at,created_at').neq('role','admin').order('created_at',{ascending:false}).limit(2000),
+    liveTx('buyer_user_id,status').in('status',SETTLED).limit(5000)]);
+  const orders={};(tx.data||[]).forEach(t=>orders[t.buyer_user_id]=(orders[t.buyer_user_id]||0)+1);
+  U=(users.data||[]).map(u=>({...u,season:seasonOf(u.color_season),orders:orders[u.id]||0,nm:u.display_name||u.handle||(u.email||'').split('@')[0]||'Client'}));
+  shellApi.setBadge('clients',U.length);
+  const week=Date.now()-7*864e5,wk=U.filter(u=>new Date(u.created_at)>week).length,an=U.filter(u=>u.season).length,wd=U.filter(u=>u.wardrobe_item_count>0).length,act=U.filter(u=>u.last_active_at&&new Date(u.last_active_at)>week).length;
+  const cu=(el,n)=>{el.dataset.to=n;el.dataset.pre='';el.dataset.dec=0;countUp(el)};
+  cu($('k1'),U.length);cu($('k2'),an);cu($('k3'),wd);cu($('k4'),act);
+  $('k1d').textContent=wk?'↑ '+wk+' this week':'No new this week';$('k1d').className='d'+(wk?'':' flat');
+  const pc=n=>U.length?Math.round(n/U.length*100)+'% of clients':'';$('k2d').textContent=pc(an);$('k3d').textContent=pc(wd);
+  draw();
+}
+</script></body></html>

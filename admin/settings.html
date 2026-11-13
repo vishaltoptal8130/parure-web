@@ -1,0 +1,56 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Settings · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button></div></div>
+<div class="head"><div><h1>Settings</h1><p>Your admin profile, password and appearance.</p></div></div>
+<div class="row r2" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
+<div style="display:grid;gap:14px;align-content:start">
+<form class="card" id="pf"><div class="chead"><div><h3>Profile</h3><p class="sub">Shown in the sidebar and on actions you take</p></div></div>
+<div style="display:flex;gap:18px;align-items:center;margin-bottom:22px"><div class="av" id="av" style="width:72px;height:72px;font-size:22px;overflow:hidden">PA</div><div><label class="btn" for="file" style="cursor:pointer">Change photo</label><input id="file" type="file" accept="image/*" hidden><p class="sub" style="margin-top:8px">Square image works best</p></div></div>
+<div class="fld"><label for="nm">Display name</label><input id="nm"></div>
+<div class="fld"><label>Email</label><input id="em" disabled style="opacity:.6"></div>
+<div class="er" id="pe" style="display:none;color:var(--bad);font-size:13px;margin-bottom:10px"></div><div class="er" id="po" style="display:none;color:var(--ok);font-size:13px;margin-bottom:10px"></div>
+<div style="display:flex;gap:10px"><button class="btn pri" type="submit" id="ps">Save profile</button><button class="btn" type="button" id="lo2">Log out</button></div></form>
+<form class="card" id="pw"><div class="chead"><div><h3>Change password</h3><p class="sub">At least 8 characters</p></div></div>
+<div class="fld"><label for="p1">New password</label><input id="p1" type="password" autocomplete="new-password"></div>
+<div class="fld"><label for="p2">Confirm new password</label><input id="p2" type="password" autocomplete="new-password"></div>
+<div class="er" id="we" style="display:none;color:var(--bad);font-size:13px;margin-bottom:10px"></div><div class="er" id="wo" style="display:none;color:var(--ok);font-size:13px;margin-bottom:10px"></div>
+<button class="btn pri" type="submit" id="ws">Update password</button></form></div>
+<div style="display:grid;gap:14px;align-content:start">
+<div class="card"><div class="chead"><div><h3>Appearance</h3><p class="sub">Saved on this device</p></div></div><div class="seg" id="th" style="width:100%"><button style="flex:1" data-t="dark">Dark</button><button style="flex:1" data-t="light">Light</button></div></div>
+<div class="card glow"><div class="chead"><div><h3>Platform fee</h3><p class="sub">Applies to every marketplace order</p></div><span class="chip cam">Fixed</span></div><div class="big" style="color:var(--gold)" id="fee">10%</div><p class="sub" style="margin-top:10px;line-height:1.6">One consistent rate across orders, escrow and tax invoices.</p></div>
+<div class="card"><div class="chead"><div><h3>Live data only</h3><p class="sub">What this console shows</p></div><span class="chip ok">On</span></div><p class="sub" style="line-height:1.6">Orders, revenue and marketplace listings come from the live Stripe and App Store build only. Parure Sandbox orders and listings are hidden everywhere.</p></div></div>
+</div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, esc, PLATFORM_FEE_RATE } from "./js/data.js";
+import { resolveAvatarUrl } from "./js/storage.js";
+const $=id=>document.getElementById(id);
+let ses,file=null;
+const msg=(e,o,t,good)=>{$(e).style.display=good?'none':(t?'block':'none');$(o).style.display=good?'block':'none';$(good?o:e).textContent=t||''};
+ses=await requireAdmin();
+if(ses){
+  const u=ses.user,pr=ses.profile||{},name=pr.display_name||u.user_metadata?.full_name||'Parure Master Admin';
+  const ini=n=>n.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  shell('settings',{name,email:u.email,initials:ini(name)});$('lo').onclick=logout;$('lo2').onclick=logout;$('main').style.visibility='visible';
+  $('fee').textContent=Math.round(PLATFORM_FEE_RATE*100)+'%';$('nm').value=name;$('em').value=u.email;
+  const setAv=url=>{const a=$('av');if(url){a.style.background=`url('${url}') center/cover`;a.textContent=''}else{a.textContent=ini($('nm').value||name)}};
+  setAv(await resolveAvatarUrl(supabase,pr.avatar_url||u.user_metadata?.avatar_url));
+  $('file').onchange=e=>{file=e.target.files[0]||null;if(file)setAv(URL.createObjectURL(file))};
+  $('pf').onsubmit=async e=>{e.preventDefault();msg('pe','po','');const n=$('nm').value.trim();if(!n){msg('pe','po','Enter a display name.');return}
+    $('ps').disabled=true;try{let av=pr.avatar_url||u.user_metadata?.avatar_url||null;
+      if(file){const path=`admin_${u.id}_${Date.now()}.${file.name.split('.').pop()}`;const {data,error}=await supabase.storage.from('avatars').upload(path,file,{upsert:true});if(!error&&data){const {data:pu}=supabase.storage.from('avatars').getPublicUrl(path);if(pu?.publicUrl)av=pu.publicUrl}else if(error)throw error}
+      const {error:ae}=await supabase.auth.updateUser({data:{full_name:n,avatar_url:av}});if(ae)throw ae;
+      await supabase.from('user_profiles').update({display_name:n,avatar_url:av}).eq('id',u.id);
+      file=null;msg('pe','po','Profile saved.',true)}catch(err){msg('pe','po','Could not save: '+(err.message||err))}$('ps').disabled=false};
+  $('pw').onsubmit=async e=>{e.preventDefault();msg('we','wo','');const a=$('p1').value,b=$('p2').value;
+    if(a.length<8){msg('we','wo','Use at least 8 characters.');return}if(a!==b){msg('we','wo','Passwords do not match.');return}
+    $('ws').disabled=true;const {error}=await supabase.auth.updateUser({password:a});$('ws').disabled=false;
+    if(error)msg('we','wo',error.message);else{$('p1').value='';$('p2').value='';msg('we','wo','Password updated.',true)}};
+  const sync=()=>{const c=document.documentElement.dataset.theme;document.querySelectorAll('#th button').forEach(b=>b.classList.toggle('on',b.dataset.t===c))};sync();
+  document.querySelectorAll('#th button').forEach(b=>b.onclick=()=>{document.documentElement.dataset.theme=b.dataset.t;try{localStorage.setItem('pt',b.dataset.t)}catch(e){}sync()});
+  $('theme').addEventListener('click',()=>setTimeout(sync,50));
+}
+</script></body></html>

@@ -1,0 +1,60 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketplace · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button></div></div>
+<div class="head"><div><h1>Marketplace</h1><p>Live showroom listings and the queue of luxury items waiting for an authenticity check. Sandbox listings are hidden.</p></div></div>
+<div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+<div class="card kpi"><small>Active listings</small><b id="k1">–</b><span class="d flat">Public showroom</span></div>
+<div class="card kpi"><small>High-value queue</small><b id="k2">–</b><span class="d flat" id="k2d">≥ $500 pending review</span></div>
+<div class="card kpi"><small>Authenticity verified</small><b id="k3">–</b><span class="d flat" id="k3d"></span></div>
+<div class="card kpi gold"><small>Avg active price</small><b id="k4">–</b><span class="d flat">Active listings</span></div></div>
+<div class="tools2"><div class="fi"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="q" placeholder="Search name, brand, category or seller"></div>
+<span class="pill" data-s="pending_review">Pending review</span><span class="pill on" data-s="active">Active</span><span class="pill" data-s="sold">Sold</span><span class="pill" data-s="declined">Declined</span><span class="pill" data-s="removed">Removed</span><span class="pill" data-s="all">All</span></div>
+<div class="gal" id="gal"></div><p class="sub" id="cnt" style="margin-top:16px"></p>
+</div></div>
+<div class="sc" id="sc"></div><aside class="dr" id="dr"></aside>
+<div class="pal" id="cf"><div class="box" style="padding:26px"><h3 class="serif" id="cft" style="font-size:28px"></h3><p class="sub" id="cfm" style="margin:8px 0 22px;color:var(--tx2)"></p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn" id="cfn">Cancel</button><button class="btn pri" id="cfy">Confirm</button></div></div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, liveListings, usd, timeAgo, esc } from "./js/data.js";
+import { resolveMarketplaceUrls } from "./js/storage.js";
+const $=id=>document.getElementById(id);
+let L=[],f='active',q='';
+const cu=(el,n,pre='',dec=0)=>{el.dataset.to=n;el.dataset.pre=pre;el.dataset.dec=dec;countUp(el)};
+const G=['#5A3A22|#B9824E','#2C3A4A|#6E8CA8','#3B2A2A|#A8705A','#4A2C3B|#C98AA6'];
+const img=u=>u?`background:url('${esc(u)}') center/cover`:`background:linear-gradient(160deg,${G[0].split('|').join(',')})`;
+function confirmBox(title,msg,btn,fn){$('cft').textContent=title;$('cfm').textContent=msg;$('cfy').textContent=btn;$('cf').classList.add('on');$('cfn').onclick=()=>$('cf').classList.remove('on');$('cfy').onclick=async()=>{$('cfy').disabled=true;await fn();$('cfy').disabled=false;$('cf').classList.remove('on')}}
+async function upd(id,u){const {error}=await supabase.from('marketplace_listings').update(u).eq('id',id).eq('livemode',true);if(error){alert('Could not update: '+error.message);return}await load();$('dr').classList.remove('on');$('sc').classList.remove('on')}
+window.setSt=(id,s)=>{const m={active:['Approve and publish?','This approves the item and publishes it on the marketplace.','Approve and publish'],declined:['Decline this listing?','The item will not be published.','Decline listing'],removed:['Remove this listing?','The item is removed from the public marketplace.','Remove listing']}[s];
+  confirmBox(...m,()=>upd(id,s==='active'?{status:s,authenticity_confirmed:true,authenticity_confirmed_at:new Date().toISOString(),auth_status:'verified'}:{status:s}))};
+window.setAuth=(id,on)=>confirmBox(on?'Confirm authenticity?':'Unverify authenticity?',on?'Confirm this luxury item is authentic.':'Mark this listing as not verified.',on?'Confirm authenticity':'Unverify',()=>upd(id,{authenticity_confirmed:on,authenticity_confirmed_at:on?new Date().toISOString():null,auth_status:on?'verified':'pending'}));
+const rows=()=>L.filter(l=>(f==='all'||l.status===f)&&((l.name||l.description||'')+' '+(l.brand||'')+' '+(l.category||'')+' '+(l.seller_display_name||'')).toLowerCase().includes(q));
+const stChip=s=>({active:'ok',pending_review:'warn',sold:'cam',declined:'bad',removed:'bad'}[s]||'');
+function draw(){const R=rows();
+ $('gal').innerHTML=R.map((l,i)=>`<div class="it" data-id="${l.id}" style="animation-delay:${Math.min(i,16)*40}ms"><div class="ph" style="${img(l._resolved||l._resolvedImageUrl)}"><span class="chip tg" style="background:rgba(0,0,0,.45);color:#fff">${esc(l.category||'Item')}</span>${l.price>=50000?'<span class="chip cam hv">High value</span>':''}</div><div class="in"><b>${esc(l.name||l.brand||'Listing')}</b><small>${esc(l.seller_display_name||'Seller')} · <span class="chip ${stChip(l.status)}" style="padding:1px 8px">${esc(l.status)}</span></small><div class="pr"><span>${usd(l.price)}</span><div class="sw ${l.authenticity_confirmed?'on':''}" title="Authenticity verified" role="switch" aria-checked="${!!l.authenticity_confirmed}" tabindex="0" data-a="${l.id}"></div></div></div></div>`).join('')||`<p style="color:var(--tx3);padding:40px">${f==='pending_review'&&!q?'No listings are waiting for review.':'No listings match.'}</p>`;
+ $('cnt').textContent=`${R.length} live listing${R.length===1?'':'s'}`;
+ document.querySelectorAll('.sw').forEach(s=>s.onclick=e=>{e.stopPropagation();const l=L.find(x=>x.id===s.dataset.a);setAuth(l.id,!l.authenticity_confirmed)});
+ document.querySelectorAll('.it').forEach(t=>t.onclick=()=>open(t.dataset.id))}
+function open(id){const l=L.find(x=>x.id===id),dr=$('dr');
+ dr.innerHTML=`<button class="btn x" id="cl">Close</button><div style="aspect-ratio:1;border-radius:20px;${img(l._resolved||l._resolvedImageUrl)};margin:18px 0"></div><span class="chip ${stChip(l.status)}">${esc(l.status)}</span><h2>${esc(l.name||l.brand||'Listing')}</h2><small style="color:var(--tx3)">${esc(l.seller_display_name||'')} · listed ${timeAgo(l.created_at)}</small>
+ <div class="stat"><div><small>Price</small><b>${usd(l.price)}</b></div><div><small>Size</small><b>${esc(l.size||'–')}</b></div><div><small>Condition</small><b style="font-size:18px">${esc(l.condition||'–')}</b></div></div>
+ ${l.brand?`<p class="sub">Brand: ${esc(l.brand)}</p>`:''}${l.description?`<p style="color:var(--tx2);margin:10px 0 18px">${esc(l.description)}</p>`:''}
+ <div class="tl"><div>Authenticity<time>${l.authenticity_confirmed?'Verified':'Not verified'}</time></div><div>Auth status<time>${esc(l.auth_status||'–')}</time></div></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">${l.status==='pending_review'?`<button class="btn pri" onclick="setSt('${l.id}','active')">Approve and publish</button><button class="btn" style="color:var(--bad)" onclick="setSt('${l.id}','declined')">Decline</button>`:''}${l.status==='active'?`<button class="btn" style="color:var(--bad)" onclick="setSt('${l.id}','removed')">Remove listing</button>`:''}</div>`;
+ dr.classList.add('on');$('sc').classList.add('on');$('cl').onclick=()=>{dr.classList.remove('on');$('sc').classList.remove('on')}}
+$('sc').onclick=()=>{$('dr').classList.remove('on');$('sc').classList.remove('on')};
+$('q').oninput=e=>{q=e.target.value.toLowerCase();draw()};
+document.querySelectorAll('.pill').forEach(p=>p.onclick=()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');f=p.dataset.s;draw()});
+async function load(){
+  const {data}=await liveListings('*').order('created_at',{ascending:false}).limit(300);
+  L=await resolveMarketplaceUrls(supabase,data||[]);
+  const act=L.filter(l=>l.status==='active'),hv=L.filter(l=>l.status==='pending_review'&&l.price>=50000).length,ver=act.filter(l=>l.authenticity_confirmed).length;
+  cu($('k1'),act.length);cu($('k2'),hv);cu($('k3'),ver);$('k3d').textContent=act.length?Math.round(ver/act.length*100)+'% of active':'';
+  cu($('k4'),act.length?act.reduce((a,l)=>a+l.price,0)/act.length/100:0,'$');shellApi.setBadge('market',hv);draw()}
+const ses=await requireAdmin();
+if(ses){const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('market',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';await load()}
+</script></body></html>

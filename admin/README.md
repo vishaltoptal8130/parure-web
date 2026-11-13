@@ -1,3 +1,11 @@
+# Parure La Plee Admin (`/admin/`)
+
+New Noir atelier console. Pages: `index.html` (sign in), `overview`, `clients`, `dossier`, `creators`, `marketplace`, `orders`, `beta`, `push`, `affiliate`, `settings`.
+
+- Shared code: `js/data.js` (Supabase client, admin guard, live-only queries), `js/shell.js` (sidebar, Cmd+K, theme), `noir.css`.
+- **Live data only:** `marketplace_transactions` and `marketplace_listings` are always filtered with `livemode = true`. Sandbox data is never shown.
+- `legacy.html` is the previous single-page console, kept as a fallback (`styles/` and the other `js/` modules belong to it). A full copy lives in `../admin-backup-old/`.
+
 # Parure La Plee — Executive Admin Console (`/admin/`)
 
 A luxury fashion-tech operations console rebuild for **Parure La Plee**, crafted from scratch with an editorial haute-couture aesthetic, quiet luxury palette, and identical Supabase data operations.

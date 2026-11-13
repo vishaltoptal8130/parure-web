@@ -1,0 +1,64 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Push · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button></div></div>
+<div class="head"><div><h1>Push</h1><p>Write a notification, pick who gets it, and see how it looks on a phone before you send. Sending reaches real devices.</p></div></div>
+<div class="row" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+<div class="card"><div class="chead"><div><h3>Compose</h3><p class="sub">Sent through Expo push and saved in each client's in-app notifications</p></div></div>
+<div class="fld"><label for="t">Title</label><input id="t" maxlength="50" placeholder="Your autumn palette is ready"></div>
+<div class="fld"><label for="b">Message</label><textarea id="b" rows="3" maxlength="140" placeholder="Three new outfits match your season. Open Parure to see them."></textarea></div>
+<div class="fld"><label>Audience</label><div class="tools2" style="margin:0" id="aud"></div></div>
+<div class="er" id="er" style="display:none;color:var(--bad);font-size:13px;margin-bottom:10px"></div>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px"><button class="btn pri" id="send">Send</button><button class="btn" id="test">Send test to me</button><span id="ok" class="chip ok" style="display:none"></span></div></div>
+<div class="card"><div class="ph2"><div class="scr"><div class="tm"><small>Wednesday</small><b>9:41</b></div><div class="ntf"><div class="h"><i>P</i>PARURE LA PLEE · now</div><b id="pt"></b><p id="pb"></p></div></div></div></div></div>
+<div class="card" style="margin-top:14px"><div class="chead"><div><h3>Recent broadcasts</h3><p class="sub">Last sends, from in-app notifications</p></div></div><div id="hist"><p class="sub">Loading…</p></div></div>
+</div></div>
+<div class="pal" id="cf"><div class="box" style="padding:26px"><h3 class="serif" id="cft" style="font-size:28px"></h3><p class="sub" id="cfm" style="margin:8px 0 22px;color:var(--tx2)"></p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn" id="cfn">Cancel</button><button class="btn pri" id="cfy">Confirm</button></div></div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, timeAgo, esc } from "./js/data.js";
+const $=id=>document.getElementById(id);
+const SC={Winter:'#7C9CE0',Autumn:'#C17F47',Summer:'#E58AA8',Spring:'#6DBE8C'};
+const isTok=v=>typeof v==='string'&&(v.startsWith('ExponentPushToken[')||v.startsWith('ExpoPushToken['));
+let U=[],TK={},seg='all',me=null,beta=new Set();
+const sInfo=u=>{const s=(u.color_season||'').toLowerCase();return Object.keys(SC).find(k=>s.includes(k.toLowerCase()))};
+const SEG=[['all','All clients',u=>true],['creators','Creators',u=>u.role==='creator'],['premium','Premium',u=>(u.subscription_tier||'free')!=='free'],...Object.keys(SC).map(k=>[k,k,u=>sInfo(u)===k]),['beta','Beta testers',u=>beta.has((u.email||'').toLowerCase())]];
+const users=k=>U.filter(SEG.find(s=>s[0]===k)[2]);
+const tokensFor=us=>{const set=new Set();us.forEach(u=>{if(isTok(u.expo_push_token))set.add(u.expo_push_token);(TK[u.id]||[]).forEach(t=>set.add(t))});return [...set]};
+function pills(){$('aud').innerHTML=SEG.map(s=>{const n=users(s[0]).length;return `<span class="pill ${s[0]===seg?'on':''}" data-k="${s[0]}" ${SC[s[0]]?`style="--c:${SC[s[0]]}"`:''}>${SC[s[0]]?'<i></i>':''}${s[1]} · ${n}</span>`}).join('');
+ document.querySelectorAll('#aud .pill').forEach(p=>p.onclick=()=>{seg=p.dataset.k;pills();lab()});lab()}
+const lab=()=>{const us=users(seg);$('send').textContent=`Send to ${us.length} client${us.length===1?'':'s'}`};
+const t=$('t'),b=$('b');const up=()=>{$('pt').textContent=t.value||'Your title appears here';$('pb').textContent=b.value||'Your message appears here'};t.oninput=b.oninput=up;up();
+function confirmBox(title,msg,btn,fn){$('cft').textContent=title;$('cfm').textContent=msg;$('cfy').textContent=btn;$('cf').classList.add('on');$('cfn').onclick=()=>$('cf').classList.remove('on');$('cfy').onclick=async()=>{$('cfy').disabled=true;await fn();$('cfy').disabled=false;$('cf').classList.remove('on')}}
+const err=m=>{$('er').textContent=m;$('er').style.display=m?'block':'none'};
+const done=m=>{$('ok').textContent=m;$('ok').style.display='inline-flex';setTimeout(()=>$('ok').style.display='none',6000)};
+async function expo(tokens,title,body,data){let sent=0,blind=false;
+ for(let i=0;i<tokens.length;i+=100){const chunk=tokens.slice(i,i+100).map(to=>({to,sound:'default',title,body,data}));
+  try{const r=await fetch('https://exp.host/--/api/v2/push/send',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(chunk)});if(r.ok)sent+=chunk.length;else throw new Error('Expo '+r.status)}
+  catch(e){await fetch('https://exp.host/--/api/v2/push/send',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(chunk)});sent+=chunk.length;blind=true}}
+ return {sent,blind}}
+function check(){const ti=t.value.trim(),bo=b.value.trim();if(!ti||!bo){err('Enter both a title and a message.');return null}err('');return {ti,bo}}
+$('test').onclick=async()=>{const c=check();if(!c)return;const tk=tokensFor([me]);if(!tk.length){err('No device is registered for your admin account yet. Open the app signed in as admin first.');return}
+ $('test').disabled=true;const r=await expo(tk,c.ti,c.bo,{test:true});$('test').disabled=false;done(`Test sent to ${r.sent} device${r.sent===1?'':'s'}${r.blind?' (delivery not confirmed)':''}`)};
+$('send').onclick=()=>{const c=check();if(!c)return;const us=users(seg),tk=tokensFor(us),name=SEG.find(s=>s[0]===seg)[1];
+ if(!us.length){err('This audience has no clients.');return}
+ confirmBox(`Send to ${us.length} clients?`,`"${c.ti}" will go to ${name} (${us.length} clients, ${tk.length} devices) and appear in their in-app notifications. This cannot be undone.`,'Send now',async()=>{
+  try{const rows=us.map(u=>({user_id:u.id,title:c.ti,body:c.bo,type:'broadcast',is_read:false}));
+   for(let i=0;i<rows.length;i+=200){const {error}=await supabase.from('notifications').insert(rows.slice(i,i+200));if(error)console.warn('notifications insert',error.message)}
+   let r={sent:0,blind:false};if(tk.length)r=await expo(tk,c.ti,c.bo,{segment:seg,dispatchedAt:new Date().toISOString()});
+   done(tk.length?`Sent to ${r.sent} devices${r.blind?' (delivery not confirmed)':''}`:`Saved in-app for ${us.length} clients (no devices registered)`);t.value='';b.value='';up();hist()}
+  catch(e){err('Could not send: '+(e.message||e))}})};
+async function hist(){const {data}=await supabase.from('notifications').select('title,body,created_at').eq('type','broadcast').order('created_at',{ascending:false}).limit(600);
+ const g=[];(data||[]).forEach(n=>{const k=n.title+'|'+n.body,l=g[g.length-1];if(l&&l.k===k&&Math.abs(new Date(l.at)-new Date(n.created_at))<36e5*6)l.n++;else if(g.length<8||!g.find(x=>x.k===k&&Math.abs(new Date(x.at)-new Date(n.created_at))<36e5*6))g.push({k,t:n.title,b:n.body,at:n.created_at,n:1})});
+ $('hist').innerHTML=g.slice(0,8).map(x=>`<div class="q"><span class="ic"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1112 0v5l1.500 2h-15zM10 20a2 2 0 004 0"/></svg></span><div><b>${esc(x.t)}</b><small>${esc((x.b||'').slice(0,90))} · ${x.n} client${x.n===1?'':'s'}</small></div><span style="margin-left:auto;color:var(--tx3)">${timeAgo(x.at)}</span></div>`).join('')||'<p class="sub">No broadcasts sent yet.</p>'}
+const ses=await requireAdmin();
+if(ses){const name=ses.profile?.display_name||'Parure Master Admin';me=ses.profile||{id:ses.user.id};me.id=ses.user.id;
+  shell('push',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';
+  const [u,tk,bt,adm]=await Promise.all([supabase.from('user_profiles').select('id,email,role,subscription_tier,color_season,expo_push_token').neq('role','admin').limit(5000),supabase.from('user_push_tokens').select('*').limit(10000),supabase.from('beta_testers').select('email'),supabase.from('user_profiles').select('id,expo_push_token').eq('id',ses.user.id).single()]);
+  U=u.data||[];(bt.data||[]).forEach(x=>beta.add((x.email||'').toLowerCase()));
+  (tk.data||[]).forEach(r=>{const v=r.expo_push_token||r.push_token||r.token||r.expo_token;if(isTok(v))(TK[r.user_id]=TK[r.user_id]||[]).push(v)});
+  me={id:ses.user.id,expo_push_token:adm.data?.expo_push_token};pills();hist()}
+</script></body></html>

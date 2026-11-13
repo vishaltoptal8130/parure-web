@@ -1,0 +1,74 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Orders and escrow · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button><button class="btn pri" id="csv">Export ledger</button></div></div>
+<div class="head"><div><h1>Orders &amp; escrow</h1><p>Every live marketplace order, where its money sits, and what Parure earns. Sandbox orders are hidden.</p></div></div>
+<div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+<div class="card kpi gold glow"><small>Platform revenue (10%)</small><b id="k1">–</b><span class="d flat">Settled live orders</span></div>
+<div class="card kpi"><small>Held in escrow</small><b id="k2">–</b><span class="d flat" id="k2d"></span></div>
+<div class="card kpi"><small>Seller payouts</small><b id="k3">–</b><span class="d flat">Payout pending or paid out</span></div>
+<div class="card kpi"><small>Processed orders</small><b id="k4">–</b><span class="d flat" id="k4d"></span></div></div>
+<div class="row r2"><div class="card"><div class="chead"><div><h3>Orders by month</h3><p class="sub">Seller net and platform fee, last 12 months</p></div><div class="lg" style="grid-template-columns:auto auto;gap:18px"><div style="--c:var(--camel)"><small>Seller net</small></div><div style="--c:var(--gold)"><small>Platform fee</small></div></div></div><div class="mini" id="mini"></div><p id="mini-empty" class="sub" style="display:none;text-align:center;margin-top:-110px;position:relative">No live orders yet.</p></div>
+<div class="card"><div class="chead"><div><h3>Escrow flow</h3><p class="sub">How every order moves</p></div></div>
+<div class="stp" style="margin-top:34px"><div class="d">Paid</div><div class="d">Held</div><div class="d c">Shipped</div><div>Delivered</div><div>Released</div></div>
+<p class="sub" style="margin-top:26px;line-height:1.6">Buyer pays into escrow. After delivery, Parure keeps 10% and releases the rest to the seller. Refunds and disputes stop the flow.</p>
+<div class="split" style="margin-top:26px"><i style="background:var(--ok)" id="s1"></i><i style="background:var(--camel)" id="s2"></i><i style="background:var(--bad)" id="s3"></i></div>
+<div class="lg"><div style="--c:var(--ok)"><small>Paid out</small><b id="c1">0</b></div><div style="--c:var(--camel)"><small>In escrow</small><b id="c2">0</b></div><div style="--c:var(--bad)"><small>Other</small><b id="c3">0</b></div></div></div></div>
+<div class="tools2" id="pills"></div>
+<div class="card tw"><table><thead><tr><th>Order</th><th>Item</th><th>Buyer</th><th>Value</th><th>Platform 10%</th><th>Seller net</th><th>Status</th><th>Placed</th></tr></thead><tbody id="tb"></tbody></table><div class="tf"><span id="cnt"></span><span>Live orders only</span></div></div>
+</div></div>
+<div class="sc" id="sc"></div><aside class="dr" id="dr"></aside>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, liveTx, txParts, usd, timeAgo, esc, SETTLED } from "./js/data.js";
+const $=id=>document.getElementById(id);
+let O=[],f='all',PR={};
+const cu=(el,n,pre='',dec=0)=>{el.dataset.to=n;el.dataset.pre=pre;el.dataset.dec=dec;countUp(el)};
+const stc=s=>s==='paid_out'?'ok':s==='payout_pending'?'ok':s==='paid'?'cam':'bad';
+const lab=s=>({paid:'In escrow',payout_pending:'Payout pending',paid_out:'Paid out'}[s]||s);
+const steps=['Paid','Held','Shipped','Delivered','Released'];
+const stage=t=>t.status==='paid_out'?5:t.fulfillment_status==='delivered'||t.fulfillment_status==='completed'?4:t.fulfillment_status==='shipped'?3:2;
+const who=id=>PR[id]?.display_name||PR[id]?.email||(id?String(id).slice(0,8)+'…':'–');
+function draw(){const R=O.filter(t=>f==='all'||t.status===f);
+ $('tb').innerHTML=R.map((t,i)=>{const p=txParts(t);return `<tr class="r" data-id="${t.id}" style="animation-delay:${Math.min(i,15)*30}ms"><td><b style="font-weight:500;font-family:monospace">${String(t.id).slice(0,8)}</b></td><td>${esc(t.item_name||'Item')}</td><td style="color:var(--tx2)">${esc(who(t.buyer_user_id))}</td><td>${usd(p.gross)}</td><td style="color:var(--gold)">${usd(p.fee)}</td><td>${usd(p.net)}</td><td><span class="chip ${stc(t.status)}">${esc(lab(t.status))}</span></td><td style="color:var(--tx3)">${timeAgo(t.created_at)}</td></tr>`}).join('')||'<tr><td colspan="8" style="padding:46px;text-align:center;color:var(--tx3)">No live orders yet. Sandbox orders are hidden.</td></tr>';
+ $('cnt').textContent=`${R.length} order${R.length===1?'':'s'}`;document.querySelectorAll('tr.r').forEach(r=>r.onclick=()=>open(r.dataset.id))}
+function invoice(t){const p=txParts(t),est=Math.round(p.gross*0.029+30),no='INV-'+new Date(t.created_at).getFullYear()+'-'+String(t.id).slice(0,8).toUpperCase();
+ const w=window.open('','_blank');if(!w)return alert('Allow pop-ups to print the invoice.');
+ w.document.write(`<!doctype html><title>${no}</title><body style="font:14px/1.6 system-ui;color:#1e1d1b;max-width:720px;margin:40px auto;padding:0 24px"><h1 style="font:400 34px Georgia">PARURE <small style="font-size:14px;color:#c17f47">La Plee</small></h1><p>Tax invoice <b>${no}</b><br>${new Date(t.created_at).toLocaleDateString('en-US',{dateStyle:'long'})}</p><hr><p><b>Buyer</b><br>${esc(PR[t.buyer_user_id]?.display_name||'')} ${esc(PR[t.buyer_user_id]?.email||'')}</p><p><b>Seller</b><br>${esc(PR[t.seller_user_id]?.display_name||'')} ${esc(PR[t.seller_user_id]?.email||'')}</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><tr style="border-bottom:1px solid #ccc"><th align=left>Item</th><th align=right>Amount</th></tr><tr><td>${esc(t.item_name||'Marketplace item')}</td><td align=right>${usd(p.gross)}</td></tr>${t.tax_amount?`<tr><td>Tax</td><td align=right>${usd(t.tax_amount)}</td></tr>`:''}<tr style="border-top:1px solid #ccc"><th align=left>Total paid by buyer</th><th align=right>${usd(p.gross)}</th></tr></table><h3>Money flow</h3><table style="width:100%"><tr><td>Platform fee (10%)</td><td align=right>${usd(p.fee)}</td></tr><tr><td>Estimated Stripe processing</td><td align=right>-${usd(est)}</td></tr><tr><td>Seller net</td><td align=right>${usd(p.net)}</td></tr></table><script>setTimeout(()=>print(),300)<\/script>`);w.document.close()}
+function open(id){const t=O.find(x=>x.id===id),p=txParts(t),st=stage(t),dr=$('dr');
+ dr.innerHTML=`<button class="btn x" id="cl">Close</button><span class="chip ${stc(t.status)}">${esc(lab(t.status))}</span><h2>Order ${String(t.id).slice(0,8)}</h2><small style="color:var(--tx3)">${esc(t.item_name||'Item')} · placed ${timeAgo(t.created_at)}</small>
+ <div class="stp" style="margin-top:28px">${steps.map((s,k)=>`<div class="${k<st?'d':''} ${k===st-1?'c':''}">${s}</div>`).join('')}</div>
+ <div class="stat"><div><small>Order value</small><b>${usd(p.gross)}</b></div><div><small>Platform 10%</small><b style="color:var(--gold)">${usd(p.fee)}</b></div><div><small>Seller net</small><b>${usd(p.net)}</b></div></div>
+ <div class="tl"><div>Buyer<time>${esc(who(t.buyer_user_id))}</time></div><div>Seller<time>${esc(who(t.seller_user_id))}</time></div>${t.tracking_number?`<div>Tracking<time>${esc(t.tracking_carrier||t.shipping_carrier||'')} ${esc(t.tracking_number)}</time></div>`:''}${t.amount_refunded?`<div>Refunded<time>${usd(t.amount_refunded)}</time></div>`:''}${t.dispute_status?`<div>Dispute<time>${esc(t.dispute_status)}</time></div>`:''}</div>
+ <div style="display:flex;gap:10px;margin-top:22px"><button class="btn pri" id="inv">Print tax invoice</button><a class="btn" href="dossier.html?id=${t.buyer_user_id}">Buyer dossier</a></div>`;
+ dr.classList.add('on');$('sc').classList.add('on');$('cl').onclick=close;$('inv').onclick=()=>invoice(t)}
+const close=()=>{$('dr').classList.remove('on');$('sc').classList.remove('on')};$('sc').onclick=close;addEventListener('keydown',e=>e.key==='Escape'&&close());
+$('csv').onclick=()=>{const c=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const t=['Order,Item,Buyer,Seller,Value,Platform fee,Seller net,Status,Placed'].concat(O.map(t=>{const p=txParts(t);return [t.id,t.item_name,who(t.buyer_user_id),who(t.seller_user_id),p.gross/100,p.fee/100,p.net/100,t.status,t.created_at].map(c).join(',')})).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='parure-live-orders.csv';a.click()};
+const ses=await requireAdmin();
+if(ses){const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('orders',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';
+  const {data}=await liveTx('*').order('created_at',{ascending:false}).limit(1000);O=data||[];
+  const ids=[...new Set(O.flatMap(t=>[t.buyer_user_id,t.seller_user_id]).filter(Boolean))];
+  if(ids.length){const {data:pr}=await supabase.from('user_profiles').select('id,email,display_name').in('id',ids);(pr||[]).forEach(p=>PR[p.id]=p)}
+  const S=O.filter(t=>SETTLED.includes(t.status));let fee=0,held=0,paid=0;
+  S.forEach(t=>{const p=txParts(t);fee+=p.fee;if(t.status==='paid')held+=p.net;else paid+=p.net});
+  cu($('k1'),fee/100,'$',2);cu($('k2'),held/100,'$');cu($('k3'),paid/100,'$');cu($('k4'),S.length);
+  $('k2d').textContent=O.filter(t=>t.status==='paid').length+' orders';$('k4d').textContent=S.length?'Avg order '+usd(S.reduce((a,t)=>a+t.amount,0)/S.length,0):'No live orders yet';
+  const n1=O.filter(t=>t.status==='paid_out'||t.status==='payout_pending').length,n2=O.filter(t=>t.status==='paid').length,n3=O.length-n1-n2;
+  $('c1').textContent=n1;$('c2').textContent=n2;$('c3').textContent=n3;const tt=O.length||1;
+  setTimeout(()=>{$('s1').style.width=n1/tt*100+'%';$('s2').style.width=n2/tt*100+'%';$('s3').style.width=n3/tt*100+'%'},300);
+  // monthly bars
+  const now=new Date(),M=[];for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);M.push({k:d.getFullYear()+'-'+d.getMonth(),l:d.toLocaleDateString('en-US',{month:'short'})[0],fee:0,net:0})}
+  S.forEach(t=>{const d=new Date(t.created_at),m=M.find(x=>x.k===d.getFullYear()+'-'+d.getMonth());if(m){const p=txParts(t);m.fee+=p.fee;m.net+=p.net}});
+  const mx=Math.max(...M.map(m=>m.fee+m.net),1);
+  $('mini').innerHTML=M.map(m=>`<div><i style="background:var(--gold);--h:${m.fee/mx*100}%"></i><i style="background:var(--camel);--h:${m.net/mx*100}%"></i><span>${m.l}</span></div>`).join('');
+  if(!S.length)$('mini-empty').style.display='block';
+  setTimeout(()=>document.querySelectorAll('#mini i').forEach(i=>i.style.height=i.style.getPropertyValue('--h')),250);
+  const sts=[...new Set(O.map(t=>t.status))];
+  $('pills').innerHTML=`<span class="pill on" data-s="all">All</span>`+sts.map(s=>`<span class="pill" data-s="${s}">${esc(lab(s))}</span>`).join('');
+  document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>{document.querySelectorAll('#pills .pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');f=p.dataset.s;draw()});
+  draw()}
+</script></body></html>

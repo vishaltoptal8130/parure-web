@@ -1,0 +1,117 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Client dossier · Parure Operations</title><meta name="robots" content="noindex"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css"></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button><a class="btn pri" id="mail" href="#">Email client</a></div></div>
+<div class="crumb"><a href="clients.html">Clients</a> / <span id="bc">Client</span></div>
+<div class="card hero2 glow"><div class="av" id="h-av" style="overflow:hidden">?</div>
+<div><div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><h1 id="h-name">Loading…</h1><span class="chip cam" id="h-handle"></span></div>
+<p style="color:var(--tx2);margin:8px 0 12px" id="h-sub"></p><div style="display:flex;gap:8px;flex-wrap:wrap" id="h-chips"></div></div>
+<div style="display:flex;gap:26px;text-align:right;align-items:center;flex-wrap:wrap"><div><small style="color:var(--tx3)">Wardrobe</small><div class="big" style="font-size:36px" id="h-w">–</div></div><div><small style="color:var(--tx3)">Seller revenue</small><div class="big" style="font-size:36px;color:var(--gold)" id="h-r">–</div></div><div><small style="color:var(--tx3)">Posts</small><div class="big" style="font-size:36px" id="h-p">–</div></div></div></div>
+<div style="display:flex;gap:10px;margin-top:12px" id="acts"></div>
+<div class="tabs sc2" id="tabs"></div><div id="panes"></div>
+</div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, liveTx, liveListings, txParts, usd, timeAgo, esc, SETTLED } from "./js/data.js";
+import { resolveWardrobeUrls, resolveMarketplaceUrls, resolveAvatarUrl, resolveSelfieUrl } from "./js/storage.js";
+const $=id=>document.getElementById(id);
+const SC={Winter:'#7C9CE0',Autumn:'#C17F47',Summer:'#E58AA8',Spring:'#6DBE8C'};
+const seasonOf=s=>{s=(s||'').toLowerCase();for(const k in SC)if(s.includes(k.toLowerCase()))return k;return null};
+const T=[['ps','Style passport'],['wd','Wardrobe'],['cp','Community posts'],['sp','Saved posts'],['fo','Forums'],['mk','Marketplace'],['lb','Lookbooks'],['mb','Moodboards'],['fv','Favorites & wishlist'],['ss','Seller shop'],['pu','Purchases'],['sb','Subscription']];
+const empty=(t,s)=>`<div class="card" style="text-align:center;padding:50px 20px"><h3>${t}</h3><p class="sub" style="margin-top:6px">${s}</p></div>`;
+const img=(u,fb='var(--card2)')=>u?`background:url('${esc(u)}') center/cover`:`background:${fb}`;
+const kv=(k,v)=>`<div><small>${k}</small><b>${v?esc(v):'Not set'}</b></div>`;
+const fmtD=i=>i?new Date(i).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'–';
+const id=new URLSearchParams(location.search).get('id');
+const ses=await requireAdmin();
+let U,D={};
+if(ses&&!id)location.replace('clients.html');
+if(ses&&id){
+  const name=ses.profile?.display_name||'Parure Master Admin';
+  shell('clients',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;$('main').style.visibility='visible';
+  const {data:u,error}=await supabase.from('user_profiles').select('*').eq('id',id).single();
+  if(error||!u){$('h-name').textContent='Client not found';}
+  else{U=u;await load();}
+}
+async function load(){
+  const g=r=>r.status==='fulfilled'&&r.value?.data?r.value.data:[];
+  const R=await Promise.allSettled([
+    supabase.from('wardrobe_items').select('*').eq('user_id',id),
+    liveListings('*').eq('seller_user_id',id).order('created_at',{ascending:false}),
+    liveTx('*').eq('seller_user_id',id).in('status',SETTLED).order('created_at',{ascending:false}),
+    liveTx('*').eq('buyer_user_id',id).order('created_at',{ascending:false}),
+    supabase.from('community_posts').select('*').eq('user_id',id).order('created_at',{ascending:false}),
+    supabase.from('marketplace_wishlists').select('listing_id').eq('user_id',id),
+    supabase.from('user_lookbooks').select('*, saved_looks(*)').eq('user_id',id),
+    supabase.from('user_moodboards').select('*, moodboard_items(*)').eq('user_id',id),
+    supabase.from('user_wishlists').select('*').eq('user_id',id),
+    supabase.from('forum_posts').select('*').eq('user_id',id).order('created_at',{ascending:false}),
+    supabase.from('post_saves').select('post_id').eq('user_id',id)]);
+  D={items:g(R[0]),listings:g(R[1]),sales:g(R[2]),buys:g(R[3]),posts:g(R[4]),wish:g(R[5]),lbs:g(R[6]),mbs:g(R[7]),wl:g(R[8]),forums:g(R[9]),saves:g(R[10])};
+  const favIds=[...new Set(D.wish.map(w=>w.listing_id).filter(Boolean))];
+  const [fav,saved,avatar,selfie,items,listings]=await Promise.all([
+    favIds.length?liveListings('*').in('id',favIds):{data:[]},
+    D.saves.length?supabase.from('community_posts').select('*').in('id',D.saves.map(s=>s.post_id)):{data:[]},
+    resolveAvatarUrl(supabase,U.avatar_url),resolveSelfieUrl(supabase,U.selfie_url||U.avatar_url),
+    Promise.resolve(D.items),resolveMarketplaceUrls(supabase,D.listings)]);
+  D.fav=await resolveMarketplaceUrls(supabase,fav.data||[]);D.saved=saved.data||[];D.avatar=avatar;D.selfie=selfie;D.items=items;D.listings=listings;
+  hero();tabs();
+}
+function hero(){
+  const nm=U.display_name||(U.email||'').split('@')[0]||'Client',ss=seasonOf(U.color_season),rev=D.sales.reduce((a,t)=>a+txParts(t).net,0);
+  $('bc').textContent=nm;$('h-name').textContent=nm;document.title=nm+' · Parure Operations';
+  $('h-handle').textContent=U.handle?'@'+U.handle.replace(/^@+/,''):'';$('h-handle').style.display=U.handle?'':'none';
+  const av=$('h-av');if(D.avatar){av.style.cssText+=';'+img(D.avatar);av.textContent=''}else{av.textContent=nm.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();av.style.background=SC[ss]||'var(--card2)'}
+  $('h-sub').textContent=[U.email,typeof U.location==='string'?U.location:'','Joined '+timeAgo(U.created_at)].filter(Boolean).join(' · ');
+  const prem=(U.subscription_tier||'free')!=='free';
+  $('h-chips').innerHTML=`<span class="chip">${esc(U.role==='creator'?'Creator':'User')}</span><span class="chip ${prem?'cam':''}">${prem?'Premium':'Free'}</span>${ss?`<span class="chip" style="color:${SC[ss]}">${esc(U.color_season)}</span>`:''}${U.is_trusted_partner?'<span class="chip cam">Trusted partner</span>':''}`;
+  $('h-w').textContent=D.items.length;$('h-r').textContent=usd(rev,0);$('h-p').textContent=D.posts.length;
+  if(U.email)$('mail').href='mailto:'+U.email;else $('mail').style.display='none';
+  const nr=U.role==='creator'?'user':'creator';
+  $('acts').innerHTML=`<button class="btn" id="role">Make ${nr}</button>`;
+  $('role').onclick=async()=>{if(!confirm(`Change this client's role to ${nr.toUpperCase()}?`))return;const {error}=await supabase.from('user_profiles').update({role:nr}).eq('id',id);if(error)alert('Could not update role: '+error.message);else location.reload()};
+}
+const tile=(i)=>`<div class="it"><div class="ph" style="${img(i._resolved||i._resolvedImageUrl,i.dominant_color_hex||'var(--card2)')};aspect-ratio:1"></div><div class="in"><b>${esc(i.name||i.category||'Item')}</b><small>${esc(i.brand_designer||i.brand||'')}${i.wear_count!=null?' · worn '+i.wear_count+'×':''}</small></div></div>`;
+const cats={tops:/top|shirt|blouse|tee|sweater|knit/i,bottoms:/bottom|pant|jean|skirt|short|trouser/i,dresses:/dress|gown|jumpsuit/i,shoes:/shoe|boot|sneaker|heel|loafer/i,outerwear:/coat|jacket|blazer/i,bags:/bag|tote|clutch|purse/i,accessories:/belt|scarf|hat|sunglass|jewel/i};
+const ctext=i=>(i.category||'')+' '+(i.subcategory||'');
+function P(k){
+ const ss=seasonOf(U.color_season);
+ if(k==='ps'){const pal=(U.color_palettes?.bestColors||[]).slice(0,5),fav=Array.isArray(U.favorite_colors)?U.favorite_colors:[],sa=U.shipping_address;
+  return `<div class="row r2" style="grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)"><div class="card"><div class="chead"><div><h3>Color passport</h3><p class="sub">From the selfie analysis</p></div>${U.color_season_confidence?`<span class="chip ok">${Math.round(U.color_season_confidence*100)}% match</span>`:''}</div>
+  <div style="aspect-ratio:4/3;border-radius:18px;${img(D.selfie)};display:grid;place-items:center;color:var(--tx3);margin-bottom:18px">${D.selfie?'':'No photo'}</div>
+  <h3 style="font-size:30px">${esc(U.color_season||'Not analysed')}</h3>
+  ${pal.length?`<div class="sw5" style="margin-top:14px">${pal.map(c=>`<div style="background:${esc(c)};aspect-ratio:1;border-radius:18px"></div>`).join('')}</div>`:''}
+  ${fav.length?`<p class="sub" style="margin:18px 0 8px">Favorite colors</p><div style="display:flex;gap:6px;flex-wrap:wrap">${fav.slice(0,10).map(c=>`<i style="width:26px;height:26px;border-radius:50%;background:${esc(typeof c==='string'?c:c.hex||'')}"></i>`).join('')}</div>`:''}</div>
+  <div style="display:grid;gap:14px"><div class="card"><div class="chead"><h3>Profile details</h3></div>${U.bio?`<p style="font-style:italic;color:var(--tx2);margin-bottom:18px">"${esc(U.bio)}"</p>`:''}<div class="kv">${kv('Age range',U.age_range)}${kv('Gender',U.gender_custom||U.gender_identity)}${kv('Pronouns',U.pronouns_custom||U.pronouns)}${kv('Date of birth',U.dob?fmtD(U.dob):'')}${kv('Expecting',U.is_pregnant?'Yes':'No')}${kv('Referred by',U.referred_by||'Direct')}</div></div>
+  <div class="card"><div class="chead"><h3>Fulfillment and payouts</h3></div><div class="kv" style="grid-template-columns:1fr 1fr"><div><small>Shipping address</small><b>${sa?esc(typeof sa==='string'?sa:[sa.name,sa.line1||sa.address1,sa.city,sa.state,sa.postal_code||sa.zip,sa.country].filter(Boolean).join(', ')):'No address on file'}</b></div><div><small>Stripe account</small><b style="word-break:break-all">${esc(U.stripe_account_id||'Not connected')}</b></div></div><div style="display:flex;gap:8px;margin-top:14px"><span class="chip ${U.stripe_charges_enabled?'ok':'warn'}">Charges ${U.stripe_charges_enabled?'enabled':'disabled'}</span><span class="chip ${U.stripe_payouts_enabled?'ok':'warn'}">Payouts ${U.stripe_payouts_enabled?'enabled':'disabled'}</span></div></div></div></div>`}
+ if(k==='wd'){if(!D.items.length)return empty('Wardrobe is empty','This client has not added any items yet.');
+  return `<div class="tools2" id="cf"><span class="pill on" data-c="all">All · ${D.items.length}</span>${Object.keys(cats).map(c=>{const n=D.items.filter(i=>cats[c].test(ctext(i))).length;return n?`<span class="pill" data-c="${c}">${c[0].toUpperCase()+c.slice(1)} · ${n}</span>`:''}).join('')}</div><div class="gal" id="wg"></div><div style="text-align:center;margin-top:18px"><button class="btn" id="wm" style="display:none">Show more</button></div>`}
+ if(k==='cp'){if(!D.posts.length)return empty('No community posts','This client has not published any posts.');
+  return `<div class="card">${D.posts.map(p=>`<div class="post"><div style="display:flex;gap:14px"><div style="width:72px;height:72px;border-radius:14px;flex:none;${img((Array.isArray(p.image_urls)&&p.image_urls[0])||p.image_url)}"></div><div style="min-width:0"><p style="margin:0 0 8px">${esc(p.caption||'No caption provided.')}</p><div class="m"><span>${fmtD(p.created_at)}</span><span>${p.likes_count||0} likes</span><span>${p.comments_count||0} comments</span><button class="btn rm" data-id="${p.id}" style="color:var(--bad);padding:6px 12px">Remove</button></div></div></div></div>`).join('')}</div>`}
+ if(k==='sp'){return D.saved.length?`<div class="card">${D.saved.map(p=>`<div class="post"><b style="font-weight:500">${esc(p.caption||'Editorial outfit')}</b><div class="m"><span>${fmtD(p.created_at)}</span></div></div>`).join('')}</div>`:empty('No saved posts','This client has not bookmarked any posts.')}
+ if(k==='fo'){return D.forums.length?`<div class="card">${D.forums.map(f=>`<div class="post"><div class="m"><span class="chip">${esc((f.forum_season||'General'))}</span><span>${fmtD(f.created_at)}</span></div><b style="font-weight:500;display:block;margin-top:6px">${esc(f.title||'Untitled discussion')}</b><p>${esc((f.content||'').slice(0,160))}</p></div>`).join('')}</div>`:empty('No forum threads','This client has not started any discussions.')}
+ if(k==='mk'){const L=l=>`<div class="it"><div class="ph" style="${img(l._resolved||l._resolvedImageUrl)};aspect-ratio:1"></div><div class="in"><b>${esc(l.name||l.brand||'Listing')}</b><small>${esc(l.status||'')}</small><div class="pr"><span>${usd(l.price)}</span></div></div></div>`;
+  return `<div class="tools2"><span class="pill on" data-m="c">Created by client · ${D.listings.length}</span><span class="pill" data-m="s">Saved by client · ${D.fav.length}</span></div><div id="mkc">${D.listings.length?`<div class="gal">${D.listings.map(L).join('')}</div>`:empty('No live listings','This client has not listed anything in the live marketplace.')}</div><div id="mks" style="display:none">${D.fav.length?`<div class="gal">${D.fav.map(L).join('')}</div>`:empty('Nothing saved','No saved live listings.')}</div>`}
+ if(k==='lb'){return D.lbs.length?`<div class="col3">${D.lbs.map(l=>`<div class="card"><h3 style="font-size:22px">${esc(l.name||'Lookbook')}</h3><p class="sub">${(l.saved_looks||[]).length} saved looks</p></div>`).join('')}</div>`:empty('No lookbooks','This client has not created any lookbooks.')}
+ if(k==='mb'){return D.mbs.length?`<div class="col3">${D.mbs.map(m=>`<div class="card"><h3 style="font-size:22px">${esc(m.name||'Moodboard')}</h3><p class="sub">${(m.moodboard_items||[]).length} items${m.description?' · '+esc(m.description):''}</p></div>`).join('')}</div>`:empty('No moodboards','This client has not created any moodboards.')}
+ if(k==='fv'){const rows=[...D.fav.map(l=>({n:l.name||l.brand||'Listing',s:'Marketplace · '+usd(l.price),u:l._resolved})),...D.wl.map(w=>({n:w.name||w.title||'Wishlist item',s:'Wishlist'+(w.price?' · '+usd(w.price):''),u:w.image_url||w.photo_url||''}))];
+  return rows.length?`<div class="card">${rows.map(r=>`<div class="fav"><i style="${img(r.u)}"></i><div><b style="font-weight:500">${esc(r.n)}</b><small style="color:var(--tx3);display:block">${esc(r.s)}</small></div></div>`).join('')}</div>`:empty('No favorites','Saved listings and wishlist items show up here.')}
+ if(k==='ss'){if(!D.sales.length)return empty('No live sales yet','Settled live sales from this client appear here.');
+  const net=D.sales.reduce((a,t)=>a+txParts(t).net,0);return `<div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div class="card kpi"><small>Items sold</small><b>${D.sales.length}</b></div><div class="card kpi gold"><small>Seller net</small><b>${usd(net)}</b></div><div class="card kpi"><small>Live listings</small><b>${D.listings.length}</b></div></div><div class="card tw"><table><thead><tr><th>Order</th><th>Item</th><th>Net</th><th>Status</th><th>Date</th></tr></thead><tbody>${D.sales.map(t=>`<tr><td>#${String(t.id).slice(0,6)}</td><td>${esc(t.item_name||'Item')}</td><td>${usd(txParts(t).net)}</td><td><span class="chip ok">${esc(t.status)}</span></td><td style="color:var(--tx3)">${timeAgo(t.created_at)}</td></tr>`).join('')}</tbody></table></div>`}
+ if(k==='pu'){return `<div class="card tw"><table><thead><tr><th>Order</th><th>Item</th><th>Value</th><th>Status</th><th>Placed</th></tr></thead><tbody>${D.buys.length?D.buys.map(t=>`<tr><td>#${String(t.id).slice(0,6)}</td><td>${esc(t.item_name||'Item')}</td><td>${usd(t.amount)}</td><td><span class="chip ${SETTLED.includes(t.status)?'ok':'warn'}">${esc(t.status)}</span></td><td style="color:var(--tx3)">${timeAgo(t.created_at)}</td></tr>`).join(''):'<tr><td colspan="5" style="padding:40px;text-align:center;color:var(--tx3)">No live purchases yet. Sandbox orders are hidden.</td></tr>'}</tbody></table></div>`}
+ if(k==='sb'){const t=(U.subscription_tier||'free'),prem=t!=='free';return `<div class="row r2" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)"><div class="card glow"><span class="chip ${prem?'cam':''}">${esc(t.toUpperCase())} member</span><div class="big" style="margin:16px 0 6px">${esc((U.subscription_status||'Active'))}</div><p class="sub">${U.subscription_renewal_date?'Renews '+fmtD(U.subscription_renewal_date):(prem?'':'Lifetime free')}</p></div><div class="card"><div class="kv" style="grid-template-columns:1fr 1fr">${kv('Billing cycle',U.billing_cycle||(prem?'':'–'))}${kv('Trial',U.trial_status||(U.is_trial?'In trial':'N/A'))}${kv('Started',fmtD(U.subscription_created_at||U.created_at))}${kv('Last active',U.last_active_at?timeAgo(U.last_active_at):'Never')}</div></div></div>`}
+}
+const W={c:'all',n:48},RES=new Map();
+async function wd(){const list=D.items.filter(i=>W.c==='all'||cats[W.c].test(ctext(i))),vis=list.slice(0,W.n),need=vis.filter(i=>!RES.has(i.id));
+ $('wg').innerHTML=vis.map(i=>tile(RES.get(i.id)||i)).join('');
+ if(need.length){const r=await resolveWardrobeUrls(supabase,need);r.forEach(i=>RES.set(i.id,i));if($('wg'))$('wg').innerHTML=vis.map(i=>tile(RES.get(i.id)||i)).join('')}
+ const m=$('wm');if(m){m.style.display=list.length>W.n?'':'none';m.textContent='Show more ('+(list.length-W.n)+' left)'}}
+function show(k){const pn=$('panes');pn.innerHTML=`<div class="pn on">${P(k)}</div>`;
+ if(k==='wd'&&D.items.length){W.c='all';W.n=48;wd();pn.querySelectorAll('#cf .pill').forEach(p=>p.onclick=()=>{pn.querySelectorAll('#cf .pill').forEach(x=>x.classList.remove('on'));p.classList.add('on');W.c=p.dataset.c;W.n=48;wd()});$('wm').onclick=()=>{W.n+=48;wd()}}
+ pn.querySelectorAll('[data-m]').forEach(p=>p.onclick=()=>{pn.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on'));p.classList.add('on');$('mkc').style.display=p.dataset.m==='c'?'':'none';$('mks').style.display=p.dataset.m==='s'?'':'none'});
+ pn.querySelectorAll('.rm').forEach(b=>b.onclick=async()=>{if(!confirm('Remove this community post? This cannot be undone.'))return;const {error}=await supabase.from('community_posts').delete().eq('id',b.dataset.id);if(error)alert('Could not remove: '+error.message);else{D.posts=D.posts.filter(p=>String(p.id)!==b.dataset.id);$('h-p').textContent=D.posts.length;show('cp')}})}
+function tabs(){const tb=$('tabs');tb.innerHTML=T.map((t,i)=>`<button class="${i?'':'on'}" data-p="${t[0]}">${t[1]}</button>`).join('');
+ tb.querySelectorAll('button').forEach(b=>b.onclick=()=>{tb.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');show(b.dataset.p)});show('ps')}
+</script></body></html>

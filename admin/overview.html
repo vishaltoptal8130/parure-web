@@ -1,0 +1,135 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Overview · Parure Operations</title><meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><div class="app"><aside class="sb" id="sb"></aside><div class="main" id="main" style="visibility:hidden">
+<div class="top"><div class="search" data-pal role="button" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg>Search pages<kbd>⌘K</kbd></div>
+<div class="tools"><span class="live"><i></i>Live data only</span><button class="btn" id="theme">Theme</button><button class="btn pri" id="refresh">Refresh data</button></div></div>
+
+<div class="head"><div><h1 id="greet">Overview</h1><p>Clients, creators and the live marketplace. Sandbox orders and listings are excluded.</p></div><div class="seg" id="rng"><button data-d="7">7d</button><button data-d="30">30d</button><button class="on" data-d="90">90d</button><button data-d="0">All</button></div></div>
+
+<div class="kpis">
+<div class="card kpi"><small>Verified clients</small><b id="k-users">–</b><span class="d" id="k-users-d"></span></div>
+<div class="card kpi"><small>Partner creators</small><b id="k-creators">–</b><span class="d flat">Curated network</span></div>
+<div class="card kpi"><small>Live listings</small><b id="k-listings">–</b><span class="d flat">Public showroom</span></div>
+<div class="card kpi"><small>Pending reviews</small><b id="k-pending">–</b><span class="d flat" id="k-pending-d"></span></div>
+<div class="card kpi gold"><small>Live GMV</small><b id="k-gmv">–</b><span class="d flat">Settled live orders</span></div>
+<div class="card kpi"><small>Beta testers</small><b id="k-beta">–</b><span class="d flat">TestFlight + Android</span></div>
+</div>
+
+<div class="row r2">
+<div class="card glow"><div class="chead"><div><h3>Marketplace revenue</h3><p class="sub" id="chart-sub">Settled live orders over time</p></div><span class="chip" id="chart-chip">–</span></div><svg id="chart" viewBox="0 0 700 240" preserveAspectRatio="none"></svg><p id="chart-empty" class="sub" style="display:none;text-align:center;margin-top:-140px;position:relative">No live orders in this period yet.</p></div>
+<div class="card"><div class="chead"><div><h3>Escrow ledger</h3><p class="sub">Consolidated 10% platform fee</p></div><span class="chip" id="l-orders">–</span></div>
+<div class="big" style="color:var(--gold)" id="l-fee">–</div><p class="sub">Platform revenue</p>
+<div class="split"><i style="background:var(--gold)" id="sp-fee"></i><i style="background:var(--camel)" id="sp-net"></i></div>
+<div class="lg"><div style="--c:var(--gold)"><small>Platform 10%</small><b id="l-fee2">–</b></div><div style="--c:var(--camel)"><small>Seller net</small><b id="l-net">–</b></div><div style="--c:var(--tan)"><small>Orders</small><b id="l-n">–</b></div></div></div>
+</div>
+
+<div class="row" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr)">
+<div class="card"><div class="chead"><div><h3>Action queues</h3><p class="sub">Needs a human decision</p></div></div>
+<div class="q"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.600 5.600 6 .7-4.500 4.100 1.200 6L12 16.500 6.700 19.400l1.200-6L3.400 9.300l6-.7z"/></svg></span><div><b>Creator applications</b><small>Inbound partnership requests</small></div><span class="chip" id="q-cr" style="margin-left:auto">–</span></div>
+<div class="q"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.500-3 8-7 10-4-2-7-5.500-7-10V6z"/></svg></span><div><b>High-value items</b><small>≥ $500 authenticity audit</small></div><span class="chip" id="q-hv" style="margin-left:auto">–</span></div></div>
+<div class="card"><div class="chead"><div><h3>Color seasons</h3><p class="sub">Across the client base</p></div></div>
+<div class="donut"><svg viewBox="0 0 120 120" id="dn"></svg><div class="c"><b id="dn-n">0</b><small>analysed</small></div></div>
+<div class="lg" style="margin-top:18px;grid-template-columns:repeat(2,1fr)" id="dn-lg"></div></div>
+<div class="card"><div class="chead"><div><h3>Live activity</h3><p class="sub">Registrations, live orders and sign-ups</p></div><span class="live"><i></i>Latest</span></div><div class="feed" id="feed"><p class="sub">Loading…</p></div></div>
+</div>
+</div></div>
+<script src="js/shell.js"></script>
+<script type="module">
+import { supabase, requireAdmin, logout, liveTx, liveListings, txParts, usd, timeAgo, esc, SETTLED } from "./js/data.js";
+const SC={Winter:'#7C9CE0',Autumn:'#C17F47',Summer:'#E58AA8',Spring:'#6DBE8C'};
+let range=90;
+const $=id=>document.getElementById(id);
+const count=(n,el)=>{el.dataset.to=n;el.dataset.pre='';el.dataset.dec=0;countUp(el)};
+
+const ses=await requireAdmin();
+if(ses){
+  const name=ses.profile?.display_name||'Parure Master Admin';
+  const first=(name.split(' ')[0]||'').trim();
+  shell('overview',{name,email:ses.user.email,initials:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});
+  $('lo').onclick=logout;
+  $('main').style.visibility='visible';
+  const hr=new Date().getHours(),g=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+  $('greet').innerHTML=name==='Parure Master Admin'?g+'.':`${g}, <em style="color:var(--camel)">${esc(first)}.</em>`;
+  $('refresh').onclick=load;
+  document.querySelectorAll('#rng button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#rng button').forEach(x=>x.classList.remove('on'));b.classList.add('on');range=+b.dataset.d;load()});
+  load();
+}
+
+async function load(){
+  const week=new Date(Date.now()-7*864e5).toISOString();
+  const since=range?new Date(Date.now()-range*864e5).toISOString():null;
+  const head={count:'exact',head:true};
+  const [users,newUsers,creators,listings,pendCr,pendHv,beta,tx,profiles]=await Promise.all([
+    supabase.from('user_profiles').select('*',head).neq('role','admin'),
+    supabase.from('user_profiles').select('*',head).neq('role','admin').gte('created_at',week),
+    supabase.from('user_profiles').select('*',head).eq('role','creator'),
+    liveListings('*',head).eq('status','active'),
+    supabase.from('creator_applications').select('*',head).eq('status','pending'),
+    liveListings('*',head).gte('price',50000).eq('status','pending_review'),
+    supabase.from('beta_testers').select('*',head),
+    liveTx('id,amount,platform_fee_amount,seller_net_amount,seller_reversed_amount,status,created_at').in('status',SETTLED).order('created_at',{ascending:false}).limit(2000),
+    supabase.from('user_profiles').select('color_season').neq('role','admin')
+  ]);
+  count(users.count??0,$('k-users'));
+  $('k-users-d').textContent=(newUsers.count?'↑ '+newUsers.count+' this week':'No new this week');$('k-users-d').className='d'+(newUsers.count?'':' flat');
+  count(creators.count??0,$('k-creators'));count(listings.count??0,$('k-listings'));
+  const pc=pendCr.count??0,ph=pendHv.count??0;count(pc+ph,$('k-pending'));$('k-pending-d').textContent=pc+ph?'Needs review':'Queue is clear';
+  count(beta.count??0,$('k-beta'));
+  shellApi.setBadge('clients',users.count??0);shellApi.setBadge('creators',pc);shellApi.setBadge('market',ph);shellApi.setBadge('beta',beta.count??0);
+  const setQ=(el,n)=>{el.textContent=n+' pending';el.className='chip '+(n?'warn':'ok');el.style.marginLeft='auto'};setQ($('q-cr'),pc);setQ($('q-hv'),ph);
+
+  // money (live, settled)
+  const rows=tx.data||[];let gmv=0,fee=0,net=0;
+  rows.forEach(t=>{const p=txParts(t);gmv+=p.gross;fee+=p.fee;net+=p.net});
+  $('k-gmv').textContent=usd(gmv);
+  $('l-fee').textContent=usd(fee);$('l-fee2').textContent=usd(fee,0);$('l-net').textContent=usd(net,0);$('l-n').textContent=rows.length;$('l-orders').textContent=rows.length+' orders';
+  const tot=fee+net||1;$('sp-fee').style.width=(rows.length?fee/tot*100:0)+'%';$('sp-net').style.width=(rows.length?net/tot*100:0)+'%';
+  drawChart(rows.filter(t=>!since||t.created_at>=since),since);
+
+  // seasons
+  const cnt={Winter:0,Autumn:0,Summer:0,Spring:0};let tot2=0;
+  (profiles.data||[]).forEach(p=>{const s=(p.color_season||'').toLowerCase();for(const k in cnt){if(s.includes(k.toLowerCase())){cnt[k]++;tot2++;break}}});
+  $('dn-n').textContent=tot2;drawDonut(cnt,tot2);
+  $('dn-lg').innerHTML=Object.keys(cnt).map(k=>`<div style="--c:${SC[k]}"><small>${k} · ${cnt[k]}</small></div>`).join('');
+  loadFeed();
+}
+
+function drawChart(rows,since){
+  const s=$('chart'),empty=$('chart-empty');
+  const days=since?range:Math.max(30,rows.length?Math.ceil((Date.now()-new Date(rows[rows.length-1].created_at))/864e5):30);
+  const buckets=days<=14?days:days<=120?Math.ceil(days/7):Math.ceil(days/30),step=days/buckets;
+  const arr=new Array(buckets).fill(0);
+  rows.forEach(t=>{const a=(Date.now()-new Date(t.created_at))/864e5;const i=buckets-1-Math.min(buckets-1,Math.floor(a/step));arr[i]+=txParts(t).gross});
+  const total=arr.reduce((a,b)=>a+b,0);
+  $('chart-chip').textContent=usd(total,0);$('chart-sub').textContent=(since?'Last '+range+' days':'All time')+' · settled live orders';
+  if(!total){s.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  const W=700,H=240,pad=20,mx=Math.max(...arr)*1.1||1,x=i=>buckets>1?i*(W/(buckets-1)):W/2,y=v=>H-pad-(v/mx)*(H-pad*2);
+  const sm=arr.map((v,i)=>[x(i),y(v)]);let p='M'+sm[0].join(' ');for(let i=1;i<sm.length;i++){const a=sm[i-1],b=sm[i],cx=(a[0]+b[0])/2;p+=` C${cx} ${a[1]} ${cx} ${b[1]} ${b[0]} ${b[1]}`}
+  let g='';[0,1,2,3].forEach(k=>{const yy=pad+k*(H-pad*2)/3;g+=`<line x1="0" x2="${W}" y1="${yy}" y2="${yy}" stroke="var(--line)" stroke-dasharray="3 5"/>`});
+  s.innerHTML=`<defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C17F47" stop-opacity=".38"/><stop offset="1" stop-color="#C17F47" stop-opacity="0"/></linearGradient></defs>${g}<path d="${p} V${H} H0Z" fill="url(#gf)"/><path id="ln" d="${p}" fill="none" stroke="#D9A441" stroke-width="2.5" stroke-linecap="round"/>`;
+  const l=$('ln'),L=l.getTotalLength();l.style.strokeDasharray=L;l.style.strokeDashoffset=L;l.getBoundingClientRect();l.style.transition='stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)';l.style.strokeDashoffset=0;
+}
+function drawDonut(cnt,T){const R=46,C=2*Math.PI*R;let o=0,h='<circle cx="60" cy="60" r="46" fill="none" stroke="var(--card2)" stroke-width="12"/>';
+  if(T){Object.keys(cnt).forEach((k,i)=>{const len=Math.max(0,cnt[k]/T*C-3);h+=`<circle cx="60" cy="60" r="46" fill="none" stroke="${SC[k]}" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 ${C}" stroke-dashoffset="${-o}" data-l="${len}" style="transition:stroke-dasharray 1.4s ${i*.15}s cubic-bezier(.2,.7,.2,1)"/>`;o+=cnt[k]/T*C})}
+  $('dn').innerHTML=h;setTimeout(()=>document.querySelectorAll('#dn circle[data-l]').forEach(c=>c.setAttribute('stroke-dasharray',c.dataset.l+' '+C)),150)}
+
+async function loadFeed(){
+  const [u,l,a,t,b]=await Promise.all([
+    supabase.from('user_profiles').select('email,created_at').neq('role','admin').order('created_at',{ascending:false}).limit(6),
+    liveListings('name,brand,price,created_at').order('created_at',{ascending:false}).limit(6),
+    supabase.from('creator_applications').select('email,handle,created_at').order('created_at',{ascending:false}).limit(6),
+    liveTx('amount,created_at').order('created_at',{ascending:false}).limit(6),
+    supabase.from('beta_testers').select('email,created_at').order('created_at',{ascending:false}).limit(6)]);
+  const ev=[];
+  (u.data||[]).forEach(x=>ev.push({k:'reg',t:'Client registration',s:x.email||'Member account created',d:x.created_at}));
+  (l.data||[]).forEach(x=>ev.push({k:'ord',t:'New live listing: '+(x.name||x.brand||'Garment'),s:'Priced at '+usd(x.price),d:x.created_at}));
+  (a.data||[]).forEach(x=>ev.push({k:'reg',t:'Creator application: @'+String(x.handle||'creator').replace(/^@+/,''),s:x.email||'',d:x.created_at}));
+  (t.data||[]).forEach(x=>ev.push({k:'ord',t:'Marketplace purchase',s:'Order value '+usd(x.amount),d:x.created_at}));
+  (b.data||[]).forEach(x=>ev.push({k:'reg',t:'Beta whitelist entry',s:x.email,d:x.created_at}));
+  ev.sort((p,q)=>new Date(q.d)-new Date(p.d));
+  const ic={reg:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.200-4 4.200-6 8-6s6.800 2 8 6"/>',ord:'<path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 016 0v2"/>'};
+  $('feed').innerHTML=ev.slice(0,7).map((e,i)=>`<div class="ev ${e.k}" style="animation-delay:${i*.08}s"><span class="dot"><svg viewBox="0 0 24 24">${ic[e.k]}</svg></span><div style="min-width:0"><b>${esc(e.t)}</b><small>${esc(e.s)}</small></div><time>${timeAgo(e.d)}</time></div>`).join('')||'<p class="sub">No recent activity yet.</p>';
+}
+</script></body></html>

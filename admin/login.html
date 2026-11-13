@@ -1,0 +1,54 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · Parure Operations</title><meta name="robots" content="noindex"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"><link rel="stylesheet" href="noir.css">
+<style>
+.lg2{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.vis{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 20% 10%,#3A2616,#0D0C0B 70%);padding:48px;display:flex;flex-direction:column;justify-content:space-between}
+.vis:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-160px;bottom:-160px;background:radial-gradient(circle,rgba(217,164,65,.35),transparent 70%);animation:fl 9s ease-in-out infinite alternate}
+@keyframes fl{to{transform:translate(-60px,-40px) scale(1.15)}}
+.vis h2{font:400 clamp(40px,4.4vw,64px)/1.02 "Instrument Serif",serif;letter-spacing:-.02em;max-width:12ch;position:relative}.vis h2 em{color:var(--camel)}
+.vis p{color:rgba(247,243,236,.6);max-width:36ch;margin-top:18px;position:relative}
+.sw6{display:flex;gap:8px;position:relative}.sw6 i{width:44px;height:44px;border-radius:14px}
+.form{display:grid;place-items:center;padding:40px}
+.box{width:min(400px,100%)}
+.box .brand{padding:0 0 38px}.box h1{font:400 40px/1.05 "Instrument Serif",serif;margin-bottom:8px}.box>p{color:var(--tx2);margin-bottom:28px}
+.pw{position:relative}.pw button{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--tx3);cursor:pointer;font:500 12px "Instrument Sans"}
+.box .btn.pri{width:100%;justify-content:center;padding:14px;font-size:14px}
+.fgt{display:block;margin:18px auto 0;background:none;border:0;color:var(--tx3);font-size:13px;text-decoration:underline;text-decoration-color:var(--camel);text-underline-offset:3px;cursor:pointer}
+.sec{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:30px;color:var(--tx3);font-size:12.5px}.sec svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+.er{color:var(--bad);font-size:13px;margin-top:-8px;margin-bottom:14px;display:none}
+@media(max-width:900px){.lg2{grid-template-columns:1fr}.vis{display:none}}
+</style></head>
+<body><div class="lg2"><div class="vis"><div class="brand" style="padding:0;position:relative"><b style="font:500 14px/1 'Instrument Sans';letter-spacing:.22em;display:block">PARURE</b><i style="font:italic 400 16px 'Instrument Serif',serif;color:var(--camel)">Operations</i></div>
+<div><h2>The quiet <em>back office</em> of Parure.</h2><p>Clients, creators, marketplace and money, in one calm place.</p></div><div class="sw6"><i style="background:#7A3B12"></i><i style="background:#C17F47"></i><i style="background:#D9A441"></i><i style="background:#5A6B3A"></i><i style="background:#F0DFC4"></i></div></div>
+<div class="form"><form class="box" id="f" novalidate><div class="brand"><b style="font:500 13px/1 'Instrument Sans';letter-spacing:.22em;display:block">PARURE</b></div><h1 id="t">Welcome back</h1><p id="lead">Sign in to the operations console.</p>
+<div class="fld"><label for="e">Admin email</label><input id="e" type="email" value="admin@parure.app" autocomplete="username"></div>
+<div class="fld"><label for="p">Password</label><div class="pw"><input id="p" type="password" placeholder="••••••••••••" autocomplete="current-password" style="width:100%;padding-right:60px"><button type="button" id="sh">Show</button></div></div>
+<div class="er" id="er"></div><div class="er" id="ok" style="color:var(--ok)"></div>
+<button class="btn pri" type="submit" id="go">Sign in</button><button type="button" class="fgt" id="fg">Forgot password</button>
+<div class="sec"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Restricted to the master administrator</div></form></div></div>
+<script type="module">
+import { supabase, MASTER_ADMIN_EMAIL } from "./js/data.js";
+const $=id=>document.getElementById(id),p=$('p'),s=$('sh'),er=$('er'),ok=$('ok'),btn=$('go'),f=$('f');
+let recovery=false;
+const msg=(t,good)=>{er.style.display=good?'none':(t?'block':'none');ok.style.display=good?'block':'none';(good?ok:er).textContent=t||''};
+s.onclick=()=>{const h=p.type==='password';p.type=h?'text':'password';s.textContent=h?'Hide':'Show'};
+p.oninput=()=>msg('');
+try{const t=localStorage.getItem('pt');if(t)document.documentElement.dataset.theme=t}catch(e){}
+const { data:{ session } } = await supabase.auth.getSession();
+if(session?.user?.email?.toLowerCase()===MASTER_ADMIN_EMAIL && !location.hash.includes('type=recovery')) location.replace('overview.html');
+supabase.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY'){recovery=true;$('t').textContent='Set a new password';$('lead').textContent='Choose a new password for the console.';$('e').closest('.fld').style.display='none';btn.textContent='Save new password';$('fg').style.display='none'}});
+f.onsubmit=async e=>{e.preventDefault();msg('');
+  if(recovery){if(p.value.length<8){msg('Use at least 8 characters.');return}
+    btn.disabled=true;const {error}=await supabase.auth.updateUser({password:p.value});btn.disabled=false;
+    if(error){msg(error.message)}else{location.replace('overview.html')}return}
+  const email=$('e').value.trim().toLowerCase();
+  if(!email||!p.value){msg('Enter your email and password.');return}
+  if(email!==MASTER_ADMIN_EMAIL){msg('Only the master administrator can sign in here.');return}
+  btn.disabled=true;btn.textContent='Signing in…';
+  const {data,error}=await supabase.auth.signInWithPassword({email,password:p.value});
+  if(error||!data?.user){btn.disabled=false;btn.textContent='Sign in';msg(error?.message||'Sign in failed. Try again.');return}
+  location.replace('overview.html')};
+$('fg').onclick=async()=>{msg('');$('fg').disabled=true;
+  const {error}=await supabase.auth.resetPasswordForEmail(MASTER_ADMIN_EMAIL,{redirectTo:location.origin+location.pathname});
+  $('fg').disabled=false;error?msg(error.message):msg('Reset link sent to '+MASTER_ADMIN_EMAIL+'. Check your inbox.',true)};
+</script></body></html>
