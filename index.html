@@ -733,7 +733,7 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
 .fq-list details[open] p{animation:fqin .45s var(--ease)}
 @keyframes fqin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .fq-list summary:focus-visible{outline:2px solid var(--camel);outline-offset:6px;border-radius:8px}
-@media (max-width:1020px){.fq-side{position:static}.fq-list details{padding:22px 18px}}
+@media (max-width:1020px){.fq .wrap{grid-template-columns:1fr;gap:36px}.fq-side{position:static}.fq-side .lede{max-width:46ch}.fq-list details{padding:22px 18px}}
 @media (prefers-reduced-motion:reduce){.fq-list details[open] p{animation:none}.bill button{transition:none}}
 </style>
 </head>
@@ -972,7 +972,7 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
 
 <section class="section colour" id="colour">
   <div class="wrap">
-    <div class="portrait"><img src="newdesign-assets/anne.jpg" alt="Anne Harrison, founder of Parure La Plee, in a camel blazer and wide-brim hat" loading="lazy" width="560" height="680"><span class="portrait-cap">Anne, Founder · Warm Autumn</span></div>
+    <div class="portrait"><img src="newdesign-assets/anne-founder.jpg" alt="Anne Harrison, founder of Parure La Plee, in a cream jacket, camel knit and printed trousers on a New York street" loading="lazy" width="1000" height="1499"><span class="portrait-cap">Anne, Founder · Warm Autumn</span></div>
     <div>
       <div class="kicker">Colour season</div>
       <h2 class="split">Know what suits you before you buy it.</h2>
@@ -1128,7 +1128,7 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
   </div>
 </footer>
 
-<div class="mbar" id="mbar"><a href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" id="mbar-main" data-smart>Get on Google Play</a><a href="https://apps.apple.com/us/app/parure-la-plee/id6784032743" data-store="ios">App Store</a></div>
+<div class="mbar" id="mbar"><a href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" id="mbar-main" data-smart>Get it on Google Play</a></div>
 
 <script>
 // Set this to the real App Store URL when Apple approves the app.
@@ -1136,10 +1136,10 @@ var IOS_URL = "https://apps.apple.com/us/app/parure-la-plee/id6784032743";
 var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.querySelectorAll('[data-store="ios"]').forEach(function(a){ a.href = IOS_URL; });
 // iPhone and iPad visitors get the App Store wherever a single download link is shown
-var isApple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+var isApple = !/Android/i.test(navigator.userAgent) && (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
 if (isApple) {
   document.querySelectorAll('#nav-cta,[data-smart]').forEach(function(a){ a.href = IOS_URL; });
-  var mm = document.getElementById('mbar-main'); if (mm) mm.textContent = 'Get on the App Store';
+  var mm = document.getElementById('mbar-main'); if (mm) mm.textContent = 'Get it on the App Store';
 }
 
 // Split headings into words for the mask reveal
