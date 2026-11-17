@@ -410,14 +410,19 @@ body.nav-open .mobile-menu{display:flex}
 .tp-note{margin-top:18px;font:400 15px var(--sans);color:rgba(247,243,236,.6)}
 
 /* founder */
-.founder .wrap{display:grid;grid-template-columns:.55fr 1.45fr;gap:clamp(36px,6vw,90px);align-items:center}
-.f-photo{width:100%;max-width:340px;aspect-ratio:560/680;border-radius:50% / 46%;overflow:hidden;border:6px solid var(--tan);box-shadow:0 40px 70px -36px rgba(60,35,10,.5)}
-.f-photo img{width:100%;height:100%;object-fit:cover;object-position:top center}
-.f-fig{margin:0;width:100%;max-width:340px}
-.f-credit{margin-top:14px;text-align:center;font:400 13px var(--sans);letter-spacing:.02em;color:var(--muted)}
-.f-quote{font:italic 400 clamp(26px,2.9vw,40px)/1.28 var(--serif);color:var(--ink);max-width:36em}
-.f-name{font:600 17px var(--sans);color:var(--ink);margin-top:26px}
-.f-title{font:400 15px var(--sans);color:var(--muted)}
+.founder .wrap{display:grid;grid-template-columns:5fr 6fr;gap:clamp(40px,7vw,110px);align-items:center}
+.f-fig{margin:0;width:100%}
+.f-photo{aspect-ratio:4/5;overflow:hidden;border-radius:4px;box-shadow:0 40px 70px -40px rgba(60,35,10,.45)}
+.f-photo img{width:100%;height:100%;object-fit:cover;object-position:62% 62%}
+.f-fig figcaption{margin-top:14px;display:flex;justify-content:space-between;gap:16px;font:400 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:520px){.f-fig figcaption{font-size:10.5px;letter-spacing:.06em}.f-fig figcaption span{white-space:nowrap}}
+.f-quote{font:400 clamp(30px,3vw,42px)/1.18 var(--serif);color:var(--ink);letter-spacing:-.01em;max-width:18em}
+.f-quote:before{content:"\201C";display:block;font-size:120px;line-height:.6;color:var(--tan);margin-bottom:10px}
+.f-quote em{color:var(--tan-deep)}
+.f-rest{margin-top:28px;font:400 18px/1.7 var(--sans);color:var(--muted);max-width:34em}
+.f-sig{margin-top:36px;padding-top:24px;border-top:1px solid var(--tan-soft)}
+.f-name{font:600 16px var(--sans);color:var(--ink)}
+.f-title{font:400 14px var(--sans);color:var(--muted)}
 .portrait-cap{position:absolute;left:16px;right:16px;bottom:16px;font:500 14px var(--sans);color:#fff;background:rgba(30,29,27,.62);backdrop-filter:blur(10px);padding:10px 16px;border-radius:999px;text-align:center}
 
 /* home tile */
@@ -444,7 +449,7 @@ footer .wrap{display:block}
 @media (max-width:1020px){
   .comm-cards,.sgrid,.sgrid-4,.tp-stats{grid-template-columns:1fr}
   .founder .wrap{grid-template-columns:1fr}
-  .f-photo,.f-fig{max-width:260px}
+  .f-fig{max-width:460px}
   .nl-form{flex-direction:column}
   .partners .photo{max-width:480px}
 }
@@ -1075,11 +1080,12 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
 
 <section class="section founder" id="about">
   <div class="wrap">
-    <figure class="f-fig"><div class="f-photo"><img src="newdesign-assets/anne-founder.jpg" alt="Anne Harrison, Founder of Parure La Plee, in a cream jacket, camel knit and printed trousers on a New York street" loading="lazy" width="680" height="826"></div><figcaption class="f-credit">Photo: Masha Lou</figcaption></figure>
+    <figure class="f-fig"><div class="f-photo"><img src="newdesign-assets/anne-founder.jpg" alt="Anne Harrison, Founder of Parure La Plee, in a cream jacket, camel knit and printed trousers on a New York street" loading="lazy" width="1000" height="1499"></div><figcaption><span>Anne Harrison, New York</span><span>Photo: Masha Lou</span></figcaption></figure>
     <div>
-      <p class="f-quote">"I love clothes. I love shopping, I love fashion — and I still found myself standing in a wardrobe full of beautiful clothes feeling completely uninspired. Something would come together, but never quite all the way. There was always something missing. Parure La Plee is the answer I built for myself, and for everyone who has ever felt that same quiet frustration. Your wardrobe is already full of possibility. We help you see it."</p>
-      <div class="f-name">Anne Harrison</div>
-      <div class="f-title">Founder &amp; CEO, Parure La Plee · Orlando, Florida</div>
+      <div class="kicker">A note from our founder</div>
+      <p class="f-quote">I love clothes, and I still stood in a wardrobe full of them feeling <em>completely uninspired.</em></p>
+      <p class="f-rest">Something would come together, but never quite all the way. There was always something missing. Parure La Plee is the answer I built for myself, and for everyone who has ever felt that same quiet frustration. Your wardrobe is already full of possibility. We help you see it.</p>
+      <div class="f-sig"><div class="f-name">Anne Harrison</div><div class="f-title">Founder &amp; CEO, Parure La Plee · Orlando, Florida</div></div>
     </div>
   </div>
 </section>
