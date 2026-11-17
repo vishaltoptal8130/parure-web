@@ -413,6 +413,8 @@ body.nav-open .mobile-menu{display:flex}
 .founder .wrap{display:grid;grid-template-columns:.55fr 1.45fr;gap:clamp(36px,6vw,90px);align-items:center}
 .f-photo{width:100%;max-width:340px;aspect-ratio:560/680;border-radius:50% / 46%;overflow:hidden;border:6px solid var(--tan);box-shadow:0 40px 70px -36px rgba(60,35,10,.5)}
 .f-photo img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.f-fig{margin:0;width:100%;max-width:340px}
+.f-credit{margin-top:14px;text-align:center;font:400 13px var(--sans);letter-spacing:.02em;color:var(--muted)}
 .f-quote{font:italic 400 clamp(26px,2.9vw,40px)/1.28 var(--serif);color:var(--ink);max-width:36em}
 .f-name{font:600 17px var(--sans);color:var(--ink);margin-top:26px}
 .f-title{font:400 15px var(--sans);color:var(--muted)}
@@ -442,7 +444,7 @@ footer .wrap{display:block}
 @media (max-width:1020px){
   .comm-cards,.sgrid,.sgrid-4,.tp-stats{grid-template-columns:1fr}
   .founder .wrap{grid-template-columns:1fr}
-  .f-photo{max-width:260px}
+  .f-photo,.f-fig{max-width:260px}
   .nl-form{flex-direction:column}
   .partners .photo{max-width:480px}
 }
@@ -1073,7 +1075,7 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
 
 <section class="section founder" id="about">
   <div class="wrap">
-    <div class="f-photo"><img src="newdesign-assets/anne.jpg" alt="Anne Harrison, Founder of Parure La Plee, styled in a camel blazer and wide-brim hat" loading="lazy" width="560" height="680"></div>
+    <figure class="f-fig"><div class="f-photo"><img src="newdesign-assets/anne-founder.jpg" alt="Anne Harrison, Founder of Parure La Plee, in a cream jacket, camel knit and printed trousers on a New York street" loading="lazy" width="680" height="826"></div><figcaption class="f-credit">Photo: Masha Lou</figcaption></figure>
     <div>
       <p class="f-quote">"I love clothes. I love shopping, I love fashion — and I still found myself standing in a wardrobe full of beautiful clothes feeling completely uninspired. Something would come together, but never quite all the way. There was always something missing. Parure La Plee is the answer I built for myself, and for everyone who has ever felt that same quiet frustration. Your wardrobe is already full of possibility. We help you see it."</p>
       <div class="f-name">Anne Harrison</div>
