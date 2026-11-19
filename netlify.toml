@@ -13,6 +13,9 @@
 [functions.waitlist]
   included_files = ["emails/**"]
 
+[functions.post-preview]
+  included_files = ["open/index.html"]
+
 # Universal Links / App Links must be served as JSON (not HTML, not a redirect).
 [[headers]]
   for = "/.well-known/apple-app-site-association"
@@ -26,9 +29,11 @@
     Content-Type = "application/json"
     Cache-Control = "public, max-age=300"
 
+# Post links get per-post preview tags (photo + title) for WhatsApp, Facebook,
+# iMessage etc. The function returns the same /open page with those tags added.
 [[redirects]]
   from = "/post/*"
-  to = "/open/index.html"
+  to = "/.netlify/functions/post-preview"
   status = 200
 
 [[redirects]]
