@@ -1,0 +1,205 @@
+# Parure La Plee: full site text
+
+Source: https://parure.app
+
+# Parure La Plee
+
+Style is more fun when it's shared.
+
+Parure La Plee is an AI personal stylist app. It finds your colour season, organises your closet and styles outfits from clothes you already own. Follow people whose style you love, share your best looks, and shop pre-loved pieces, all filtered to your own colour season.
+
+Free to start, with a 14-day Premium trial. Available on [iPhone](https://apps.apple.com/us/app/parure-la-plee/id6784032743) and [Android](https://play.google.com/store/apps/details?id=com.parurelaplee.app).
+
+## What you can do
+
+- **Find your colour season** from one selfie, and get a colour card with your best shades.
+- **Build a digital closet.** Photograph what you own; backgrounds are removed and every piece is tagged for your colouring.
+- **Get dressed for 45 occasions** (brunch, school pickup, a wedding, a job interview) with complete looks from your own pieces. Premium.
+- **Plan your week** on an outfit calendar with the weather, and pack for trips with the Getaway Edit. The Getaway Edit is Premium.
+- **Join the Style Circle**, a community where you can follow friends and stylists. Browsing is free; posting looks and asking for advice is Premium.
+- **Buy and sell pre-loved** in Parure Preloved. Buying is free; selling is Premium, and Parure takes 8%.
+- **Work with a stylist.** Invite an approved stylist or personal shopper into your wardrobe. Premium.
+
+## Sustainability first
+
+The average person wears only 20% of their wardrobe. Parure La Plee helps you wear the other 80%. Every outfit recommendation starts with what you already own; shopping suggestions come second, and only when they complete the look.
+
+## More
+
+- [How it works and features](https://parure.app/how-it-works.md)
+- [Pricing](https://parure.app/pricing.md)
+- [FAQ](https://parure.app/faq.md)
+- [About the founder](https://parure.app/about.md)
+- [For stylists](https://parure.app/for-stylists.md)
+
+---
+
+# How Parure La Plee works
+
+From selfie to styled: five steps from one photo of your face to a week of outfits from clothes you already own.
+
+## 1. Upload one selfie
+
+Parure La Plee reads your skin tone, hair and eye colour and finds your colour season. Use natural light, a bare face and face the camera. Your selfie is used only for colour analysis, it is encrypted, and you can delete it at any time.
+
+## 2. Get your colour card
+
+Your season and a few of your best shades are free. Premium unlocks the full palette in three groups: Best for you, Complementary, and Style with purpose. Share your colour card with friends or your stylist.
+
+## 3. Fill your closet
+
+Add what you own and the background is removed for you. Every piece is tagged for your colouring, and the app tells you what you haven't worn this season. Premium adds bulk upload, up to 10 pieces at a time.
+
+## 4. Pick an occasion
+
+Choose from 45 occasions, such as Sunday brunch, wedding guest, first date, school pickup, concert, gallery opening, cruise and job interview. With Premium you get complete looks from your own pieces and a preview on your personalised AI model. Swap, add or remove any piece in a tap.
+
+## 5. Plan your week
+
+Put looks on your outfit calendar, check the forecast, and pack for a trip with the Getaway Edit (Premium). Tomorrow's outfit is already decided.
+
+## Features
+
+| Feature | Plan | What it does |
+|---|---|---|
+| Dressed for today | Premium | The home screen opens on a look for the day, picked from your forecast and colour season. Wear it, swap one piece, or ask for another. |
+| Style Circle | Free to browse | Browse the feed, follow friends and stylists, and shop pre-loved pieces from people with your colouring. Posting looks and asking for advice is Premium. |
+| Getaway Edit (Pack in minutes) | Premium | Add a trip and get a suitcase list and day-by-day outfits from your own wardrobe, with the weather where you are going. |
+| Your colour card | Free | Your season and a few best shades. Premium unlocks the full palette. |
+| Sell what you don't wear | Premium | List pre-loved pieces to your followers first in Parure Preloved. Parure takes 8%, you keep the rest. |
+| Your style team | Premium | Invite a stylist or personal shopper into your wardrobe. They build looks from your closet and send them for your approval. Collaborating with friends on moodboards and lookbooks is also Premium. |
+| Everything else | Free | Wardrobe Edit, Style Edit, Week Ahead, moodboards, lookbooks and pre-loved finds, one tap from Quick Access. |
+
+## No stylist needed
+
+You don't need a stylist, a shopper or a free hour. Add your closet once, open the app each morning to a look for the weather and your colours, then wear it, swap a piece, or ask for another.
+
+See [Pricing](https://parure.app/pricing.md) for what is in each plan.
+
+---
+
+# Parure La Plee pricing
+
+Start free. Unlock your stylist.
+
+## Free: $0 forever
+
+Organise your closet, plan outfits and join the Style Circle.
+
+- Unlimited digital closet
+- Background removal on photos
+- Outfit calendar and history log
+- Wishlists, moodboards and lookbooks
+- Browse the Style Circle and buy pre-loved
+- Basic tagging by category, colour and season
+- Cost-per-wear and wear rate analytics
+- Read Style Circle forums by colour season
+- Share looks by text, email or WhatsApp
+- Your colour season and a few best shades
+
+## Premium: $12.99 per month or $119.00 per year
+
+Includes a 14-day free trial. The yearly plan saves 24% (about $9.92 a month). Your AI stylist, full colour palette and a style team on call.
+
+Everything in Free, plus:
+
+- Full colour analysis and palette
+- AI outfits for 45 occasions
+- Bulk upload, up to 10 pieces at a time
+- Getaway Edit AI packing
+- Post and ask for advice in the Style Circle
+- Personalised AI model
+- Outfit gap detection and shopping recommendations
+- Calendar sync with outfit suggestions
+- Stylist and personal shopper access (Trusted Partners)
+- Sell in Parure Preloved (Parure takes 8%)
+- Share moodboards and lookbooks with friends to collaborate
+- Priority support
+
+Prices are in US dollars as shown on parure.app. Subscriptions are managed through the App Store or Google Play.
+
+Download: [App Store](https://apps.apple.com/us/app/parure-la-plee/id6784032743) · [Google Play](https://play.google.com/store/apps/details?id=com.parurelaplee.app)
+
+---
+
+# Parure La Plee FAQ
+
+## Is Parure La Plee free?
+
+Yes. The closet, calendar, lookbooks, browsing the Style Circle and your colour season with a few of your best shades are free. Premium adds your full colour palette, AI outfits, your personalised AI model, bulk upload, the Getaway Edit, posting in the Style Circle, stylist and personal shopper access, and selling in Parure Preloved, with a 14-day free trial.
+
+## Is it only for women?
+
+No. Styling and language adapt to your gender identity, body type and pronouns, and everyone gets the same closet tools.
+
+## Do I have to upload a selfie?
+
+Only for colour analysis. You can build your closet and plan outfits without one. Your selfie is encrypted, and you can delete it at any time.
+
+## Is there a minimum age?
+
+Yes. Parure La Plee is for adults aged 18 and over, and you confirm you are 18 or over when you sign up. Adding your birthday in Settings is optional. You can delete your account and data at any time from the app.
+
+## Which phones does it work on?
+
+Android through [Google Play](https://play.google.com/store/apps/details?id=com.parurelaplee.app), and iPhone through the [App Store](https://apps.apple.com/us/app/parure-la-plee/id6784032743).
+
+## How much does Premium cost?
+
+$12.99 per month or $119.00 per year, with a 14-day free trial. See [Pricing](https://parure.app/pricing.md).
+
+## Where can I get help?
+
+Visit the [support page](https://parure.app/support/).
+
+---
+
+# About Parure La Plee
+
+> "Your wardrobe is already full of possibility. We help you see it."
+
+I love clothes. I love shopping, I love fashion, and I still found myself standing in a wardrobe full of beautiful clothes feeling completely uninspired. Something would come together, but never quite all the way. Parure La Plee is the answer I built for myself, and for everyone who has ever felt that same quiet frustration.
+
+Anne Harrison, Founder and CEO, Parure La Plee, Orlando, Florida.
+
+## What Parure La Plee stands for
+
+- **Personal colour intelligence.** Every recommendation is filtered to your own colour season.
+- **Sustainability first.** Outfits start with what you already own. The marketplace gives pieces you no longer wear a second life.
+- **Style is more fun when it's shared.** The Style Circle connects you with friends and stylists, and the Style Team lets a professional work inside your wardrobe.
+
+## Links
+
+- Website: https://parure.app
+- Instagram: https://instagram.com/parurelaplee
+- [Support](https://parure.app/support/)
+- Download: [App Store](https://apps.apple.com/us/app/parure-la-plee/id6784032743) · [Google Play](https://play.google.com/store/apps/details?id=com.parurelaplee.app)
+
+---
+
+# For stylists and personal shoppers: Parure La Plee Trusted Partners
+
+Work inside your clients' wardrobes. Earn as you grow.
+
+A curated partnership for verified style professionals: fashion stylists, personal shoppers, photographers, makeup artists, wardrobe consultants and other qualified professionals whose work involves creating, coordinating or influencing complete looks for clients. Approved Trusted Partners join the Parure La Plee Style Team.
+
+## How it works
+
+- **Work inside a client's wardrobe, remotely.** Clients invite you into their closet. Build looks from what they already own, from any city, and send them for approval.
+- **Add linked items for what's missing.** Spot a gap and attach a linked piece to the look. Your client sees the exact item and where to buy it.
+- **Tiered commission for every referral.** Earn 15 to 25% on every Premium subscriber you refer, tiered by referral performance, for the life of their membership.
+- **0% fees.** Parure takes nothing from the styling services you charge your clients.
+
+## Who can become a Trusted Partner?
+
+- Works professionally in styling, fashion, beauty, photography or a related field that contributes to complete client looks
+- Provides evidence of professional work, portfolio, business or client experience
+- Style, fashion, beauty or lifestyle expertise
+- Genuine professional or audience engagement
+- Alignment with Parure La Plee's approach to personal colour intelligence and intentional style
+- 5,000+ followers can be considered, but a following is not required
+
+Anne reviews every application personally. Response within 5 to 7 business days.
+
+- [Apply to join the Style Team](https://forms.gle/Wzi5UBzDvYvxGcjD6)
+- [Trusted Partner Agreement](https://parure.app/partner-agreement/)

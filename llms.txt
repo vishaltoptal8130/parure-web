@@ -1,0 +1,35 @@
+# Parure La Plee
+
+> Parure La Plee is an AI personal stylist app for iPhone and Android. It finds your colour season from one selfie, organises your closet, and styles complete outfits for 45 occasions from clothes you already own. It also has a social Style Circle, a pre-loved marketplace (Parure Preloved), and a Style Team where approved stylists and personal shoppers work inside a client's wardrobe. Free to download, with a 14-day Premium trial.
+
+Key facts:
+- Founder and CEO: Anne Harrison, Orlando, Florida.
+- Platforms: iPhone (App Store) and Android (Google Play). For adults aged 18 and over.
+- Free plan ($0 forever): unlimited digital closet, background removal, outfit calendar, wishlists, moodboards, lookbooks, browsing the Style Circle, buying pre-loved, and your colour season with a few best shades.
+- Premium ($12.99 per month or $119.00 per year, 14-day free trial): full colour palette, AI outfits for 45 occasions, personalised AI model, bulk upload (up to 10 pieces at a time), Getaway Edit AI packing, posting in the Style Circle, stylist and personal shopper access, and selling in Parure Preloved (Parure takes 8%).
+- Sustainability first: every outfit starts with what you already own; shopping suggestions come second.
+
+## Main pages
+
+- [Home](https://parure.app/index.md): what Parure La Plee is and who it is for
+- [How it works and features](https://parure.app/how-it-works.md): selfie to colour season, closet, occasions and planning
+- [Pricing](https://parure.app/pricing.md): Free and Premium plans
+- [FAQ](https://parure.app/faq.md): common questions about price, privacy, age and devices
+- [About](https://parure.app/about.md): founder Anne Harrison and why Parure exists
+- [For stylists](https://parure.app/for-stylists.md): the Trusted Partner programme
+
+## Download
+
+- [App Store (iPhone)](https://apps.apple.com/us/app/parure-la-plee/id6784032743)
+- [Google Play (Android)](https://play.google.com/store/apps/details?id=com.parurelaplee.app)
+
+## Optional
+
+- [Support](https://parure.app/support/): help and contact
+- [Privacy Policy](https://parure.app/policy/)
+- [Terms of Service](https://parure.app/terms/)
+- [Parure Preloved Marketplace Terms](https://parure.app/preloved-terms/)
+- [Trusted Partner Agreement](https://parure.app/partner-agreement/)
+- [Accessibility Statement](https://parure.app/accessibility/)
+- [Account deletion](https://parure.app/delete-account/)
+- [Full text in one file](https://parure.app/llms-full.txt)

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin2/
+
+Sitemap: https://parure.app/sitemap.xml
