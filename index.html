@@ -735,6 +735,45 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
 .fq-list summary:focus-visible{outline:2px solid var(--camel);outline-offset:6px;border-radius:8px}
 @media (max-width:1020px){.fq .wrap{grid-template-columns:1fr;gap:36px}.fq-side{position:static}.fq-side .lede{max-width:46ch}.fq-list details{padding:22px 18px}}
 @media (prefers-reduced-motion:reduce){.fq-list details[open] p{animation:none}.bill button{transition:none}}
+
+/* ---------- PRICING v2: Ledgr-style cards in Parure colours ---------- */
+.pv2{position:relative;overflow:hidden;isolation:isolate;background:var(--ivory)}
+.pv2-grid{position:absolute;inset:0;z-index:-1;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect x='6' y='6' width='44' height='44' rx='9' fill='none' stroke='%23C8B89A' stroke-opacity='.45'/%3E%3C/svg%3E") center top/56px 56px;-webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 30%,transparent 25%,#000 75%);mask-image:radial-gradient(ellipse 75% 60% at 50% 30%,transparent 25%,#000 75%);opacity:.55}
+.pv2-grid::after{content:"";position:absolute;left:50%;top:44%;width:min(900px,90vw);aspect-ratio:1;transform:translate(-50%,-10%);border-radius:50%;background:radial-gradient(circle,rgba(232,221,208,.9),rgba(247,243,236,0) 65%)}
+.pv2-head{text-align:center;margin-bottom:56px}
+.pv2-pill{display:inline-block;font:600 13px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tan-deep);background:var(--tan-soft);padding:10px 20px;border-radius:999px;box-shadow:0 0 0 7px rgba(232,221,208,.55),0 0 0 15px rgba(232,221,208,.25)}
+.pv2-head h2{font:400 clamp(44px,6.4vw,84px)/1.14 var(--serif);color:var(--ink);margin:34px 0 0;letter-spacing:-.01em}
+.pv2-bill{margin-top:30px;padding:3px;background:var(--paper)}
+.pv2-bill button{padding:8px 16px;font-size:13px}
+.pv2-bill button.on{background:var(--tan-soft);color:var(--ink)}
+.pv2-bill button em{color:var(--camel)}
+.pv2-bill button.on em{color:var(--camel)}
+.pv2-cards{display:grid;grid-template-columns:repeat(2,minmax(0,350px));justify-content:center;gap:26px;align-items:start}
+.pv2-card{position:relative;border-radius:24px;padding:30px 28px 28px;border:1px solid rgba(200,184,154,.6);box-shadow:0 34px 60px -38px rgba(90,64,36,.45);overflow:hidden}
+.pv2-card::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000,transparent);mask-image:linear-gradient(180deg,#000,transparent)}
+.pv2-free{background:linear-gradient(180deg,#F3EADC 0%,#FFFDF9 70%)}
+.pv2-free::before{background:radial-gradient(circle,rgba(140,122,98,.35) 1px,transparent 1.4px) 0 0/9px 9px}
+.pv2-pro{margin-top:44px;overflow:visible;background:linear-gradient(180deg,#E8D9C3 0%,#FBF6EE 72%);border-color:rgba(193,127,71,.45)}
+.pv2-pro::before{border-radius:24px 24px 0 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect x='6' y='6' width='44' height='44' rx='9' fill='none' stroke='%23C8B89A' stroke-opacity='.45'/%3E%3C/svg%3E") 0 0/30px 30px}
+.pv2-badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%) rotate(-4deg);font:600 12px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ivory);background:var(--ink);padding:9px 16px;border-radius:9px;box-shadow:0 10px 20px -10px rgba(30,29,27,.6);white-space:nowrap}
+.pv2-card h3{position:relative;font:400 34px/1.1 var(--serif);color:var(--ink);margin:0}
+.pv2-desc{position:relative;font:400 15px/1.5 var(--sans);color:var(--ink-2);opacity:.8;margin:10px 0 0;max-width:30ch}
+.pv2-price{position:relative;font:400 58px/1 var(--serif);color:var(--ink);margin:26px 0 22px}
+.pv2-price small{display:block;font:400 13px/1.4 var(--sans);opacity:.65;margin-top:8px}
+.pv2-btn{position:relative;display:flex;justify-content:center;align-items:center;width:100%;padding:13px 20px;border-radius:999px;font:500 15px var(--sans);text-decoration:none;color:var(--ink);background:linear-gradient(180deg,#DCCDB4,#C8B89A);border:1px solid rgba(140,122,98,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);transition:transform .3s var(--ease),filter .3s}
+.pv2-btn:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.pv2-btn-pro{color:var(--ivory);background:linear-gradient(180deg,#3A3631,#1E1D1B);border-color:#1E1D1B;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.pv2-inc{font:600 14px var(--sans);color:var(--ink);margin:26px 0 12px}
+.pv2-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.pv2-list li{position:relative;padding-left:26px;font:400 15px/1.4 var(--sans);color:var(--ink-2)}
+.pv2-list li::before{content:"";position:absolute;left:3px;top:.32em;width:11px;height:6px;border-left:1.6px solid var(--ink-2);border-bottom:1.6px solid var(--ink-2);transform:rotate(-45deg)}
+.pv2 details.pv2-more,.pv2 details.pv2-more:last-child{margin-top:14px;padding:0;border:0}
+.pv2 .pv2-more summary{display:inline-block;padding:0}
+.pv2 .pv2-more summary::after{content:none;display:none}
+.pv2-more summary{cursor:pointer;list-style:none;font:400 14px var(--sans);color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;opacity:.75}
+.pv2-more summary::-webkit-details-marker{display:none}
+.pv2-more[open] summary{margin-bottom:10px}
+@media (max-width:760px){.pv2-cards{grid-template-columns:minmax(0,420px)}.pv2-pro{order:-1;margin-top:16px}.pv2-free{margin-top:10px}.pv2-grid{background-size:44px 44px}}
 </style>
 </head>
 <body>
@@ -1011,34 +1050,36 @@ html:not(.js) .pb-grid i:not(.w){background:#E6C4A2;border-color:#E6C4A2}
   </div>
 </section>
 
-<section class="section pricing px" id="pricing">
+<section class="section pricing px pv2" id="pricing">
+  <div class="pv2-grid" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="head">
-      <div class="kicker">Simple pricing</div>
-      <h2 class="split">Start free. Unlock more.</h2>
-      <p class="lede">Full wardrobe management is always free. Premium unlocks the AI magic.</p>
-      <div class="bill" role="group" aria-label="Premium billing period">
+    <div class="pv2-head">
+      <span class="pv2-pill">Pricing</span>
+      <h2 class="split">Start free.<br>Unlock your stylist.</h2>
+      <div class="bill pv2-bill" role="group" aria-label="Premium billing period">
         <button type="button" class="on" data-b="m" aria-pressed="true">Monthly</button>
-        <button type="button" data-b="y" aria-pressed="false">Yearly <em>Save 24%</em></button>
+        <button type="button" data-b="y" aria-pressed="false">Yearly <em>(Save 24%)</em></button>
       </div>
     </div>
-    <div class="plans">
-      <div class="plan">
+    <div class="pv2-cards">
+      <div class="pv2-card pv2-free">
         <h3>Free</h3>
-        <div class="price">$0<small>forever</small></div>
-        <p class="try">Everything you need to manage your wardrobe</p>
-        <ul><li>Unlimited digital closet &amp; clothing inventory</li><li>Background removal on uploaded photos</li><li>Basic wardrobe tagging — category, colour, season</li><li>Cost-per-wear tracking &amp; wear rate analytics</li><li>Outfit calendar — manual planning by date</li><li>Wishlists &amp; moodboards</li></ul>
-        <details class="more"><summary>See all 13 features</summary><ul><li>Lookbooks — save &amp; categorize your favorite outfits</li><li>Outfit history log — record what you wore &amp; when</li><li>Follow friends &amp; browse the Style Circle feed</li><li>Read Style Circle forums by colour season</li><li>Share looks by text, email or WhatsApp</li><li>Marketplace buying — shop pre-loved from members</li><li>Your colour season + a few of your best shades</li></ul></details>
-        <a class="btn btn-ink" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" data-smart>Download free</a>
+        <p class="pv2-desc">Organise your closet, plan outfits and join the Style Circle.</p>
+        <div class="pv2-price">$0<small>forever</small></div>
+        <a class="pv2-btn" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" data-smart>Download free</a>
+        <p class="pv2-inc">Free includes</p>
+        <ul class="pv2-list"><li>Unlimited digital closet</li><li>Background removal on photos</li><li>Outfit calendar &amp; history log</li><li>Wishlists, moodboards &amp; lookbooks</li><li>Browse the Style Circle &amp; buy pre-loved</li></ul>
+        <details class="pv2-more"><summary>and a lot more</summary><ul class="pv2-list"><li>Basic tagging by category, colour &amp; season</li><li>Cost-per-wear &amp; wear rate analytics</li><li>Read Style Circle forums by colour season</li><li>Share looks by text, email or WhatsApp</li><li>Your colour season + a few best shades</li></ul></details>
       </div>
-      <div class="plan pro">
-        <span class="trial">14 days free</span>
+      <div class="pv2-card pv2-pro">
+        <span class="pv2-badge">Most popular</span>
         <h3>Premium</h3>
-        <div class="price"><span id="px-amt">$12.99</span><small id="px-note">per month · or $119.00/year</small></div>
-        <p class="try">Try free for 14 days</p>
-        <ul><li>Everything in Free</li><li>Full personal colour analysis — your complete CPCP</li><li>Selfie to colour season — skin, hair &amp; eye analysis</li><li>Full colour palette — best, acceptable &amp; style with purpose</li><li>AI colour-matched wardrobe tagging</li><li>AI outfit generation — 45 occasions styled from what you already own</li><li>Bulk upload — add up to 10 pieces at a time</li></ul>
-        <details class="more"><summary>See all 18 features</summary><ul><li>Personalized AI model — see looks on a model built for you</li><li>AI outfit gap detection + colour-matched shopping recs</li><li>Calendar sync — AI suggests outfits based on your events</li><li>Getaway Edit — AI travel packing stylist with complete outfits per day</li><li>AI learns your individual preferences over time</li><li>Unlimited saved looks</li><li>Post looks &amp; ask for advice in the Style Circle and its forums</li><li>Selling in Parure Preloved — list pre-loved items</li><li>Stylist &amp; personal shopper access (Trusted Partners)</li><li>Share moodboards &amp; lookbooks with friends to collaborate</li><li>Priority support</li></ul></details>
-        <a class="btn btn-tan" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" data-smart>Start your free trial</a>
+        <p class="pv2-desc">Your AI stylist, full colour palette and a style team on call.</p>
+        <div class="pv2-price"><span id="px-amt">$12.99</span><small id="px-note">per month · or $119.00/year</small></div>
+        <a class="pv2-btn pv2-btn-pro" href="https://play.google.com/store/apps/details?id=com.parurelaplee.app" data-smart>Start 14-day free trial</a>
+        <p class="pv2-inc">Everything in Free +</p>
+        <ul class="pv2-list"><li>Full colour analysis &amp; palette</li><li>AI outfits for 45 occasions</li><li>Bulk upload, up to 10 pieces at a time</li><li>Getaway Edit AI packing</li><li>Post &amp; ask for advice in the Style Circle</li></ul>
+        <details class="pv2-more"><summary>and a lot more</summary><ul class="pv2-list"><li>Personalized AI model</li><li>Outfit gap detection &amp; shopping recs</li><li>Calendar sync with outfit suggestions</li><li>Stylist &amp; personal shopper access</li><li>Sell in Parure Preloved</li><li>Share moodboards &amp; lookbooks to collaborate</li><li>Priority support</li></ul></details>
       </div>
     </div>
   </div>
