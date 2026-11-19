@@ -13,9 +13,6 @@
 [functions.waitlist]
   included_files = ["emails/**"]
 
-[functions.post-preview]
-  included_files = ["open/index.html"]
-
 # Universal Links / App Links must be served as JSON (not HTML, not a redirect).
 [[headers]]
   for = "/.well-known/apple-app-site-association"

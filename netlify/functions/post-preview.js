@@ -18,9 +18,6 @@
 //   - SUPABASE_ANON_KEY  (public anon key, same one shipped in the app)
 // ─────────────────────────────────────────────────────────────────────
 
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
 const SUPABASE_URL = process.env.SUPABASE_URL || "https://hcunlytijzmzxklrxxsr.supabase.co";
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjdW5seXRpanptenhrbHJ4eHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MzYzMzQsImV4cCI6MjA5NzMxMjMzNH0.G_YGI-z7xz-oUeKPCnRjS-_Ei_2yT5eth8iWR4zzPAg";
 const SITE = "https://parure.app";
@@ -31,19 +28,14 @@ let templateCache = null;
 
 async function loadTemplate() {
   if (templateCache) return templateCache;
-  const candidates = [
-    path.join(process.cwd(), "open", "index.html"),
-    path.join(path.dirname(new URL(import.meta.url).pathname), "..", "..", "open", "index.html"),
-  ];
-  for (const file of candidates) {
-    try {
-      templateCache = await readFile(file, "utf8");
-      return templateCache;
-    } catch {
-      // try next location
-    }
-  }
-  throw new Error("open/index.html not found");
+  // Read the static /open page from the site itself; bundled function files
+  // do not reliably include it on disk.
+  const res = await fetch(`${SITE}/open/index.html`, { signal: AbortSignal.timeout(3000) });
+  if (!res.ok) throw new Error(`open/index.html fetch failed: ${res.status}`);
+  const html = await res.text();
+  if (!html.includes("parurelaplee://")) throw new Error("unexpected /open page content");
+  templateCache = html;
+  return templateCache;
 }
 
 function escapeHtml(value) {
@@ -144,11 +136,17 @@ export const handler = async (event) => {
   try {
     html = await loadTemplate();
   } catch (err) {
-    console.error("[post-preview]", err);
-    return { statusCode: 302, headers: { Location: "/open/" }, body: "" };
+    console.error("[post-preview]", err?.message || err);
+    // Minimal page that still opens the app or the stores for this exact post.
+    const deepLink = postId ? `parurelaplee://post/${postId}` : "parurelaplee://";
+    html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Open in Parure</title></head><body style="font-family:system-ui,sans-serif;text-align:center;padding:48px 16px"><h1>Open this look in Parure</h1><p><a href="${deepLink}">Open Parure app</a></p><p><a href="https://apps.apple.com/app/id6784032743">App Store</a> &middot; <a href="https://play.google.com/store/apps/details?id=com.parurelaplee.app">Google Play</a></p><script>window.location.href=${JSON.stringify(deepLink)};</script></body></html>`;
   }
 
   html = html
+    // Drop preview tags already on the page (Netlify adds a generic og:image)
+    // so bots pick up this post's photo instead.
+    .replace(/<meta\s+(?:property|name)=["'](?:og|twitter):[^>]*>\s*/gi, "")
+    .replace(/<meta\s+name=["']description["'][^>]*>\s*/gi, "")
     .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(meta.title)} | Parure</title>\n  ${buildTags(meta)}`);
 
   return {
